@@ -1,0 +1,22 @@
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+
+import { styled } from '@mui/system';
+import Navbar from '../common/Navbar';
+
+const MainLayoutBlock = styled('div')(({theme}) => ({
+    background : theme.palette.bg,
+    width : '1440px',
+    margin : '0 auto'
+}))
+
+function MainLayout(props) {
+    return (
+        <MainLayoutBlock>
+            <Navbar />
+            <Outlet />
+        </MainLayoutBlock>
+    );
+}
+
+export default MainLayout;
