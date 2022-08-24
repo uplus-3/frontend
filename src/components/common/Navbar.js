@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LogoUplus from '../../assets/images/logo_uplus.png';
 
-import { AppBar, Toolbar, ButtonBase, IconButton, styled } from '@mui/material';
-import { Search } from '@mui/icons-material';
+import { AppBar, Toolbar, ButtonBase, Button, Collapse, styled, useTheme } from '@mui/material';
 
+import { NavbarContent } from './NavbarContent';
 import RoundBtn from './RoundBtn';
-
-import { useNavigate, createSearchParams } from 'react-router-dom';
-import useInput from '../../lib/hooks/useInput';
+import SearchBar from './SearchBar';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const CustomAppbar = styled(AppBar)(({ theme }) => ({
   height: 60,
+  width: '100%',
   minWidth: 1440,
+  color: '#000',
   background: theme.palette.bg,
   boxShadow:
     '0px 2px 4px -1px rgb(0 0 0 / 3%), 0px 4px 5px 0px rgb(0 0 0 / 6%), 0px 1px 10px 0px rgb(0 0 0 / 4%)',
@@ -22,81 +23,158 @@ const CustomToolbar = styled(Toolbar)(({ theme }) => ({
   margin: '0 auto',
 }));
 
-const SearchInput = styled('input')(({ theme }) => ({
-  fontFamily: 'LGSmart',
-  width: 500,
-  borderRadius: 100,
-  border: `1px solid ${theme.palette.gray3}`,
-  padding: 10,
-  '&:focus': {
-    outline: `1px solid ${theme.palette.prime}`,
-    '::-webkit-input-placeholder': {
-      color: 'transparent',
-    },
-  },
-  '&::-webkit-input-placeholder': {
-    color: theme.palette.prime,
-    textAlign: 'center',
-  },
+const MenuCollpase = styled(Collapse)({
+  position: 'absolute',
+  width: '100%',
+  top: '60px',
+  zIndex: 50,
+});
+
+const MenuDiv = styled('div')(({ theme }) => ({
+  background: '#fff',
+  display: 'flex',
+  minHeight: 170,
+  paddingTop: 20,
+  paddingBottom: 10,
+  paddingLeft: 350,
+  gap: 50,
+  boxShadow:
+    '0px 2px 4px -1px rgb(0 0 0 / 2%), 0px 4px 5px 0px rgb(0 0 0 / 4%), 0px 1px 10px 0px rgb(0 0 0 / 3%)',
 }));
+
+const SubMenuWrapper = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'start',
+  gap: 10,
+});
 
 const LogoImage = styled('img')({
   height: 24,
 });
 
-const SearchBar = styled('div')({
-  position: 'absolute',
-  left: '50%',
-  transform: `translate(-50%)`,
-});
+const TitleBtnWrapper = styled('div')({});
 
-const BtnWrapper = styled('div')({
+const BuyBtnWrapper = styled('div')({
   position: 'absolute',
   right: 0,
 });
 
+const TitleBtn = styled(Button)(({ theme }) => ({
+  fontFamily: 'LGSmart',
+  color: '#000',
+  height: 60,
+  fontWeight: 600,
+  marginLeft: 20,
+  '&:hover': {
+    color: theme.palette.prime,
+    background: 'transparent',
+  },
+}));
+
+const SubTitleBtn = styled(ButtonBase)({
+  fontFamily: 'LGSmart',
+  fontWeight: 600,
+  paddingLeft: 10,
+});
+
+const SubItemBtn = styled(ButtonBase)({
+  fontFamily: 'LGSmart',
+  paddingLeft: 10,
+});
+
 function Navbar() {
-  const lenValidator = (value) => value.length <= 30;
-  const [searchResult, onChange, setSearchResult] = useInput('', lenValidator);
   const navigate = useNavigate();
+  const location = useLocation();
+  const theme = useTheme();
+  const [selectedMenu, setSelectedMenu] = useState(null);
+  const [beforeSelectedMenu, setBeforeSelectedMenu] = useState(null);
 
   // 로고 클릭시 홈으로 이동
   const handleLogoClick = () => {
     navigate('/');
   };
 
-  // 검색시 호출되는 함수
-  const handleSearch = (event) => {
-    if ((event.type === 'keydown' && event.key === 'Enter') || event.type === 'click') {
-      navigate({
-        pathname: 'search/result',
-        search: createSearchParams({ searchResult: searchResult }).toString(),
-      });
-      setSearchResult('');
-    }
+  // 메뉴를 눌러 페이지 이동 한 뒤
+  const handleMenuClick = (url) => {
+    setSelectedMenu(null);
+    navigate(url);
+  };
+
+  const compareLocation = (title) => {
+    console.log(location.pathname, NavbarContent[title]);
+    return NavbarContent[title].some((subTitle) => location.pathname.indexOf(subTitle.url) !== -1);
   };
   return (
-    <CustomAppbar position="relative">
-      <CustomToolbar disableGutters>
-        <ButtonBase onClick={handleLogoClick}>
-          <LogoImage alt="로고" src={LogoUplus} />
-        </ButtonBase>
-        <SearchBar>
-          <SearchInput
-            placeholder="갤럭시 Z Fold4"
-            value={searchResult}
-            onChange={onChange}
-            onKeyDown={handleSearch}
-          />
-          <IconButton onClick={handleSearch}>
-            <Search />
-          </IconButton>
-        </SearchBar>
-        <BtnWrapper>
-          <RoundBtn>구매조회</RoundBtn>
-        </BtnWrapper>
-      </CustomToolbar>
-    </CustomAppbar>
+    <>
+      <CustomAppbar position="fixed">
+        <CustomToolbar disableGutters>
+          <ButtonBase disableRipple onClick={handleLogoClick}>
+            <LogoImage alt="로고" src={LogoUplus} />
+          </ButtonBase>
+          {Object.keys(NavbarContent).map((mainTitle, idx) => {
+            return (
+              <div
+                key={`${idx}-${mainTitle}`}
+                // onMouseLeave={() => setSelectedMenu(null)}
+                onMouseEnter={() => {
+                  setSelectedMenu(mainTitle);
+                  setBeforeSelectedMenu(mainTitle);
+                }}>
+                <TitleBtnWrapper>
+                  <TitleBtn
+                    disableFocusRipple
+                    disableRipple
+                    style={{
+                      color:
+                        selectedMenu === mainTitle || compareLocation(mainTitle)
+                          ? theme.palette.prime
+                          : '#000',
+                    }}>
+                    {mainTitle}
+                  </TitleBtn>
+                </TitleBtnWrapper>
+              </div>
+            );
+          })}
+          <SearchBar />
+          <BuyBtnWrapper>
+            <RoundBtn>구매조회</RoundBtn>
+          </BuyBtnWrapper>
+        </CustomToolbar>
+      </CustomAppbar>
+      <MenuCollpase
+        in={Boolean(selectedMenu)}
+        onMouseEnter={() => setSelectedMenu(beforeSelectedMenu)}
+        onMouseLeave={() => {
+          setSelectedMenu(null);
+        }}
+        disableStrictModeCompat>
+        <MenuDiv>
+          {!!selectedMenu &&
+            NavbarContent[selectedMenu].map((subTitle, idx) => {
+              return (
+                <>
+                  <SubMenuWrapper key={`${idx}-${selectedMenu}-${subTitle.name}`}>
+                    <SubTitleBtn onClick={() => handleMenuClick(subTitle.url)}>
+                      {subTitle.name}
+                    </SubTitleBtn>
+                    {subTitle.children.map((subItem, idx) => {
+                      return (
+                        <SubItemBtn
+                          key={`${idx}-${selectedMenu}-${subTitle.name}=${subItem.name}`}
+                          onClick={() => handleMenuClick(`${subTitle.url}${subItem.url}`)}>
+                          {subItem.name}
+                        </SubItemBtn>
+                      );
+                    })}
+                  </SubMenuWrapper>
+                </>
+              );
+            })}
+        </MenuDiv>
+      </MenuCollpase>
+    </>
   );
 }
 

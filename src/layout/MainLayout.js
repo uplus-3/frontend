@@ -8,7 +8,7 @@ const MainLayoutBlock = styled('div')(({ theme }) => ({
   background: theme.palette.bg,
   width: '1440px',
   margin: '0 auto',
-  // paddingTop: 60
+  paddingTop: 60,
 }));
 
 function MainLayout(props) {
