@@ -102,7 +102,6 @@ function Navbar() {
   };
 
   const compareLocation = (title) => {
-    console.log(location.pathname, NavbarContent[title]);
     return NavbarContent[title].some((subTitle) => location.pathname.indexOf(subTitle.url) !== -1);
   };
   return (
@@ -116,7 +115,7 @@ function Navbar() {
             return (
               <div
                 key={`${idx}-${mainTitle}`}
-                // onMouseLeave={() => setSelectedMenu(null)}
+                onMouseLeave={() => setSelectedMenu(null)}
                 onMouseEnter={() => {
                   setSelectedMenu(mainTitle);
                   setBeforeSelectedMenu(mainTitle);
@@ -148,8 +147,7 @@ function Navbar() {
         onMouseEnter={() => setSelectedMenu(beforeSelectedMenu)}
         onMouseLeave={() => {
           setSelectedMenu(null);
-        }}
-        disableStrictModeCompat>
+        }}>
         <MenuDiv>
           {!!selectedMenu &&
             NavbarContent[selectedMenu].map((subTitle, idx) => {

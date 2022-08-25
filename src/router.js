@@ -21,8 +21,11 @@ function Router() {
         },
         {
           path: '5g-phone',
-          element: <DeviceListPage />,
           children: [
+            {
+              path: '',
+              element: <DeviceListPage />,
+            },
             {
               path: ':id',
               element: <DeviceDetailPage />,
@@ -31,12 +34,15 @@ function Router() {
         },
         {
           path: '4g-phone',
-          element: <DeviceListPage />,
           children: [
+            {
+              path: '',
+              element: <DeviceListPage />,
+            },
             {
               path: ':id',
               element: <DeviceDetailPage />,
-            }
+            },
           ],
         },
         {
