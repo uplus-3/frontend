@@ -1,4 +1,4 @@
-export const PaymentType = [
+export const PAYMENT_TYPE = [
   {
     name: '가장 알맞은 요금제',
     value: 'recommend',
@@ -17,7 +17,7 @@ export const PaymentType = [
   },
 ];
 
-export const DiscountType = [
+export const DISCOUNT_TYPE = [
   {
     name: '추천',
     value: 'recommend',
@@ -36,7 +36,7 @@ export const DiscountType = [
   },
 ];
 
-export const Company = [
+export const COMPANY = [
   {
     name: '전체',
     value: 'all',
@@ -55,7 +55,7 @@ export const Company = [
   },
 ];
 
-export const Storage = [
+export const STORAGE = [
   {
     name: '전체',
     value: 'all',
@@ -73,3 +73,9 @@ export const Storage = [
     value: '256gb',
   },
 ];
+
+export const PRICE_CONFIG = {
+  MIN: 0,
+  MAX: 200000,
+  STEP: 1000,
+};
