@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as FilterData from './DeviceListFileterContents';
+import * as FILTER_DATA from './DeviceListFileterContents';
 
 import { styled } from '@mui/system';
 import {
@@ -23,11 +23,7 @@ import {
 } from '@mui/icons-material';
 
 const DeviceListFilterBlock = styled('div')(({ theme }) => ({
-  position: 'sticky',
-  top: 0,
   minWidth: 240,
-  height: 340,
-  background: theme.palette.gray1,
   '& .MuiListItemButton-root': {
     padding: '0 5px',
   },
@@ -40,6 +36,30 @@ const DeviceListFilterBlock = styled('div')(({ theme }) => ({
   '& .list-type-label': {
     cursor: 'pointer',
   },
+}));
+
+// TODO - sticky 적용시 하단에 공백 생성됨 : maxHeight때문
+const StyledListFilter = styled(List)(({ theme }) => ({
+  background: theme.palette.gray1,
+  position: 'sticky',
+  top: '60px',
+  overflowX: 'hidden',
+  overflowY: 'auto',
+  maxHeight: 'calc(100vh - 150px)',
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  },
+  // '&:hover::-webkit-scrollbar': {
+  //   width: '10px',
+  // },
+  // '&::-webkit-scrollbar-thumb': {
+  //   background: theme.palette.gray3,
+  //   borderRadius: 50,
+  // },
+  // '&::-webkit-scrollbar-track': {
+  //   background: theme.palette.gray2,
+  //   borderRadius: 50,
+  // },
 }));
 
 const StyledCheckbox = styled(Checkbox)(({ theme }) => ({
@@ -60,10 +80,15 @@ function printPriceRange(value) {
   return `${value[0].toLocaleString('ko-KR')}원 ~ ${value[1].toLocaleString('ko-KR')}원`;
 }
 
-// TODO - 필터 라벨 눌러도 체크되도록 설정
-function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onChangeCheckbox }) {
+function DeviceListFilter({
+  paymentType,
+  discountType,
+  price,
+  multiCheckbox,
+  onChangeCheckbox,
+  onChangeSlider,
+}) {
   const [open, setOpen] = useState([true, true, true, false, false]);
-
   const handleClickListOpen = (idx) => {
     const newOpen = [...open];
     newOpen[idx] = !newOpen[idx];
@@ -72,7 +97,7 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
 
   return (
     <DeviceListFilterBlock>
-      <List component="nav">
+      <StyledListFilter component="nav">
         {/* 요금제 */}
         <ListItem className="list-type-label" onClick={() => handleClickListOpen(0)}>
           <ListItemText primary="요금제" />
@@ -81,8 +106,11 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
         <Divider />
         <Collapse in={open[0]} timeout="auto" unmountOnExit>
           <List component="div">
-            {FilterData.PaymentType.map((type) => (
-              <ListItemButton dense onClick={() => onChangeCheckbox('payment', type.value)}>
+            {FILTER_DATA.PAYMENT_TYPE.map((type) => (
+              <ListItemButton
+                key={type.value}
+                dense
+                onClick={() => onChangeCheckbox('payment', type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={paymentType === type.value}
@@ -104,8 +132,11 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
         <Divider />
         <Collapse in={open[1]} timeout="auto" unmountOnExit>
           <List component="div">
-            {FilterData.DiscountType.map((type) => (
-              <ListItemButton dense onClick={() => onChangeCheckbox('discount', type.value)}>
+            {FILTER_DATA.DISCOUNT_TYPE.map((type) => (
+              <ListItemButton
+                key={type.value}
+                dense
+                onClick={() => onChangeCheckbox('discount', type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={discountType === type.value}
@@ -131,12 +162,12 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
                 <StyledSlider
                   value={price}
                   getAriaLabel={() => 'Price'}
-                  min={0}
-                  max={200000}
-                  step={1000}
-                  defaultValue={[20, 37]}
+                  min={FILTER_DATA.PRICE_CONFIG.MIN}
+                  max={FILTER_DATA.PRICE_CONFIG.MAX}
+                  step={FILTER_DATA.PRICE_CONFIG.STEP}
+                  defaultValue={[FILTER_DATA.PRICE_CONFIG.MIN, FILTER_DATA.PRICE_CONFIG.MAX]}
                   valueLabelDisplay="off"
-                  // onChange={handleChangePriceRange}
+                  onChange={onChangeSlider}
                   valueLabelFormat={valueLabelFormat}
                 />
               </Stack>
@@ -152,14 +183,16 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
         <Divider />
         <Collapse in={open[3]} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {FilterData.Company.map((type) => (
-              <ListItemButton dense>
+            {FILTER_DATA.COMPANY.map((type) => (
+              <ListItemButton
+                key={type.value}
+                dense
+                onClick={(e) => onChangeCheckbox('company', type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={multiCheckbox.company.has(type.value)}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
-                    onChange={(e) => onChangeCheckbox('company', type.value, e.target.checked)}
                   />
                 </ListItemIcon>
                 <ListItemText primary={type.name} />
@@ -176,14 +209,16 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
         <Divider />
         <Collapse in={open[4]} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {FilterData.Storage.map((type) => (
-              <ListItemButton dense onClick={(e) => onChangeCheckbox('storage', type.value, e)}>
+            {FILTER_DATA.STORAGE.map((type) => (
+              <ListItemButton
+                key={type.value}
+                dense
+                onClick={(e) => onChangeCheckbox('storage', type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={multiCheckbox.storage.has(type.value)}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
-                    // onChange={(e) => onChangeCheckbox('storage', type.value, e.target.checked)}
                   />
                 </ListItemIcon>
                 <ListItemText primary={type.name} />
@@ -191,7 +226,7 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
             ))}
           </List>
         </Collapse>
-      </List>
+      </StyledListFilter>
     </DeviceListFilterBlock>
   );
 }

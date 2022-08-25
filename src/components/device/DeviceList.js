@@ -16,18 +16,15 @@ const DeviceListWrapper = styled(Box)({
 });
 
 function DeviceList() {
+  const datas = Array.from({ length: 32 });
+  console.log(datas);
   return (
     <DeviceListBlock>
       <DeviceListHeader />
       <DeviceListWrapper>
-        <DeviceListItem />
-        <DeviceListItem />
-        <DeviceListItem />
-        <DeviceListItem />
-        <DeviceListItem />
-        <DeviceListItem />
-        <DeviceListItem />
-        <DeviceListItem />
+        {datas.map((data) => (
+          <DeviceListItem />
+        ))}
       </DeviceListWrapper>
     </DeviceListBlock>
   );
