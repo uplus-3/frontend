@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import DeviceList from '../../components/device/DeviceList';
 import DeviceListFilter from '../../components/device/DeviceListFilter';
@@ -22,15 +23,32 @@ function DeviceListPage() {
   // const [sort, setSort] = useState(true); // 정렬 기준 (true : 내림차순, false : 오름차순)
   // const [hasSoldout, setHasSoldout] = useState(false); // 품절 제외 여부 (true : 품절 제외, false : 품절 포함)
   // const [showOriginPrice, setShowOriginPrice] = useState(false); // 정상가 보기 여부 (true : 정상가 보기, false : 정상가 숨기기)
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  /* DeviceListFilter */
-  const [paymentType, setPaymentType] = useState('recommend'); // default : 가장 알맞은 요금제, 한개만 선택 가능
-  const [discountType, setDiscountType] = useState('recommend'); // default : 추천, 한개만 선택 가능
+  const [paymentType, setPaymentType] = useState(searchParams.get('plan') || 'recommend'); // default : 가장 알맞은 요금제, 한개만 선택 가능
+  const [discountType, setDiscountType] = useState(searchParams.get('plan') || 'recommend'); // default : 추천, 한개만 선택 가능
   const [price, setPrice] = useState([PRICE_CONFIG.MIN, PRICE_CONFIG.MAX]);
   const [multiCheckbox, setMultiCheckbox] = useState({
     company: new Set(['all']),
     storage: new Set(['all']),
   });
+
+  useEffect(() => {
+    setSearchParams({
+      plan: paymentType,
+      'discount-type': discountType,
+      price: price.join('~'),
+      company: Array.from(multiCheckbox.company),
+      storage: Array.from(multiCheckbox.storage),
+    });
+  }, [
+    setSearchParams,
+    paymentType,
+    discountType,
+    price,
+    multiCheckbox.company,
+    multiCheckbox.storage,
+  ]);
 
   // 체크박스 선택시 값이 변경되는 함수
   const handleChangeCheckbox = (type, value) => {
