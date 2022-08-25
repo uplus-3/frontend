@@ -49,4 +49,20 @@ export const theme = createTheme({
     gray2: palette.gray2,
     gray3: palette.gray3,
   },
+  typography: {
+    fontFamily: [
+      'LGSmart',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      'Segoe UI',
+      'Roboto',
+      'Oxygen',
+      'Ubuntu',
+      'Cantarell',
+      'Fira Sans',
+      'Droid Sans',
+      'Helvetica Neue',
+      ' sans-serif',
+    ].join(','),
+  },
 });

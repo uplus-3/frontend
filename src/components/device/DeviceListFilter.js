@@ -60,7 +60,6 @@ function printPriceRange(value) {
   return `${value[0].toLocaleString('ko-KR')}원 ~ ${value[1].toLocaleString('ko-KR')}원`;
 }
 
-// TODO - 필터 메뉴 최소/최대 하나만 선택되도록 구현
 // TODO - 필터 라벨 눌러도 체크되도록 설정
 function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onChangeCheckbox }) {
   const [open, setOpen] = useState([true, true, true, false, false]);
@@ -83,13 +82,12 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
         <Collapse in={open[0]} timeout="auto" unmountOnExit>
           <List component="div">
             {FilterData.PaymentType.map((type) => (
-              <ListItemButton dense>
+              <ListItemButton dense onClick={() => onChangeCheckbox('payment', type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={paymentType === type.value}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
-                    onChange={() => onChangeCheckbox('payment', type.value)}
                   />
                 </ListItemIcon>
                 <ListItemText primary={type.name} />
@@ -107,13 +105,12 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
         <Collapse in={open[1]} timeout="auto" unmountOnExit>
           <List component="div">
             {FilterData.DiscountType.map((type) => (
-              <ListItemButton dense>
+              <ListItemButton dense onClick={() => onChangeCheckbox('discount', type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={discountType === type.value}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
-                    onChange={() => onChangeCheckbox('discount', type.value)}
                   />
                 </ListItemIcon>
                 <ListItemText primary={type.name} />
@@ -180,13 +177,13 @@ function DeviceListFilter({ paymentType, discountType, price, multiCheckbox, onC
         <Collapse in={open[4]} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {FilterData.Storage.map((type) => (
-              <ListItemButton dense>
+              <ListItemButton dense onClick={(e) => onChangeCheckbox('storage', type.value, e)}>
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={multiCheckbox.storage.has(type.value)}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
-                    onChange={(e) => onChangeCheckbox('storage', type.value, e.target.checked)}
+                    // onChange={(e) => onChangeCheckbox('storage', type.value, e.target.checked)}
                   />
                 </ListItemIcon>
                 <ListItemText primary={type.name} />

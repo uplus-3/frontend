@@ -139,7 +139,7 @@ function SearchBar() {
           최근검색어
           <Divider />
           <div>
-            {JSON.parse(localStorage.getItem('recent_search_terms')).map((term) => {
+            {JSON.parse(localStorage.getItem('recent_search_terms'))?.map((term) => {
               return <div>{term}</div>;
             })}
           </div>
