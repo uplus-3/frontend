@@ -184,7 +184,7 @@ function SearchBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchNetworkType, setSearchNetworkType] = useState(null);
   const [recentSearchTerm, setRecentSearchTerm] = useState(
-    JSON.parse(localStorage.getItem('recent_search_terms') || []),
+    JSON.parse(localStorage.getItem('recent_search_terms')) || [],
   );
   const [relatedSearchTerm, setRelatedSearchTerm] = useState({ results: [] });
   const [selectedRelatedTerm, setSelectedRelatedSearchTerm] = useState(null);
