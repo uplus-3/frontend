@@ -3,22 +3,21 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/system';
 import { Button } from '@mui/material';
 
-const RoundBtnBlock = styled('div')({});
+const SquareBtnBlock = styled('div')({});
 const CustomButton = styled(Button)(({ theme }) => ({
   fontFamily: 'LGSmart',
-  color: '#FFF',
+  color: '#000',
   fontSize: 14,
   height: 'auto',
-  borderRadius: 100,
+  borderRadius: 10,
+  border: `1px solid ${theme.palette.gray3}`,
   padding: '4px 20px 4px 20px',
-  background: theme.palette.prime,
-  '&:hover': {
-    background: theme.palette.prime + '90',
-  },
+  background: 'transparent',
 }));
-function RoundBtn({
+function SquareBtn({
   content,
   backgroundColor = '',
+  border = '',
   color = '',
   disabled = false,
   width = '',
@@ -33,6 +32,7 @@ function RoundBtn({
         backgroundColor: backgroundColor,
         color: color,
         width: width,
+        border: border,
         padding: padding,
         minWidth: 'fit-content',
         height: height,
@@ -48,9 +48,10 @@ function RoundBtn({
   );
 }
 
-RoundBtn.propTypes = {
+SquareBtnBlock.propTypes = {
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  border: PropTypes.string,
   backgroundColor: PropTypes.string,
   color: PropTypes.string,
   disabled: PropTypes.bool,
@@ -60,4 +61,4 @@ RoundBtn.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default RoundBtn;
+export default SquareBtn;
