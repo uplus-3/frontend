@@ -8,6 +8,7 @@ const MainDiv = styled('div')({
   position: 'absolute',
   background: `url(https://image.lguplus.com/static/pc-contents/images/fcmm/cnts/imge/20220822-123958-160-h0WGG9kU.jpg)`,
   backgroundSize: 'cover',
+  minWidth: 1440,
   width: '100%',
   height: '100%',
   left: 0,

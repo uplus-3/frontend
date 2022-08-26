@@ -3,15 +3,18 @@ import { styled } from '@mui/system';
 import { Button, useTheme } from '@mui/material';
 import SquareBtn from '../common/SquareBtn';
 import RoundBtn from '../common/RoundBtn';
+import PriceCompareModal from '../modal/PriceCompareModal';
 import { getFormattedPrice } from '../../lib/utils';
 
 import PropTypes from 'prop-types';
 const DeviceItemInfoBlock = styled('div')({
   width: 600,
+  marginTop: 70,
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'start',
+  // alignItems: 'start',
   gap: 15,
+  alignSelf: 'flex-start',
 });
 
 const DeviceName = styled('div')({
@@ -69,9 +72,10 @@ const DeviceSelectResult = styled('div')(({ theme }) => ({
   position: 'relative',
   background: theme.palette.gray2,
   borderRadius: 15,
-  padding: 10,
+  marginTop: 35,
+  marginBottom: 25,
+  padding: '30px 50px 30px 50px',
   width: '90%',
-  height: 300,
 }));
 
 const DeviceSelectResultTitle = styled('div')({
@@ -79,9 +83,19 @@ const DeviceSelectResultTitle = styled('div')({
   fontSize: '1.5rem',
 });
 
+const DevicePriceTable = styled('table')({
+  marginTop: 10,
+  fontSize: '0.85rem',
+  borderCollapse: 'separate',
+  td: {
+    width: 70,
+  },
+});
+
 const CompareBtn = styled(Button)(({ theme }) => ({
   position: 'absolute',
   right: 10,
+  top: 10,
   color: '#000000',
   '&:hover': {
     background: 'transparent',
@@ -116,6 +130,7 @@ const DeviceTag = ({ tag }) => {
 function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
   const theme = useTheme();
   const [selectedShippingIdx, setSelectedShippingIdx] = useState(0);
+  const [compareModalOpen, setCompareModalOpen] = useState(false);
   return (
     <DeviceItemInfoBlock>
       <div>
@@ -159,16 +174,32 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
         </DeviceShippingTypeFormat>
       </DeviceInfoFormat>
       <DeviceSelectResult>
-        <CompareBtn>비교하기</CompareBtn>
+        <CompareBtn onClick={() => setCompareModalOpen(true)}>비교하기</CompareBtn>
         <DeviceSelectResultTitle>
           월 {getFormattedPrice(deviceInfo?.d_price)}원
         </DeviceSelectResultTitle>
+        {deviceInfo?.plan?.name}, 공시지원금 기준
+        <DevicePriceTable>
+          <tr>
+            <td>휴대폰</td>
+            <td>{getFormattedPrice(4690)}원</td>
+          </tr>
+          <tr>
+            <td>통신료</td>
+            <td>{getFormattedPrice(55000)}원</td>
+          </tr>
+          <tr>
+            <td>정상가</td>
+            <td>{getFormattedPrice(428000)}원</td>
+          </tr>
+        </DevicePriceTable>
       </DeviceSelectResult>
       <AlignCenterDiv>
-        <RoundBtn height="100%" width={200}>
+        <RoundBtn height={40} width={300}>
           주문하기
         </RoundBtn>
       </AlignCenterDiv>
+      <PriceCompareModal open={compareModalOpen} setOpen={setCompareModalOpen} />
     </DeviceItemInfoBlock>
   );
 }
