@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import * as FILTER_DATA from './DeviceListFileterContents';
+import { FILTER_DATA } from './DeviceListFileterContents';
+import { getFormattedPrice } from '../../lib/utils';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { devicesActions } from '../../modules/actions/devicesSlice';
@@ -43,26 +44,27 @@ const DeviceListFilterBlock = styled('div')(({ theme }) => ({
 
 // TODO - sticky 적용시 하단에 공백 생성됨 : maxHeight때문
 const StyledListFilter = styled(List)(({ theme }) => ({
+  width: 'calc(100% - 10px)',
   background: theme.palette.gray1,
   position: 'sticky',
   top: '60px',
   overflowX: 'hidden',
   overflowY: 'auto',
-  maxHeight: 'calc(100vh - 150px)',
+  maxHeight: 'calc(100vh - 130px)',
   '&::-webkit-scrollbar': {
-    display: 'none',
+    width: '0px',
   },
-  // '&:hover::-webkit-scrollbar': {
-  //   width: '10px',
-  // },
-  // '&::-webkit-scrollbar-thumb': {
-  //   background: theme.palette.gray3,
-  //   borderRadius: 50,
-  // },
-  // '&::-webkit-scrollbar-track': {
-  //   background: theme.palette.gray2,
-  //   borderRadius: 50,
-  // },
+  '&:hover::-webkit-scrollbar': {
+    width: '10px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    background: theme.palette.gray3,
+    borderRadius: 50,
+  },
+  '&::-webkit-scrollbar-track': {
+    background: theme.palette.gray2,
+    borderRadius: 50,
+  },
 }));
 
 const StyledCheckbox = styled(Checkbox)(({ theme }) => ({
@@ -75,22 +77,13 @@ const StyledSlider = styled(Slider)(({ theme }) => ({
   color: theme.palette.prime,
 }));
 
-function valueLabelFormat(value) {
-  return `${value?.toLocaleString('ko-KR')}원`;
-}
-
+// TODO - 나중에 다시 리뷰해야할 부분
 function printPriceRange(value) {
-  return `${value[0].toLocaleString('ko-KR')}원 ~ ${value[1].toLocaleString('ko-KR')}원`;
+  if (!value || !value?.length) return;
+  return `${getFormattedPrice(parseInt(value[0]))}원 ~ ${getFormattedPrice(parseInt(value[1]))}원`;
 }
 
-function DeviceListFilter({
-  paymentType,
-  discountType,
-  // price,
-  multiCheckbox,
-  // onChangeCheckbox,
-  onChangeSlider,
-}) {
+function DeviceListFilter() {
   const dispatch = useDispatch();
   const { plan, discount, price, company, storage } = useSelector((state) => state.devices.filter);
   const [open, setOpen] = useState([true, true, true, false, false]);
@@ -99,6 +92,7 @@ function DeviceListFilter({
     newOpen[idx] = !newOpen[idx];
     setOpen(newOpen);
   };
+  const { plan_type, discount_type, company_type, storage_type, price_range } = FILTER_DATA;
 
   const onChangeCheckbox = (type, value) => {
     dispatch(devicesActions.setFilterValue({ type, value }));
@@ -115,12 +109,11 @@ function DeviceListFilter({
         <Divider />
         <Collapse in={open[0]} timeout="auto" unmountOnExit>
           <List component="div">
-            {FILTER_DATA.PLAN_TYPE.map((type) => (
+            {plan_type.data.map((type) => (
               <ListItemButton
                 key={type.value}
                 dense
-                // onClick={() => onChangeCheckbox('payment', type.value)}
-              >
+                onClick={() => onChangeCheckbox(plan_type.name, type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={plan === type.value}
@@ -142,11 +135,11 @@ function DeviceListFilter({
         <Divider />
         <Collapse in={open[1]} timeout="auto" unmountOnExit>
           <List component="div">
-            {FILTER_DATA.DISCOUNT_TYPE.map((type) => (
+            {discount_type.data.map((type) => (
               <ListItemButton
                 key={type.value}
                 dense
-                onClick={() => onChangeCheckbox('discount', type.value)}>
+                onClick={() => onChangeCheckbox(discount_type.name, type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={discount === type.value}
@@ -159,7 +152,7 @@ function DeviceListFilter({
             ))}
           </List>
         </Collapse>
-        {/* <ListItem className="list-type-label" onClick={() => handleClickListOpen(2)}>
+        <ListItem className="list-type-label" onClick={() => handleClickListOpen(2)}>
           <ListItemText primary="가격" />
           {open[2] ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
@@ -172,18 +165,16 @@ function DeviceListFilter({
                 <StyledSlider
                   value={price}
                   getAriaLabel={() => 'Price'}
-                  min={FILTER_DATA.PRICE_CONFIG.MIN}
-                  max={FILTER_DATA.PRICE_CONFIG.MAX}
-                  step={FILTER_DATA.PRICE_CONFIG.STEP}
-                  defaultValue={[FILTER_DATA.PRICE_CONFIG.MIN, FILTER_DATA.PRICE_CONFIG.MAX]}
+                  min={price_range.config.MIN}
+                  max={price_range.config.MAX}
+                  step={price_range.config.STEP}
                   valueLabelDisplay="off"
-                  onChange={onChangeSlider}
-                  valueLabelFormat={valueLabelFormat}
+                  onChange={(e, value) => onChangeCheckbox(price_range.name, value)}
                 />
               </Stack>
             </ListItem>
           </List>
-        </Collapse> */}
+        </Collapse>
 
         {/* 제조사 */}
         <ListItem className="list-type-label" onClick={() => handleClickListOpen(3)}>
@@ -193,14 +184,14 @@ function DeviceListFilter({
         <Divider />
         <Collapse in={open[3]} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {FILTER_DATA.COMPANY.map((type) => (
+            {company_type.data.map((type) => (
               <ListItemButton
                 key={type.value}
                 dense
-                onClick={(e) => onChangeCheckbox('company', type.value)}>
+                onClick={(e) => onChangeCheckbox(company_type.name, type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
-                    checked={multiCheckbox.company.has(type.value)}
+                    checked={company.includes(type.value)}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />
@@ -219,14 +210,14 @@ function DeviceListFilter({
         <Divider />
         <Collapse in={open[4]} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {FILTER_DATA.STORAGE.map((type) => (
+            {storage_type.data.map((type) => (
               <ListItemButton
                 key={type.value}
                 dense
-                onClick={(e) => onChangeCheckbox('storage', type.value)}>
+                onClick={(e) => onChangeCheckbox(storage_type.name, type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
-                    checked={multiCheckbox.storage.has(type.value)}
+                    checked={storage.includes(type.value)}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />
