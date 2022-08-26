@@ -13,6 +13,9 @@ const CustomButton = styled(Button)(({ theme }) => ({
   border: `1px solid ${theme.palette.gray3}`,
   padding: '4px 20px 4px 20px',
   background: 'transparent',
+  '&:hover': {
+    background: theme.palette.prime + '0a',
+  },
 }));
 function SquareBtn({
   content,
@@ -28,6 +31,7 @@ function SquareBtn({
 }) {
   return (
     <CustomButton
+      disableRipple
       sx={{
         backgroundColor: backgroundColor,
         color: color,
