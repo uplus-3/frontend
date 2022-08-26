@@ -3,6 +3,7 @@ import { styled } from '@mui/system';
 import DeviceListHeader from './DeviceListHeader';
 import DeviceListItem from './DeviceListItem';
 import { Box } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const DeviceListBlock = styled('div')({
   width: '100%',
@@ -16,13 +17,14 @@ const DeviceListWrapper = styled(Box)({
 });
 
 function DeviceList() {
-  const datas = Array.from({ length: 32 });
+  const devices = useSelector((state) => state.devices.devices);
+  const datas = Array.from({ length: 32 }).fill(devices[0]);
   return (
     <DeviceListBlock>
       <DeviceListHeader />
       <DeviceListWrapper>
         {datas.map((data) => (
-          <DeviceListItem />
+          <DeviceListItem data={data} />
         ))}
       </DeviceListWrapper>
     </DeviceListBlock>
