@@ -4,9 +4,10 @@ import { Button, useTheme } from '@mui/material';
 import SquareBtn from '../common/SquareBtn';
 import RoundBtn from '../common/RoundBtn';
 import PriceCompareModal from '../modal/PriceCompareModal';
-import { getFormattedPrice } from '../../lib/utils';
+import { PriceFormatter } from '../../lib/utils';
 
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 const DeviceItemInfoBlock = styled('div')({
   width: 600,
   marginTop: 70,
@@ -129,8 +130,14 @@ const DeviceTag = ({ tag }) => {
 
 function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
   const theme = useTheme();
+  const navigate = useNavigate();
+
   const [selectedShippingIdx, setSelectedShippingIdx] = useState(0);
   const [compareModalOpen, setCompareModalOpen] = useState(false);
+
+  const handleOrderClick = () => {
+    navigate('/order/mobile', { state: { ...deviceInfo, selectedColor: selectedColor } });
+  };
   return (
     <DeviceItemInfoBlock>
       <div>
@@ -162,6 +169,7 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
         <DeviceShippingTypeFormat>
           {['기기변경', '번호이동', '신규가입'].map((type, idx) => (
             <SquareBtn
+              key={`${type}-${idx}`}
               border={selectedShippingIdx === idx && `1px solid ${theme.palette.prime}`}
               color={selectedShippingIdx === idx && theme.palette.prime}
               width={160}
@@ -176,26 +184,28 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
       <DeviceSelectResult>
         <CompareBtn onClick={() => setCompareModalOpen(true)}>비교하기</CompareBtn>
         <DeviceSelectResultTitle>
-          월 {getFormattedPrice(deviceInfo?.d_price)}원
+          월 {PriceFormatter(deviceInfo?.d_price)}원
         </DeviceSelectResultTitle>
         {deviceInfo?.plan?.name}, 공시지원금 기준
         <DevicePriceTable>
-          <tr>
-            <td>휴대폰</td>
-            <td>{getFormattedPrice(4690)}원</td>
-          </tr>
-          <tr>
-            <td>통신료</td>
-            <td>{getFormattedPrice(55000)}원</td>
-          </tr>
-          <tr>
-            <td>정상가</td>
-            <td>{getFormattedPrice(428000)}원</td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>휴대폰</td>
+              <td>{PriceFormatter(4690)}원</td>
+            </tr>
+            <tr>
+              <td>통신료</td>
+              <td>{PriceFormatter(55000)}원</td>
+            </tr>
+            <tr>
+              <td>정상가</td>
+              <td>{PriceFormatter(428000)}원</td>
+            </tr>
+          </tbody>
         </DevicePriceTable>
       </DeviceSelectResult>
       <AlignCenterDiv>
-        <RoundBtn height={40} width={300}>
+        <RoundBtn height={40} width={300} onClick={handleOrderClick}>
           주문하기
         </RoundBtn>
       </AlignCenterDiv>
