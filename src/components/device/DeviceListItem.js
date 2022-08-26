@@ -1,27 +1,11 @@
-import React from 'react';
-import TestImage from '../../assets/images/SM-F721N-purple-0.jpg';
+import React, { useState } from 'react';
+import purple from '../../assets/images/SM-F721N-purple-0.jpg';
+import blue from '../../assets/images/SM-F721N-blue-0.jpg';
+import gold from '../../assets/images/SM-F721N-gold-0.jpg';
+import graphite from '../../assets/images/SM-F721N-graphite-0.jpg';
 
 import { styled } from '@mui/system';
-import { Box, Divider, Typography } from '@mui/material';
-
-const colors = [
-  {
-    name: '보라퍼플',
-    color: 'rgb(184, 170, 203)',
-  },
-  {
-    name: '핑크골드',
-    color: 'rgb(236, 219, 211)',
-  },
-  {
-    name: '블루',
-    color: 'rgb(201, 209, 228)',
-  },
-  {
-    name: '그라파이트',
-    color: 'rgb(66, 67, 71)',
-  },
-];
+import { Box, Divider } from '@mui/material';
 
 const DeviceListItemBlock = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -47,7 +31,6 @@ const ItemImageWapper = styled(Box)({
   width: '100%',
   height: 280,
   borderRadius: '0.875rem',
-  backgroundImage: `url(${TestImage})`,
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
 });
@@ -65,6 +48,12 @@ const ItemColorWapper = styled(Box)({
       width: 12,
       height: 12,
       borderRadius: '100%',
+      cursor: 'pointer',
+      transition: 'transform 0.25s',
+    },
+    '& li:hover': {
+      transform: 'scale(1.3)',
+      transition: 'transform 0.25s',
     },
   },
 });
@@ -83,6 +72,9 @@ const ItemInfoWapper = styled(Box)({
   '& .p-price': {
     fontSize: '1.5rem',
     fontWeight: 700,
+  },
+  '& .origin-price': {
+    color: 'gray',
   },
 });
 
@@ -104,28 +96,45 @@ const ItemCompareWapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-function DeviceListItem() {
+const colorImages = [purple, gold, blue, graphite];
+
+function DeviceListItem({ data }) {
+  const [cIdx, setCIdx] = useState(0);
+
+  const handleClickColor = (idx) => {
+    setCIdx(idx);
+  };
+
   return (
     <DeviceListItemBlock>
       <ItemTagWapper>
-        <span className="popular">인기</span>
+        {data.tags.map((tag) => (
+          <span key={tag.content} className="popular" style={{ background: tag.rgb }}>
+            {tag.content}
+          </span>
+        ))}
       </ItemTagWapper>
-      <ItemImageWapper />
+      <ItemImageWapper style={{ backgroundImage: `url(${colorImages[cIdx]})` }} />
       <ItemColorWapper>
         <ul className="colors">
-          {colors.map((color) => (
-            <li key={color.name} title={color.name} style={{ background: color.color }}></li>
+          {data.colors.map((color, index) => (
+            <li
+              key={color.name}
+              title={color.name}
+              style={{ background: color.code }}
+              onClick={() => handleClickColor(index)}></li>
           ))}
         </ul>
       </ItemColorWapper>
       <ItemInfoWapper>
-        <div className="p-name">갤럭시 Z Flip 4</div>
+        <div className="p-name">{data.name}</div>
         <div>
           <div className="p-price-sub">
+            <div className="origin-price">정상가 {data.price.toLocaleString('ko-KR')}원</div>
             <div>휴대폰 월 59,000원</div>
             <div>통신료 월 65,000원</div>
           </div>
-          <div className="p-price">월 124,900원</div>
+          <div className="p-price">월 {data.m_price.toLocaleString('ko-KR')}원</div>
         </div>
       </ItemInfoWapper>
       <Divider />

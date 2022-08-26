@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { devicesActions } from '../../modules/actions/devicesSlice';
 
 import DeviceList from '../../components/device/DeviceList';
 import DeviceListFilter from '../../components/device/DeviceListFilter';
@@ -23,6 +25,7 @@ function DeviceListPage() {
   // const [sort, setSort] = useState(true); // 정렬 기준 (true : 내림차순, false : 오름차순)
   // const [hasSoldout, setHasSoldout] = useState(false); // 품절 제외 여부 (true : 품절 제외, false : 품절 포함)
   // const [showOriginPrice, setShowOriginPrice] = useState(false); // 정상가 보기 여부 (true : 정상가 보기, false : 정상가 숨기기)
+  const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [paymentType, setPaymentType] = useState(searchParams.get('plan') || 'recommend'); // default : 가장 알맞은 요금제, 한개만 선택 가능
@@ -33,22 +36,26 @@ function DeviceListPage() {
     storage: new Set(['all']),
   });
 
+  // TODO - filter INIT
   useEffect(() => {
-    setSearchParams({
-      plan: paymentType,
-      'discount-type': discountType,
-      price: price.join('~'),
-      company: Array.from(multiCheckbox.company),
-      storage: Array.from(multiCheckbox.storage),
-    });
-  }, [
-    setSearchParams,
-    paymentType,
-    discountType,
-    price,
-    multiCheckbox.company,
-    multiCheckbox.storage,
-  ]);
+    // filter init
+    const { initFilterValue } = devicesActions;
+    const { plan, discount, price, company, storage } = searchParams;
+    const init = {
+      plan: plan || 'recommend',
+      discount: discount || 'discount',
+      company: company || new Set(['all']),
+      storage: storage || new Set(['all']),
+      price: price || [PRICE_CONFIG.MIN, PRICE_CONFIG.MAX],
+    };
+    if (price) {
+      const spt = price.split('~');
+      if (spt.length === 2) {
+        init.price = [parseInt(spt[0]), parseInt(spt[1])];
+      }
+    }
+    dispatch(initFilterValue(init));
+  }, [dispatch]);
 
   // 체크박스 선택시 값이 변경되는 함수
   const handleChangeCheckbox = (type, value) => {

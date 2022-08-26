@@ -1,4 +1,4 @@
-export const PAYMENT_TYPE = [
+export const PLAN_TYPE = [
   {
     name: '가장 알맞은 요금제',
     value: 'recommend',
@@ -79,3 +79,18 @@ export const PRICE_CONFIG = {
   MAX: 200000,
   STEP: 1000,
 };
+
+export const SORT_TYPE = [
+  {
+    name: '출시순',
+    value: 'launch',
+  },
+  {
+    name: '실구매가순',
+    value: 'purchase',
+  },
+  {
+    name: '정상가순',
+    value: 'price',
+  },
+];

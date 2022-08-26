@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import * as FILTER_DATA from './DeviceListFileterContents';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { devicesActions } from '../../modules/actions/devicesSlice';
+
 import { styled } from '@mui/system';
 import {
   Checkbox,
@@ -83,16 +86,22 @@ function printPriceRange(value) {
 function DeviceListFilter({
   paymentType,
   discountType,
-  price,
+  // price,
   multiCheckbox,
-  onChangeCheckbox,
+  // onChangeCheckbox,
   onChangeSlider,
 }) {
+  const dispatch = useDispatch();
+  const { plan, discount, price, company, storage } = useSelector((state) => state.devices.filter);
   const [open, setOpen] = useState([true, true, true, false, false]);
   const handleClickListOpen = (idx) => {
     const newOpen = [...open];
     newOpen[idx] = !newOpen[idx];
     setOpen(newOpen);
+  };
+
+  const onChangeCheckbox = (type, value) => {
+    dispatch(devicesActions.setFilterValue({ type, value }));
   };
 
   return (
@@ -106,14 +115,15 @@ function DeviceListFilter({
         <Divider />
         <Collapse in={open[0]} timeout="auto" unmountOnExit>
           <List component="div">
-            {FILTER_DATA.PAYMENT_TYPE.map((type) => (
+            {FILTER_DATA.PLAN_TYPE.map((type) => (
               <ListItemButton
                 key={type.value}
                 dense
-                onClick={() => onChangeCheckbox('payment', type.value)}>
+                // onClick={() => onChangeCheckbox('payment', type.value)}
+              >
                 <ListItemIcon>
                   <StyledCheckbox
-                    checked={paymentType === type.value}
+                    checked={plan === type.value}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />
@@ -139,7 +149,7 @@ function DeviceListFilter({
                 onClick={() => onChangeCheckbox('discount', type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
-                    checked={discountType === type.value}
+                    checked={discount === type.value}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />
@@ -149,7 +159,7 @@ function DeviceListFilter({
             ))}
           </List>
         </Collapse>
-        <ListItem className="list-type-label" onClick={() => handleClickListOpen(2)}>
+        {/* <ListItem className="list-type-label" onClick={() => handleClickListOpen(2)}>
           <ListItemText primary="가격" />
           {open[2] ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
@@ -173,7 +183,7 @@ function DeviceListFilter({
               </Stack>
             </ListItem>
           </List>
-        </Collapse>
+        </Collapse> */}
 
         {/* 제조사 */}
         <ListItem className="list-type-label" onClick={() => handleClickListOpen(3)}>

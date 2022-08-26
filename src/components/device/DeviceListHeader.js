@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SORT_TYPE } from './DeviceListFileterContents';
 
 import { styled } from '@mui/system';
 import {
@@ -81,13 +82,11 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   },
 }));
 
-const options = ['출시순', '실구매가순', '정상가순'];
-
 // TODO - 정렬 hover시 dropdown 구현
 function DeviceListHeader() {
   const [sort, setSort] = useState(true); // 정렬 기준 (true : 내림차순, false : 오름차순)
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const open = Boolean(anchorEl);
   const handleClickListItem = (event) => {
     setAnchorEl(event.currentTarget);
@@ -140,7 +139,7 @@ function DeviceListHeader() {
               aria-haspopup="listbox"
               aria-controls="lock-menu"
               aria-expanded={open ? 'true' : undefined}>
-              <ListItemText primary={options[selectedIndex]} onClick={handleClickListItem} />
+              <ListItemText primary={SORT_TYPE[selectedIndex].name} onClick={handleClickListItem} />
               <ListItemIcon onClick={handleChangeSortDirection}>
                 {sort ? <ExpandMore /> : <ExpandLess />}
               </ListItemIcon>
@@ -155,12 +154,12 @@ function DeviceListHeader() {
               'aria-labelledby': 'lock-button',
               role: 'listbox',
             }}>
-            {options.map((option, index) => (
+            {SORT_TYPE.map((option, index) => (
               <StyledMenuItem
-                key={option}
+                key={option.value}
                 selected={index === selectedIndex}
                 onClick={(event) => handleMenuItemClick(event, index)}>
-                {option}
+                {option.name}
               </StyledMenuItem>
             ))}
           </Menu>
