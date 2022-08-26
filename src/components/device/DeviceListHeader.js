@@ -108,10 +108,9 @@ function DeviceListHeader() {
     setSelectedIndex(index);
     setAnchorEl(null);
     setSortDirection(true);
-    setSearchParams({
-      ...query,
-      sortby: data,
-    });
+
+    searchParams.set('sortby', data);
+    setSearchParams(searchParams, { replace: true });
   };
 
   const handleClose = () => {

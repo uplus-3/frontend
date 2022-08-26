@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FILTER_DATA } from './DeviceListFileterContents';
-import { getFormattedPrice } from '../../lib/utils';
+import { PriceFormatter } from '../../lib/utils';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { devicesActions } from '../../modules/actions/devicesSlice';
@@ -80,7 +80,7 @@ const StyledSlider = styled(Slider)(({ theme }) => ({
 // TODO - 나중에 다시 리뷰해야할 부분
 function printPriceRange(value) {
   if (!value || !value?.length) return;
-  return `${getFormattedPrice(parseInt(value[0]))}원 ~ ${getFormattedPrice(parseInt(value[1]))}원`;
+  return `${PriceFormatter(parseInt(value[0]))}원 ~ ${PriceFormatter(parseInt(value[1]))}원`;
 }
 
 function DeviceListFilter() {
@@ -191,7 +191,7 @@ function DeviceListFilter() {
                 onClick={(e) => onChangeCheckbox(company_type.name, type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
-                    checked={company.includes(type.value)}
+                    checked={company?.includes(type.value)}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />
@@ -217,7 +217,7 @@ function DeviceListFilter() {
                 onClick={(e) => onChangeCheckbox(storage_type.name, type.value)}>
                 <ListItemIcon>
                   <StyledCheckbox
-                    checked={storage.includes(type.value)}
+                    checked={storage?.includes(type.value)}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />

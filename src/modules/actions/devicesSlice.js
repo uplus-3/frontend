@@ -66,9 +66,9 @@ const initialState = {
   filter: {
     plan: null,
     discount: null,
-    price: [],
-    company: [],
-    storage: [],
+    price: null,
+    company: null,
+    storage: null,
   },
   options: {
     search: null,
