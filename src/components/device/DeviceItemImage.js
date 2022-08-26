@@ -3,8 +3,12 @@ import { styled } from '@mui/system';
 import PropTypes from 'prop-types';
 
 const DeviceItemImageBlock = styled('div')({
+  position: 'sticky',
+  top: 0,
   display: 'flex',
+  marginTop: 70,
   flexDirection: 'column',
+
   alignItems: 'center',
   gap: 10,
 });

@@ -18,8 +18,10 @@ const tempData = {
   storage: 256,
   stock: 1,
   plan: {
-    price: '요금제가격(월)',
+    name: '5G 라이트',
+    price: 65000,
     d_price: '할인된가격(할인적용)',
+    sDiscount: '선택약정 금액',
   },
   tags: [
     {

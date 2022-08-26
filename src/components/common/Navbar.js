@@ -12,6 +12,7 @@ const CustomAppbar = styled(AppBar)(({ theme }) => ({
   height: 60,
   width: '100%',
   minWidth: 1440,
+
   color: '#000',
   background: theme.palette.bg,
   boxShadow:
@@ -24,7 +25,7 @@ const CustomToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 const MenuCollpase = styled(Collapse)({
-  position: 'absolute',
+  position: 'fixed',
   width: '100%',
   top: '60px',
   zIndex: 50,
@@ -106,7 +107,7 @@ function Navbar() {
   };
   return (
     <>
-      <CustomAppbar position="fixed">
+      <CustomAppbar position="sticky">
         <CustomToolbar disableGutters>
           <ButtonBase disableRipple onClick={handleLogoClick}>
             <LogoImage alt="로고" src={LogoUplus} />
