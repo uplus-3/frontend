@@ -178,13 +178,33 @@ const tempRelatedSearchTerm = {
   ],
 };
 
+const HightlightSearchTerm = (text, query) => {
+  if (query === '') return text;
+  const initial = text.split(new RegExp(`(${query})`, 'gi'));
+  return (
+    <>
+      {initial.map((normal, idx) =>
+        normal.toLowerCase() === query.toLowerCase() ? (
+          <>
+            <HighlightRelatedSearchTerm key={`highlight-related-search-term-${idx}`}>
+              {normal}
+            </HighlightRelatedSearchTerm>
+          </>
+        ) : (
+          <>{normal}</>
+        ),
+      )}
+    </>
+  );
+};
+
 function SearchBar() {
   const lenValidator = (value) => value.length <= 30;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchNetworkType, setSearchNetworkType] = useState(null);
   const [recentSearchTerm, setRecentSearchTerm] = useState(
-    JSON.parse(localStorage.getItem('recent_search_terms') || []),
+    JSON.parse(localStorage.getItem('recent_search_terms')) || [],
   );
   const [relatedSearchTerm, setRelatedSearchTerm] = useState({ results: [] });
   const [selectedRelatedTerm, setSelectedRelatedSearchTerm] = useState(null);
@@ -252,25 +272,6 @@ function SearchBar() {
   };
 
   // 특정 검색어 하이라이팅 기능
-  const HightlightSearchTerm = (text, query) => {
-    if (query === '') return text;
-    const initial = text.split(new RegExp(`(${query})`, 'gi'));
-    return (
-      <>
-        {initial.map((normal, idx) =>
-          normal.toLowerCase() === query.toLowerCase() ? (
-            <>
-              <HighlightRelatedSearchTerm key={`highlight-related-search-term-${idx}`}>
-                {normal}
-              </HighlightRelatedSearchTerm>
-            </>
-          ) : (
-            <>{normal}</>
-          ),
-        )}
-      </>
-    );
-  };
 
   return (
     <SearchBarBlock>
