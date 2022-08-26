@@ -54,26 +54,24 @@ jobs:
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$REGISTRY/$REPOSITORY:$IMAGE_TAG"
 
-# # NOW CREATE CLUSTER
-
-#     - name: Download Task Definition
-#       run: |
-#         aws ecs describe-task-definition \
-#         --task-definition Group3TestTask \
-#         --query taskDefinition > task-definition.json
+    - name: Download Task Definition
+      run: |
+        aws ecs describe-task-definition \
+        --task-definition dev3task \
+        --query taskDefinition > task-definition.json
         
-#     - name: Fill in the new image ID in the Amazon ECS task definition
-#       id: task-def
-#       uses: aws-actions/amazon-ecs-render-task-definition@v1
-#       with:
-#         task-definition: task-definition.json
-#         container-name: group3test
-#         image: ${{ steps.build-image.outputs.image }}
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: dev3nginx
+        image: ${{ steps.build-image.outputs.image }}
 
-#     - name: Deploy Amazon ECS task definition
-#       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-#       with:
-#         task-definition: ${{ steps.task-def.outputs.task-definition }}
-#         cluster: Group-3-Test
-#         service: Group3TestService
-#         wait-for-service-stability: true
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        cluster: u3-dev
+        service: dev3service
+        wait-for-service-stability: true
