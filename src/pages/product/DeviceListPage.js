@@ -24,7 +24,6 @@ function DeviceListPage() {
   const dispatch = useDispatch();
   const current_filter = useSelector((state) => state.devices.filter);
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = Object.fromEntries([...searchParams]);
 
   // TODO - query string이 유효하지 않은 경우 처리
   useEffect(() => {
@@ -32,7 +31,7 @@ function DeviceListPage() {
     const { price_range } = FILTER_DATA;
     const { initFilterValue } = devicesActions;
     // const { plan, discount, price, company, storage } = searchParams;
-    const { plan, discount, price, company, storage } = query;
+    const { plan, discount, price, company, storage } = Object.fromEntries([...searchParams]);
     const init = {
       plan: plan || '-1',
       discount: discount || '-1',
@@ -50,12 +49,14 @@ function DeviceListPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    const temp = {
-      price: current_filter.price?.join('~'),
-      company: current_filter.company?.join('^'),
-      storage: current_filter.storage?.join('^'),
-    };
-    setSearchParams({ ...query, ...current_filter, ...temp });
+    const { plan, discount, price, company, storage } = current_filter;
+    if (plan) searchParams.set('plan', plan);
+    if (discount) searchParams.set('discount', discount);
+    if (price) searchParams.set('price', price.join('~'));
+    if (company) searchParams.set('company', company.join('^'));
+    if (storage) searchParams.set('storage', storage.join('^'));
+
+    setSearchParams(searchParams, { replace: true });
   }, [current_filter, setSearchParams]);
 
   return (
