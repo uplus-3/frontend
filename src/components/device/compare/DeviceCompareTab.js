@@ -5,6 +5,7 @@ import classnames from 'classnames';
 
 import { styled } from '@mui/system';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
+import DeviceCompareModal from '../../modal/DeviceCompareModal';
 
 const DeviceCompareTabBlock = styled('div')(({ theme }) => ({
   position: 'fixed',
@@ -57,6 +58,8 @@ const DeviceWapper = styled('ul')({
   justifyContent: 'space-between',
   gap: 20,
   width: '100%',
+  height: 105,
+
   '& > li': {
     width: '100%',
   },
@@ -75,6 +78,7 @@ const ResetButton = styled('div')({
 
 function DeviceCompareTab() {
   const [open, setOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(true);
   const handleClickOpen = useCallback(() => setOpen((prev) => !prev), []);
 
   return (
@@ -100,6 +104,7 @@ function DeviceCompareTab() {
           <ResetButton>전체삭제</ResetButton>
         </CompareButtonWapper>
       </BodyWapper>
+      <DeviceCompareModal open={modalOpen} setOpen={setModalOpen} />
     </DeviceCompareTabBlock>
   );
 }

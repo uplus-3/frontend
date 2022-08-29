@@ -9,15 +9,20 @@ const DeviceCompareItemBlock = styled('div')(({ theme, data }) => ({
   alignItems: 'center',
   gap: 20,
   width: '100%',
+  height: '100%',
   padding: 10,
   border: data ? `1px solid ${theme.palette.gray3}` : `2px dashed ${theme.palette.gray3}`,
   borderRadius: 10,
+}));
+
+const DeviceImgWapper = styled('div')({
+  height: '100%',
 
   '& img': {
-    width: !!data ? 75 : '100%',
-    height: 75,
+    width: '100%',
+    height: '100%',
   },
-}));
+});
 
 const CloseIconWapper = styled('div')({
   position: 'absolute',
@@ -47,14 +52,14 @@ function DeviceCompareItem({ data }) {
       <CloseIconWapper>
         <Close />
       </CloseIconWapper>
-      <div>
+      <DeviceImgWapper>
         <img src={imgUrl} />
-      </div>
+      </DeviceImgWapper>
       {data ? (
         <>
           <InfoWapper>
             <p>갤럭시 Z Flip 4</p>
-            <p>124,900원</p>
+            <p>월 124,900원</p>
           </InfoWapper>
         </>
       ) : (
