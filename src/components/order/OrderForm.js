@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+
 import { styled } from '@mui/system';
-import { TextField, useTheme } from '@mui/material';
+import { TextField, InputAdornment, useTheme } from '@mui/material';
 import { PhoneFormatter, PriceFormatter } from '../../lib/utils';
 import useInput from '../../lib/hooks/useInput';
 import SquareBtn from '../common/SquareBtn';
+import DaumPostCodeModal from '../modal/DaumPostCodeModal';
 
 const OrderFormBlock = styled('div')({
   marginTop: 20,
   width: 1000,
+  paddingRight: 130,
   display: 'inline-block',
 });
 
@@ -15,17 +18,30 @@ const InputWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   marginLeft: 20,
   alignItems: 'center',
-  gap: 20,
+  marginTop: 10,
   span: {
     fontSize: '0.8rem',
     color: '#00000090',
+    width: 100,
   },
 }));
 
-const CustomInput = styled(TextField)(({ theme }) => ({
+const NamePhoneInputWrapper = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+});
+
+const CustomInput = styled(TextField)(({ theme, width }) => ({
+  width: width,
   margin: 0,
   '.MuiInput-underline:after': {
     borderBottomColor: theme.palette.prime,
+  },
+  '.MuiFormHelperText-root': {
+    color: '#d32f2f',
+  },
+  '&::placeholder': {
+    fontSize: '0.8rem',
   },
 }));
 
@@ -47,7 +63,7 @@ const OrderTitle = styled('div')({
 });
 
 const OrderFormWrapper = styled('div')(({ theme }) => ({
-  padding: '25px 0 25px 40px',
+  padding: '25px 40px',
   '.form-title': {
     fontWeight: 600,
     fontSize: '1.1rem',
@@ -103,25 +119,45 @@ const installmentPeriodList = [
   { id: 36, content: '36개월' },
 ];
 
-function OrderForm() {
+function OrderForm({ orderForm, setOrderForm }, ref) {
   const phonenumberValidator = (num) => num.indexOf('-') === -1;
   const theme = useTheme();
   const [name, onNameChange, setName] = useInput('');
   const [phonenumber, onChangePhonenumber, setPhonenumber] = useInput('');
-  const [address, onChangeAddress, setAddress] = useInput('');
-  const [orderForm, setOrderForm] = useState({
-    colorId: 1,
-    discountType: 0,
-    installmentPeriod: 1,
-    planId: 1,
-    price: 100236,
-    registrationType: 0,
-    shipmentType: 1,
-  });
+  const [detailAddress, onChangeDetailAddress] = useInput('');
+  const [address, setAddress] = useState('');
+  const [openPostcode, setOpenPostCode] = useState(false);
   const [planList, setPlanList] = useState([]);
 
+  const [phoneMessage, setPhoneMessage] = useState('');
+  const [nameMessage, setNameMessage] = useState('');
+  const [addressMessage, setAddressMessage] = useState('');
+  const [detailAddressMessage, setDetailAddressMessage] = useState('');
+
+  const phoneValidator = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+  const nameValidator = /^[가-힣]{2,20}$/;
+
+  useImperativeHandle(ref, () => ({
+    checkUserInfo,
+  }));
   const getPrice = () => {
     // 백엔드로 api 요청
+  };
+
+  const checkUserInfo = () => {
+    if (!!!name) {
+      setNameMessage('이름을 입력해주세요');
+      return false;
+    } else if (!!!phonenumber) {
+      setPhoneMessage('휴대폰 번호를 입력해주세요.');
+      return false;
+    } else if (!!!address) {
+      setAddressMessage('주소를 입력해주세요');
+      return false;
+    } else if (!!!detailAddress) {
+      setDetailAddressMessage('상세주소를 입력해주세요');
+    }
+    return !!!nameMessage && !!!addressMessage && !!!phoneMessage && !!!detailAddressMessage;
   };
 
   const getPlanList = () => {
@@ -143,30 +179,109 @@ function OrderForm() {
       },
     ]);
   };
+
   useEffect(() => {
     getPrice();
     getPlanList();
   }, []);
+
+  useEffect(() => {
+    if (!name || nameValidator.test(name)) {
+      setNameMessage('');
+    } else {
+      setNameMessage('한글이름 기준으로 2자리 이상 20자리 이하로 입력해주세요.');
+    }
+  }, [name]);
+
+  useEffect(() => {
+    if (!phonenumber || phoneValidator.test(PhoneFormatter(phonenumber))) {
+      setPhoneMessage('');
+    } else {
+      setPhoneMessage('유효하지 않은 휴대폰번호입니다.');
+    }
+  }, [phonenumber]);
+
+  useEffect(() => {
+    if (address) {
+      setAddressMessage('');
+    } else {
+      setAddressMessage('주소를 입력해주세요.');
+    }
+  }, [address]);
+
+  useEffect(() => {
+    if (detailAddress) {
+      setDetailAddressMessage('');
+    } else {
+      setDetailAddressMessage('상세주소를 입력해주세요.');
+    }
+  }, [detailAddress]);
+
   return (
     <OrderFormBlock>
       <OrderTitle>주문/결제</OrderTitle>
       <OrderFormWrapper>
         <div className="form-title">주문자 정보</div>
+        <NamePhoneInputWrapper>
+          <InputWrapper>
+            <span>이름</span>
+            <CustomInput
+              required
+              width={255}
+              value={name}
+              onChange={onNameChange}
+              variant="standard"
+              helperText={nameMessage}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <span>휴대폰번호</span>
+            <CustomInput
+              required
+              placehoder="휴대폰번호를 입력해주세요"
+              width={255}
+              value={PhoneFormatter(phonenumber)}
+              onChange={onChangePhonenumber}
+              variant="standard"
+              helperText={phoneMessage}
+            />
+          </InputWrapper>
+        </NamePhoneInputWrapper>
         <InputWrapper>
-          <span>이름</span>
-          <CustomInput value={name} onChange={onNameChange} variant="standard" />
-        </InputWrapper>
-        <InputWrapper>
-          <span>휴대폰번호</span>
+          <span>주소</span>
           <CustomInput
-            value={PhoneFormatter(phonenumber)}
-            onChange={onChangePhonenumber}
+            required
+            InputProps={{
+              readOnly: true,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SquareBtn
+                    onClick={() => setOpenPostCode(true)}
+                    color="#ffffff"
+                    border="transparent"
+                    backgroundColor={theme.palette.prime}
+                    height="20px">
+                    주소검색
+                  </SquareBtn>
+                </InputAdornment>
+              ),
+            }}
+            width={670}
+            value={address}
             variant="standard"
+            onClick={() => setOpenPostCode(true)}
+            helperText={addressMessage}
           />
         </InputWrapper>
         <InputWrapper>
-          <span>주소</span>
-          <CustomInput variant="standard" />
+          <span>상세주소</span>
+          <CustomInput
+            width={670}
+            disabled={!!!address}
+            value={detailAddress}
+            variant="standard"
+            onChange={onChangeDetailAddress}
+          />
         </InputWrapper>
       </OrderFormWrapper>
       <OrderFormWrapper>
@@ -278,9 +393,10 @@ function OrderForm() {
             ))}
           </ButtonWrapper>
         </DeviceInfoWrapper>
+        <DaumPostCodeModal open={openPostcode} setOpen={setOpenPostCode} setAddress={setAddress} />
       </OrderFormWrapper>
     </OrderFormBlock>
   );
 }
 
-export default OrderForm;
+export default forwardRef(OrderForm);
