@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import purple from '../../assets/images/SM-F721N-purple-0.jpg';
 import blue from '../../assets/images/SM-F721N-blue-0.jpg';
 import gold from '../../assets/images/SM-F721N-gold-0.jpg';
@@ -6,6 +8,8 @@ import graphite from '../../assets/images/SM-F721N-graphite-0.jpg';
 
 import { styled } from '@mui/system';
 import { Box, Divider } from '@mui/material';
+
+import qs from 'qs';
 
 const DeviceListItemBlock = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -33,6 +37,7 @@ const ItemImageWapper = styled(Box)({
   borderRadius: '0.875rem',
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
+  cursor: 'pointer',
 });
 
 const ItemColorWapper = styled(Box)({
@@ -64,6 +69,7 @@ const ItemInfoWapper = styled(Box)({
     fontSize: '1.25rem',
     fontWeight: 600,
     marginBottom: 15,
+    cursor: 'pointer',
   },
   '& .p-price-sub': {
     fontSize: '0.75rem',
@@ -99,10 +105,24 @@ const ItemCompareWapper = styled(Box)(({ theme }) => ({
 const colorImages = [purple, gold, blue, graphite];
 
 function DeviceListItem({ data }) {
+  const navigate = useNavigate();
+  const filter = useSelector((state) => state.devices.filter);
   const [cIdx, setCIdx] = useState(0);
+
+  const queryString = qs.stringify({
+    plan: filter.plan,
+    discount: filter.discount,
+  });
 
   const handleClickColor = (idx) => {
     setCIdx(idx);
+  };
+
+  const handleGoDetailPage = () => {
+    navigate({
+      pathname: `./${data.serialNumber}`,
+      search: `?id=${data.id}&${queryString}`,
+    });
   };
 
   return (
@@ -114,7 +134,10 @@ function DeviceListItem({ data }) {
           </span>
         ))}
       </ItemTagWapper>
-      <ItemImageWapper style={{ backgroundImage: `url(${colorImages[cIdx]})` }} />
+      <ItemImageWapper
+        onClick={handleGoDetailPage}
+        style={{ backgroundImage: `url(${colorImages[cIdx]})` }}
+      />
       <ItemColorWapper>
         <ul className="colors">
           {data.colors.map((color, index) => (
@@ -127,7 +150,9 @@ function DeviceListItem({ data }) {
         </ul>
       </ItemColorWapper>
       <ItemInfoWapper>
-        <div className="p-name">{data.name}</div>
+        <div onClick={handleGoDetailPage} className="p-name">
+          {data.name}
+        </div>
         <div>
           <div className="p-price-sub">
             <div className="origin-price">정상가 {data.price.toLocaleString('ko-KR')}원</div>
