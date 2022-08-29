@@ -9,6 +9,7 @@ import { FILTER_DATA } from '../../components/device/DeviceListFileterContents';
 
 import { styled } from '@mui/system';
 import { Box } from '@mui/system';
+import DeviceCompareTab from '../../components/device/compare/DeviceCompareTab';
 
 const Title = styled('h2')({
   paddingTop: 30,
@@ -66,6 +67,7 @@ function DeviceListPage() {
         <DeviceListFilter />
         <DeviceList />
       </DeviceListWrapper>
+      <DeviceCompareTab />
     </div>
   );
 }
