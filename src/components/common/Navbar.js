@@ -153,22 +153,20 @@ function Navbar() {
           {!!selectedMenu &&
             NavbarContent[selectedMenu].map((subTitle, idx) => {
               return (
-                <>
-                  <SubMenuWrapper key={`${idx}-${selectedMenu}-${subTitle.name}`}>
-                    <SubTitleBtn onClick={() => handleMenuClick(subTitle.url)}>
-                      {subTitle.name}
-                    </SubTitleBtn>
-                    {subTitle.children.map((subItem, idx) => {
-                      return (
-                        <SubItemBtn
-                          key={`${idx}-${selectedMenu}-${subTitle.name}=${subItem.name}`}
-                          onClick={() => handleMenuClick(`${subTitle.url}${subItem.url}`)}>
-                          {subItem.name}
-                        </SubItemBtn>
-                      );
-                    })}
-                  </SubMenuWrapper>
-                </>
+                <SubMenuWrapper key={`${idx}-${selectedMenu}-${subTitle.name}`}>
+                  <SubTitleBtn onClick={() => handleMenuClick(subTitle.url)}>
+                    {subTitle.name}
+                  </SubTitleBtn>
+                  {subTitle.children.map((subItem, idx) => {
+                    return (
+                      <SubItemBtn
+                        key={`${idx}-${selectedMenu}-${subTitle.name}=${subItem.name}`}
+                        onClick={() => handleMenuClick(`${subTitle.url}${subItem.url}`)}>
+                        {subItem.name}
+                      </SubItemBtn>
+                    );
+                  })}
+                </SubMenuWrapper>
               );
             })}
         </MenuDiv>

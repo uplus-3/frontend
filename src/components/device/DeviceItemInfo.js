@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 const DeviceItemInfoBlock = styled('div')({
   width: 600,
-  marginTop: 70,
+  marginTop: 150,
   display: 'flex',
   flexDirection: 'column',
   // alignItems: 'start',
@@ -164,7 +164,7 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
       <DeviceInfoFormat>
         저장공간 <span>{deviceInfo?.storage}GB</span>
       </DeviceInfoFormat>
-      <DeviceInfoFormat>
+      {/* <DeviceInfoFormat>
         가입유형
         <DeviceShippingTypeFormat>
           {['기기변경', '번호이동', '신규가입'].map((type, idx) => (
@@ -180,7 +180,7 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
             </SquareBtn>
           ))}
         </DeviceShippingTypeFormat>
-      </DeviceInfoFormat>
+      </DeviceInfoFormat> */}
       <DeviceSelectResult>
         <CompareBtn onClick={() => setCompareModalOpen(true)}>비교하기</CompareBtn>
         <DeviceSelectResultTitle>
