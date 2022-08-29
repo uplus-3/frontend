@@ -55,12 +55,6 @@ const DeviceColorChip = styled('div')({
   },
 });
 
-const DeviceShippingTypeFormat = styled('div')({
-  marginTop: 8,
-  display: 'flex',
-  gap: 20,
-});
-
 const ColorChip = styled('div')(({ colorCode }) => ({
   borderRadius: '50%',
   background: colorCode,
@@ -132,7 +126,6 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const [selectedShippingIdx, setSelectedShippingIdx] = useState(0);
   const [compareModalOpen, setCompareModalOpen] = useState(false);
 
   const handleOrderClick = () => {
@@ -164,23 +157,6 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
       <DeviceInfoFormat>
         저장공간 <span>{deviceInfo?.storage}GB</span>
       </DeviceInfoFormat>
-      {/* <DeviceInfoFormat>
-        가입유형
-        <DeviceShippingTypeFormat>
-          {['기기변경', '번호이동', '신규가입'].map((type, idx) => (
-            <SquareBtn
-              key={`${type}-${idx}`}
-              border={selectedShippingIdx === idx && `1px solid ${theme.palette.prime}`}
-              color={selectedShippingIdx === idx && theme.palette.prime}
-              width={160}
-              onClick={() => {
-                setSelectedShippingIdx(idx);
-              }}>
-              {type}
-            </SquareBtn>
-          ))}
-        </DeviceShippingTypeFormat>
-      </DeviceInfoFormat> */}
       <DeviceSelectResult>
         <CompareBtn onClick={() => setCompareModalOpen(true)}>비교하기</CompareBtn>
         <DeviceSelectResultTitle>
@@ -209,7 +185,13 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
           주문하기
         </RoundBtn>
       </AlignCenterDiv>
-      <PriceCompareModal open={compareModalOpen} setOpen={setCompareModalOpen} />
+      <PriceCompareModal
+        open={compareModalOpen}
+        setOpen={setCompareModalOpen}
+        deviceId={deviceInfo.id}
+        imgUrl={selectedColor?.images[0].url}
+        name={deviceInfo.name}
+      />
     </DeviceItemInfoBlock>
   );
 }
