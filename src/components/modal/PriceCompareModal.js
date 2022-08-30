@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/system';
 import { PriceFormatter } from '../../lib/utils';
+import { getDevicePriceCompare } from '../../lib/api/device';
 import {
   Dialog,
   TableContainer,
@@ -11,6 +12,7 @@ import {
   TableRow,
   TableSortLabel,
   Tooltip,
+  tooltipClasses,
 } from '@mui/material';
 
 const PriceCompareModalBlock = styled(Dialog)({
@@ -38,14 +40,34 @@ const TableWrapper = styled('div')({
 
 const PlanDescription = styled('div')({
   display: 'flex',
-  fontSize: '0.8rem',
-  alignItems: 'center',
+  fontSize: '0.9rem',
+  alignItems: 'start',
+
   padding: 5,
   span: {
-    width: 70,
+    width: 100,
+  },
+  '.sub-description': {
+    fontSize: '0.8rem',
+    color: '#000000a0',
   },
 });
 
+const PlanTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.gray2,
+    fontSize: '1.2rem',
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.gray2,
+    minWidth: 250,
+    minHeight: 150,
+    padding: 10,
+    color: '#000000',
+  },
+}));
 const descendingComparator = (a, b, orderBy) => {
   let orderKey = 'psPrice';
   if (orderBy === 1) orderKey = 'sdPrice';
@@ -69,130 +91,15 @@ function PriceCompareModal({ open, setOpen, imgUrl, deviceId, name }) {
   const [plans, setPlans] = useState([]);
   const [orderBy, setOrderBy] = useState(0);
   const [isAsc, setIsAsc] = useState(true);
-  const getPlans = () => {
-    setPlans([
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 시그니처',
-        psPrice: 134230,
-        sdPrice: 120020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 슈퍼',
-        psPrice: 144230,
-        sdPrice: 110020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 플러스',
-        psPrice: 154230,
-        sdPrice: 100020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 레귤러',
-        psPrice: 184230,
-        sdPrice: 190020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 플러스',
-        psPrice: 154230,
-        sdPrice: 100020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 레귤러',
-        psPrice: 184230,
-        sdPrice: 190020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 플러스',
-        psPrice: 154230,
-        sdPrice: 100020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 레귤러',
-        psPrice: 184230,
-        sdPrice: 190020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 플러스',
-        psPrice: 154230,
-        sdPrice: 100020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 레귤러',
-        psPrice: 184230,
-        sdPrice: 190020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-      {
-        data: '무제한',
-        id: 0,
-        name: '5G 프리미어 플러스',
-        psPrice: 154230,
-        sdPrice: 100020,
-        shareData: '60GB + 60GB',
-        subData: '다 쓰면 최대 5Mbps',
-        subVoiceCall: '부가통화 300분',
-        voiceCall: '집/이동전화 무제한',
-      },
-    ]);
+  const getPlans = async () => {
+    try {
+      const res = await getDevicePriceCompare({ deviceId });
+      const sortedPlans = res.data.plans.sort(getComparator('asc', orderBy));
+      setPlans(sortedPlans);
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleSort = (orderKey, direction) => {
@@ -247,33 +154,35 @@ function PriceCompareModal({ open, setOpen, imgUrl, deviceId, name }) {
                 <TableRow
                   key={`${plan.name}-${idx}`}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <Tooltip
+                  <PlanTooltip
                     arrow
                     placement="left"
                     title={
                       <div>
                         <PlanDescription>
                           <span>데이터</span>
-                          <div>{plan.data}</div>
+                          <div>
+                            <div>{plan.data || '-'}</div>
+                            <div className="sub-description">{plan.subData}</div>
+                          </div>
                         </PlanDescription>
                         <PlanDescription>
                           <span>공유데이터</span>
-                          <div>{plan.shareData}</div>
+                          <div>{plan.shareData || '-'}</div>
                         </PlanDescription>
                         <PlanDescription>
                           <span>음성통화</span>
-                          <div>{plan.shareData}</div>
-                        </PlanDescription>
-                        <PlanDescription>
-                          <span>공유데이터</span>
-                          <div>{plan.shareData}</div>
+                          <div>
+                            <div>{plan.voiceCall || '-'}</div>
+                            <div className="sub-description">{plan.subVoiceCall}</div>
+                          </div>
                         </PlanDescription>
                       </div>
                     }>
                     <TableCell component="th" scope="row">
                       {plan.name}
                     </TableCell>
-                  </Tooltip>
+                  </PlanTooltip>
                   <TableCell align="center">{PriceFormatter(plan.psPrice)}원</TableCell>
                   <TableCell align="center">{PriceFormatter(plan.sdPrice)}원</TableCell>
                 </TableRow>

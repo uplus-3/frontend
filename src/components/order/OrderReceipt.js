@@ -88,6 +88,7 @@ function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
     }
   }, [orderForm.registrationType]);
 
+  // 카카오톡으로 주문내역 공유하기
   const shareInfoByKakao = (orderNumber) => {
     if (window.Kakao) {
       const kakao = window.Kakao;
@@ -95,7 +96,6 @@ function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
         kakao.init('64ca1622b62f15240ae2889c61165009');
       }
       kakao.Share.sendCustom({
-        requestUrl: window.location.host,
         templateId: 82187,
         templateArgs: {
           image: deviceInfo.selectedColor.images[0].imageUrl,
@@ -160,7 +160,7 @@ function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
         </OrderReceiptDevice>
         <OrderReceiptDevice>
           <span>저장공간</span>
-          <div>{deviceInfo?.storage}GB</div>
+          <div>{deviceInfo?.storage}</div>
         </OrderReceiptDevice>
         <OrderReceiptDevice>
           <span>색상</span>

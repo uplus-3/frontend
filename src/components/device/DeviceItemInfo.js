@@ -7,13 +7,12 @@ import PriceCompareModal from '../modal/PriceCompareModal';
 import { PriceFormatter } from '../../lib/utils';
 
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 const DeviceItemInfoBlock = styled('div')({
   width: 600,
   marginTop: 150,
   display: 'flex',
   flexDirection: 'column',
-  // alignItems: 'start',
   gap: 15,
   alignSelf: 'flex-start',
 });
@@ -36,6 +35,7 @@ const AlignCenterDiv = styled('div')(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   height: 'auto',
+  gap: 20,
 }));
 
 const DeviceColorChip = styled('div')({
@@ -47,20 +47,26 @@ const DeviceColorChip = styled('div')({
     outline: '3px solid #fff',
     outlineOffset: '-4px',
   },
-  '.sold-out-color': {
-    width: 50,
-    height: 3,
-    backgroundColor: '#ffffff',
-    transform: 'rotate(45deg)',
-  },
 });
 
 const ColorChip = styled('div')(({ colorCode }) => ({
   borderRadius: '50%',
   background: colorCode,
+  position: 'relative',
   width: 35,
   height: 35,
   cursor: 'pointer',
+  // overflow: 'hidden',
+  boxShadow: '0px 0px 6px 1px rgb(0 0 0 / 20%)',
+  div: {
+    position: 'absolute',
+    top: 15,
+    left: -10,
+    width: 50,
+    height: 3,
+    backgroundColor: '#ffffff',
+    transform: 'rotate(45deg)',
+  },
 }));
 
 const DeviceSelectResult = styled('div')(({ theme }) => ({
@@ -83,7 +89,7 @@ const DevicePriceTable = styled('table')({
   fontSize: '0.85rem',
   borderCollapse: 'separate',
   td: {
-    width: 70,
+    width: 80,
   },
 });
 
@@ -125,6 +131,7 @@ const DeviceTag = ({ tag }) => {
 function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [compareModalOpen, setCompareModalOpen] = useState(false);
 
@@ -147,49 +154,64 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
           {deviceInfo?.colors.map((color, idx) => (
             <ColorChip
               key={`color-chip-${idx}`}
-              colorCode={color.code}
+              colorCode={color.rgb}
               onClick={() => setSelectedColor(color)}
-              className={selectedColor.name === color.name && 'selected-color-chip'}
-            />
+              className={[selectedColor.name === color.name && 'selected-color-chip'].join(' ')}>
+              {color.stock <= 0 && <div></div>}
+            </ColorChip>
           ))}
         </DeviceColorChip>
       </div>
       <DeviceInfoFormat>
-        저장공간 <span>{deviceInfo?.storage}GB</span>
+        저장공간 <span>{deviceInfo?.storage}</span>
       </DeviceInfoFormat>
       <DeviceSelectResult>
         <CompareBtn onClick={() => setCompareModalOpen(true)}>비교하기</CompareBtn>
         <DeviceSelectResultTitle>
-          월 {PriceFormatter(deviceInfo?.d_price)}원
+          월 {PriceFormatter(deviceInfo?.plan?.dprice + deviceInfo?.dprice)}원
         </DeviceSelectResultTitle>
-        {deviceInfo?.plan?.name}, 공시지원금 기준
+        {deviceInfo?.plan?.name}, {deviceInfo?.psupport > 0 ? '공시지원금' : '선택약정 (24개월)'}{' '}
+        기준
         <DevicePriceTable>
           <tbody>
             <tr>
               <td>휴대폰</td>
-              <td>{PriceFormatter(4690)}원</td>
+              <td>{PriceFormatter(deviceInfo?.dprice)}원</td>
             </tr>
             <tr>
               <td>통신료</td>
-              <td>{PriceFormatter(55000)}원</td>
+              <td>{PriceFormatter(deviceInfo?.plan?.dprice)}원</td>
             </tr>
             <tr>
               <td>정상가</td>
-              <td>{PriceFormatter(428000)}원</td>
+              <td>{PriceFormatter(deviceInfo?.price)}원</td>
             </tr>
           </tbody>
         </DevicePriceTable>
       </DeviceSelectResult>
       <AlignCenterDiv>
-        <RoundBtn height={40} width={300} onClick={handleOrderClick}>
-          주문하기
+        <RoundBtn
+          height={40}
+          width={100}
+          backgroundColor="#FFFFFF"
+          border={`1px solid ${theme.palette.prime}`}
+          color={theme.palette.prime}>
+          장바구니
+        </RoundBtn>
+        <RoundBtn
+          height={40}
+          width={300}
+          onClick={handleOrderClick}
+          disabled={selectedColor.stock === 0}
+          backgroundColor={selectedColor.stock === 0 ? theme.palette.prime + '20' : ''}>
+          {selectedColor.stock > 0 ? '주문하기' : '품절'}
         </RoundBtn>
       </AlignCenterDiv>
       <PriceCompareModal
         open={compareModalOpen}
         setOpen={setCompareModalOpen}
         deviceId={deviceInfo.id}
-        imgUrl={selectedColor?.images[0].url}
+        imgUrl={selectedColor?.images[0].imageUrl}
         name={deviceInfo.name}
       />
     </DeviceItemInfoBlock>
