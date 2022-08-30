@@ -6,6 +6,10 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
+import DeviceCompareInfoPrice from './DeviceCompareInfoPrice';
+import DeviceCompareInfoPlan from './DeviceCompareInfoPlan';
+import DeviceCompareInfoSpec from './DeviceCompareInfoSpec';
+
 const DeviceCompareInfoBlock = styled('div')({});
 
 const StyledAccordion = styled(Accordion)({});
@@ -19,7 +23,7 @@ const StyledAccordionSummary = styled(AccordionSummary)({
 });
 
 const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-  background: theme.palette.gray1,
+  background: theme.palette.gray4,
   padding: 20,
   display: 'flex',
   gap: 10,
@@ -27,11 +31,10 @@ const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
 }));
 
 const DetailWapper = styled('div')({
-  background: '#fff',
   width: '100%',
 });
 
-function DeviceCompareInfo({ title, children }) {
+function DeviceCompareInfo() {
   const [expanded, setExpanded] = useState(0);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -42,12 +45,50 @@ function DeviceCompareInfo({ title, children }) {
     <DeviceCompareInfoBlock>
       <Accordion expanded={expanded === 0} onChange={handleChange(0)}>
         <StyledAccordionSummary expandIcon={<ExpandMore />}>
-          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>{title}</Typography>
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>월 납부금액</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWapper></DetailWapper>
-          <DetailWapper>여기는 비교할 곳</DetailWapper>
-          <DetailWapper>여기는 비교할 곳</DetailWapper>
+          <DetailWapper>
+            <DeviceCompareInfoPrice />
+          </DetailWapper>
+          <DetailWapper>
+            <DeviceCompareInfoPrice />
+          </DetailWapper>
+          <DetailWapper>
+            <DeviceCompareInfoPrice />
+          </DetailWapper>
+        </StyledAccordionDetails>
+      </Accordion>
+      <Accordion expanded={expanded === 1} onChange={handleChange(1)}>
+        <StyledAccordionSummary expandIcon={<ExpandMore />}>
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>할인유형, 요금제</Typography>
+        </StyledAccordionSummary>
+        <StyledAccordionDetails>
+          <DetailWapper>
+            <DeviceCompareInfoPlan />
+          </DetailWapper>
+          <DetailWapper>
+            <DeviceCompareInfoPlan />
+          </DetailWapper>
+          <DetailWapper>
+            <DeviceCompareInfoPlan />
+          </DetailWapper>
+        </StyledAccordionDetails>
+      </Accordion>
+      <Accordion expanded={expanded === 2} onChange={handleChange(2)}>
+        <StyledAccordionSummary expandIcon={<ExpandMore />}>
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>기기 성능</Typography>
+        </StyledAccordionSummary>
+        <StyledAccordionDetails>
+          <DetailWapper>
+            <DeviceCompareInfoSpec />
+          </DetailWapper>
+          <DetailWapper>
+            <DeviceCompareInfoSpec />
+          </DetailWapper>
+          <DetailWapper>
+            <DeviceCompareInfoSpec />
+          </DetailWapper>
         </StyledAccordionDetails>
       </Accordion>
     </DeviceCompareInfoBlock>

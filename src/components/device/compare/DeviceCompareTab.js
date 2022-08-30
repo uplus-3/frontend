@@ -78,7 +78,7 @@ const ResetButton = styled('div')({
 
 function DeviceCompareTab() {
   const [open, setOpen] = useState(true);
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
   const handleClickOpen = useCallback(() => setOpen((prev) => !prev), []);
 
   return (
@@ -100,7 +100,13 @@ function DeviceCompareTab() {
           </li>
         </DeviceWapper>
         <CompareButtonWapper>
-          <RoundBtn content="비교하기" width="120px" height="fit-content" padding="5px 0" />
+          <RoundBtn
+            content="비교하기"
+            width="120px"
+            height="fit-content"
+            padding="5px 0"
+            onClick={() => setModalOpen(true)}
+          />
           <ResetButton>전체삭제</ResetButton>
         </CompareButtonWapper>
       </BodyWapper>

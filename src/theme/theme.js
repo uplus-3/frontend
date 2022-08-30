@@ -7,6 +7,7 @@ const palette = {
   gray1: '#F8F8F8',
   gray2: '#EEEEEE',
   gray3: '#D0D0D0',
+  gray4: '#F2F2F2',
 };
 
 export const theme = createTheme({
@@ -48,6 +49,7 @@ export const theme = createTheme({
     gray1: palette.gray1,
     gray2: palette.gray2,
     gray3: palette.gray3,
+    gray4: palette.gray4,
   },
   typography: {
     fontFamily: [

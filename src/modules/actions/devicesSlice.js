@@ -7,7 +7,8 @@ const ALL = 'all';
 const initialState = {
   devices: [
     {
-      id: 'SM-F721N',
+      id: 1,
+      serialNumber: 'SM-F721N',
       name: '갤럭시 Z Flip 4',
       price: 1353000,
       m_price: 124900,
