@@ -19,7 +19,7 @@ const CartLIstItemBlock = styled('div')(({ theme }) => ({
     top: 0,
   },
 
-  '&:first-child': {
+  '&:first-of-type': {
     '&::before': {
       display: 'none',
     },
@@ -73,7 +73,7 @@ const DetailWapper = styled('div')(({ theme }) => ({
   alignItems: 'center',
   margin: ' 0 80px',
 
-  '& > div:first-child': {
+  '& > div:first-of-type': {
     paddingRight: 40,
   },
 

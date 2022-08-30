@@ -9,7 +9,9 @@ import { FILTER_DATA } from '../../components/device/DeviceListFileterContents';
 
 import { styled } from '@mui/system';
 import { Box } from '@mui/system';
+import { ExpandLess } from '@mui/icons-material';
 import DeviceCompareTab from '../../components/device/compare/DeviceCompareTab';
+import ScrollTopBtn from '../../components/common/ScrollTopBtn';
 
 const Title = styled('h2')({
   paddingTop: 30,
@@ -49,6 +51,7 @@ function DeviceListPage() {
     dispatch(initFilterValue(init));
   }, [dispatch]);
 
+  // TODO - 쿼리스트링 최적화
   useEffect(() => {
     const { plan, discount, price, company, storage } = current_filter;
     if (plan) searchParams.set('plan', plan);
@@ -68,6 +71,7 @@ function DeviceListPage() {
         <DeviceList />
       </DeviceListWrapper>
       <DeviceCompareTab />
+      <ScrollTopBtn Icon={<ExpandLess />} />
     </div>
   );
 }
