@@ -1,8 +1,10 @@
-import React from "react";
-import axios from "axios";
+import React from 'react';
+import axios from 'axios';
 
-const SERVER_URL = "서버주소";
+const SERVER_URL = 'http://13.209.204.114:8080/api';
 
-export const client = axios.create({
+const client = axios.create({
   baseURL: `${SERVER_URL}`,
 });
+
+export default client;
