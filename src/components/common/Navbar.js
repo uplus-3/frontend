@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import LogoUplus from '../../assets/images/logo_uplus.png';
 
-import { AppBar, Toolbar, ButtonBase, Button, Collapse, styled, useTheme } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  ButtonBase,
+  Button,
+  Collapse,
+  styled,
+  useTheme,
+  Badge,
+} from '@mui/material';
+import { ShoppingCartOutlined } from '@mui/icons-material';
 
 import { NavbarContent } from './NavbarContent';
 import RoundBtn from './RoundBtn';
@@ -56,6 +66,22 @@ const LogoImage = styled('img')({
 
 const TitleBtnWrapper = styled('div')({});
 
+const CartBtnWrapper = styled('div')(({ theme }) => ({
+  position: 'absolute',
+  right: 120,
+  cursor: 'pointer',
+
+  svg: {
+    fontSize: '1.875rem',
+    verticalAlign: 'middle',
+  },
+
+  '& .MuiBadge-badge': {
+    background: theme.palette.prime,
+    color: '#fff',
+  },
+}));
+
 const BuyBtnWrapper = styled('div')({
   position: 'absolute',
   right: 0,
@@ -102,6 +128,11 @@ function Navbar() {
     navigate(url);
   };
 
+  // 장바구니 아이콘 클릭시 장바구니 페이지로 이동
+  const handleCartClick = () => {
+    navigate('/cart');
+  };
+
   const compareLocation = (title) => {
     return NavbarContent[title].some((subTitle) => location.pathname.indexOf(subTitle.url) !== -1);
   };
@@ -138,6 +169,11 @@ function Navbar() {
             );
           })}
           <SearchBar />
+          <CartBtnWrapper onClick={handleCartClick}>
+            <Badge badgeContent={4}>
+              <ShoppingCartOutlined />
+            </Badge>
+          </CartBtnWrapper>
           <BuyBtnWrapper>
             <RoundBtn>구매조회</RoundBtn>
           </BuyBtnWrapper>

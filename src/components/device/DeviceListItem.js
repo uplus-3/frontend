@@ -8,6 +8,7 @@ import graphite from '../../assets/images/SM-F721N-graphite-0.jpg';
 
 import { styled } from '@mui/system';
 import { Box, Divider } from '@mui/material';
+import { ShoppingCartOutlined } from '@mui/icons-material';
 
 import qs from 'qs';
 
@@ -87,12 +88,12 @@ const ItemInfoWapper = styled(Box)({
 const ItemCompareWapper = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'flex-end',
+  gap: 10,
   padding: '1rem 1.5rem',
 
-  '& .compare-add-btn': {
+  '& .add-btn': {
     border: `1px solid ${theme.palette.dark}`,
     borderRadius: 50,
-    padding: '5px 25px',
     cursor: 'pointer',
 
     '&:hover': {
@@ -100,6 +101,16 @@ const ItemCompareWapper = styled(Box)(({ theme }) => ({
       borderColor: theme.palette.prime,
     },
   },
+
+  '& .compare-add-btn': {
+    padding: '5px 25px',
+  },
+}));
+
+const AddCartIconWapper = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: '0 5px',
 }));
 
 const colorImages = [purple, gold, blue, graphite];
@@ -164,7 +175,10 @@ function DeviceListItem({ data }) {
       </ItemInfoWapper>
       <Divider />
       <ItemCompareWapper>
-        <div className="compare-add-btn">비교하기</div>
+        <AddCartIconWapper className="add-btn">
+          <ShoppingCartOutlined />
+        </AddCartIconWapper>
+        <div className="add-btn compare-add-btn">비교하기</div>
       </ItemCompareWapper>
     </DeviceListItemBlock>
   );
