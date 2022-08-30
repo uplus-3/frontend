@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/system';
 import { Button } from '@mui/material';
 
-const RoundBtnBlock = styled('div')({});
 const CustomButton = styled(Button)(({ theme }) => ({
   fontFamily: 'LGSmart',
   color: '#FFF',
@@ -20,6 +19,7 @@ function RoundBtn({
   content,
   backgroundColor = '',
   color = '',
+  border = '',
   disabled = false,
   width = '',
   height = '',
@@ -32,6 +32,7 @@ function RoundBtn({
       sx={{
         backgroundColor: backgroundColor,
         color: color,
+        border: border,
         width: width,
         padding: padding,
         minWidth: 'fit-content',
