@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
 import DeviceListHeader from './DeviceListHeader';
 import DeviceListItem from './DeviceListItem';
 
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
-
-import { devicesActions } from '../../modules/actions/devicesSlice';
 
 const DeviceListBlock = styled('div')({
   width: '100%',
@@ -20,13 +17,10 @@ const DeviceListWrapper = styled(Box)({
   marginTop: 15,
 });
 
-function DeviceList() {
-  const dispatch = useDispatch();
-  const devices = useSelector((state) => state.devices.devices);
-
-  useEffect(() => {
-    dispatch(devicesActions.getDevice());
-  }, [dispatch]);
+function DeviceList({ devices, loading, error }) {
+  if (error) {
+    return 'error!';
+  }
 
   return (
     <DeviceListBlock>

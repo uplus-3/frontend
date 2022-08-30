@@ -5,7 +5,8 @@ import { FILTER_DATA } from '../../components/device/DeviceListFileterContents';
 const ALL = 'all';
 
 const initialState = {
-  devices: [],
+  devices: null,
+  error: null,
   filter: {
     plan: null,
     discount: null,
@@ -34,7 +35,11 @@ const devicesSlice = createSlice({
     getDevicesSuccess: (state, action) => {
       const { devices } = action.payload;
       console.log('get devices success!');
-      state.devices = devices || [];
+      state.devices = devices;
+    },
+    getDevicesFailure: (state, action) => {
+      const { error } = action.payload;
+      state.error = error;
     },
     initFilterValue: (state, action) => {
       state.filter = action.payload;

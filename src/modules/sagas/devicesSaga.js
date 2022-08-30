@@ -1,10 +1,13 @@
-import { call, put, delay, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { devicesActions } from '../actions/devicesSlice';
 import { getDeviceList } from '../../lib/api/device';
+import { loadingActions } from '../actions/loadingSlice';
 
 // Devices 데이터를 가져오는 Saga (api 호출)
 export function* getDevicesSaga(action) {
-  const { getDevicesSuccess } = devicesActions;
+  const { getDevicesSuccess, getDevicesFailure } = devicesActions;
+  const { startLoading, finishLoading } = loadingActions;
+  yield put(startLoading('devices'));
   try {
     const res = yield call(getDeviceList, {
       discountType: -1,
@@ -12,9 +15,21 @@ export function* getDevicesSaga(action) {
       networkType: 5,
       plan: -1,
     });
-    yield put(getDevicesSuccess(res.data));
+    yield put(
+      getDevicesSuccess({
+        payload: res.data,
+      }),
+    );
   } catch (e) {
     console.log(e);
+    yield put(
+      getDevicesFailure({
+        payload: e,
+        error: true,
+      }),
+    );
+  } finally {
+    yield put(finishLoading('devices'));
   }
 }
 

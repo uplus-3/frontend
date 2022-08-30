@@ -16,24 +16,6 @@ export const SORT_TYPE = [
 export const FILTER_DATA = {
   plan_type: {
     name: 'plan',
-    data: [
-      {
-        name: '가장 알맞은 요금제',
-        value: '-1',
-      },
-      {
-        name: '5G 프리미어 에센셜',
-        value: 'premier',
-      },
-      {
-        name: '5G 슬림+',
-        value: 'slim',
-      },
-      {
-        name: '5G 다이렉트 37.5',
-        value: 'direct',
-      },
-    ],
   },
   discount_type: {
     name: 'discount',

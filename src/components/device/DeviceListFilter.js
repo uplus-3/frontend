@@ -85,9 +85,8 @@ function printPriceRange(value) {
   return `${PriceFormatter(parseInt(value[0]))}원 ~ ${PriceFormatter(parseInt(value[1]))}원`;
 }
 
-function DeviceListFilter() {
+function DeviceListFilter({ plan: plan_datas, loading, error, onChangeFilter }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { network } = useParams();
   const { plan, discount, price, company, storage } = useSelector((state) => state.devices.filter);
   const [open, setOpen] = useState([true, true, true, false, false]);
@@ -99,7 +98,8 @@ function DeviceListFilter() {
   const { plan_type, discount_type, company_type, storage_type, price_range } = FILTER_DATA;
 
   const onChangeCheckbox = (type, value) => {
-    dispatch(devicesActions.setFilterValue({ type, value }));
+    // dispatch(devicesActions.setFilterValue({ type, value }));
+    onChangeFilter(type, value);
   };
 
   return (
@@ -113,7 +113,7 @@ function DeviceListFilter() {
         <Divider />
         <Collapse in={open[0]} timeout="auto" unmountOnExit>
           <List component="div">
-            {plan_type.data.map((type) => (
+            {plan_datas?.map((type) => (
               <ListItemButton
                 key={type.value}
                 dense
