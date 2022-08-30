@@ -139,6 +139,7 @@ function OrderForm({ orderForm, setOrderForm }, ref) {
 
   useImperativeHandle(ref, () => ({
     checkUserInfo,
+    getUserInfo,
   }));
   const getPrice = () => {
     // 백엔드로 api 요청
@@ -158,6 +159,14 @@ function OrderForm({ orderForm, setOrderForm }, ref) {
       setDetailAddressMessage('상세주소를 입력해주세요');
     }
     return !!!nameMessage && !!!addressMessage && !!!phoneMessage && !!!detailAddressMessage;
+  };
+
+  const getUserInfo = () => {
+    return {
+      name,
+      address: `${address} ${detailAddress}`,
+      phoneNumber: phonenumber,
+    };
   };
 
   const getPlanList = () => {
@@ -200,22 +209,6 @@ function OrderForm({ orderForm, setOrderForm }, ref) {
       setPhoneMessage('유효하지 않은 휴대폰번호입니다.');
     }
   }, [phonenumber]);
-
-  useEffect(() => {
-    if (address) {
-      setAddressMessage('');
-    } else {
-      setAddressMessage('주소를 입력해주세요.');
-    }
-  }, [address]);
-
-  useEffect(() => {
-    if (detailAddress) {
-      setDetailAddressMessage('');
-    } else {
-      setDetailAddressMessage('상세주소를 입력해주세요.');
-    }
-  }, [detailAddress]);
 
   return (
     <OrderFormBlock>
@@ -270,7 +263,7 @@ function OrderForm({ orderForm, setOrderForm }, ref) {
             value={address}
             variant="standard"
             onClick={() => setOpenPostCode(true)}
-            helperText={addressMessage}
+            helperText={!!address && addressMessage}
           />
         </InputWrapper>
         <InputWrapper>
@@ -281,6 +274,7 @@ function OrderForm({ orderForm, setOrderForm }, ref) {
             value={detailAddress}
             variant="standard"
             onChange={onChangeDetailAddress}
+            helperText={!!detailAddress && detailAddressMessage}
           />
         </InputWrapper>
       </OrderFormWrapper>

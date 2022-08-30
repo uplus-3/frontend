@@ -26,6 +26,9 @@ function DeviceOrderPage() {
     return formRef.current.checkUserInfo();
   };
 
+  const getUserInfo = () => {
+    return formRef.current.getUserInfo();
+  };
   useEffect(() => {
     const { state } = location;
     if (!!!state) navigate(-1);
@@ -37,6 +40,7 @@ function DeviceOrderPage() {
         deviceInfo={location.state}
         orderForm={orderForm}
         checkUserInfo={checkUserInfo}
+        getUserInfo={getUserInfo}
       />
     </DeviceOrderPageWrapper>
   );

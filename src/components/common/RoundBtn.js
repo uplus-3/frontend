@@ -24,6 +24,7 @@ function RoundBtn({
   width = '',
   height = '',
   padding = '',
+  cursor = '',
   children,
   onClick,
 }) {
@@ -35,7 +36,9 @@ function RoundBtn({
         border: border,
         width: width,
         padding: padding,
+        border: border,
         minWidth: 'fit-content',
+        cursor: cursor,
         height: height,
         '&:hover': {
           backgroundColor: backgroundColor + '90',
@@ -54,6 +57,7 @@ RoundBtn.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   backgroundColor: PropTypes.string,
   color: PropTypes.string,
+  border: PropTypes.string,
   disabled: PropTypes.bool,
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
