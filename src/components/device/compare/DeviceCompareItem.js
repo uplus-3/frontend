@@ -35,7 +35,7 @@ const CloseIconWapper = styled('div')({
 });
 
 const InfoWapper = styled('div')({
-  '& p:first-child': {
+  '& p:first-of-type': {
     fontWeight: 600,
     fontSize: 14,
   },
