@@ -29,10 +29,12 @@ function DeviceOrderPage() {
   const getUserInfo = () => {
     return formRef.current.getUserInfo();
   };
+
   useEffect(() => {
     const { state } = location;
     if (!!!state) navigate(-1);
   }, []);
+
   return (
     <DeviceOrderPageWrapper>
       <OrderForm orderForm={orderForm} setOrderForm={setOrderForm} ref={formRef} />

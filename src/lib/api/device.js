@@ -7,7 +7,9 @@ export const getDeviceDetail = ({
   installmentPeriod = 24,
   plan = -1,
 }) => {
-  return client.get(`/devices/${deviceId}`, {
+  return client({
+    url: `/devices/${deviceId}`,
+    method: 'get',
     params: {
       'discount-type': discountType,
       'installment-period': installmentPeriod,
