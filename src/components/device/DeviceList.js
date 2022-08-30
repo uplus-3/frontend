@@ -1,11 +1,13 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import DeviceListHeader from './DeviceListHeader';
 import DeviceListItem from './DeviceListItem';
 
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
+
+import { devicesActions } from '../../modules/actions/devicesSlice';
 
 const DeviceListBlock = styled('div')({
   width: '100%',
@@ -19,14 +21,18 @@ const DeviceListWrapper = styled(Box)({
 });
 
 function DeviceList() {
+  const dispatch = useDispatch();
   const devices = useSelector((state) => state.devices.devices);
-  const datas = Array.from({ length: 32 }).fill(devices[0]);
+
+  useEffect(() => {
+    dispatch(devicesActions.getDevice());
+  }, [dispatch]);
 
   return (
     <DeviceListBlock>
       <DeviceListHeader />
       <DeviceListWrapper>
-        {datas.map((data) => (
+        {devices?.map((data) => (
           <DeviceListItem data={data} />
         ))}
       </DeviceListWrapper>

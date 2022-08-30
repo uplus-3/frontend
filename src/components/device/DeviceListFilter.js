@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FILTER_DATA } from './DeviceListFileterContents';
 import { PriceFormatter } from '../../lib/utils';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { devicesActions } from '../../modules/actions/devicesSlice';
+import { getPlans } from '../../lib/api/plan';
 
 import { styled } from '@mui/system';
 import {
@@ -25,6 +26,7 @@ import {
   RadioButtonChecked,
   RadioButtonUnchecked,
 } from '@mui/icons-material';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const DeviceListFilterBlock = styled('div')(({ theme }) => ({
   minWidth: 240,
@@ -85,6 +87,8 @@ function printPriceRange(value) {
 
 function DeviceListFilter() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { network } = useParams();
   const { plan, discount, price, company, storage } = useSelector((state) => state.devices.filter);
   const [open, setOpen] = useState([true, true, true, false, false]);
   const handleClickListOpen = (idx) => {
