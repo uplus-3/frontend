@@ -5,65 +5,7 @@ import { FILTER_DATA } from '../../components/device/DeviceListFileterContents';
 const ALL = 'all';
 
 const initialState = {
-  devices: [
-    {
-      id: 1,
-      serialNumber: 'SM-F721N',
-      name: '갤럭시 Z Flip 4',
-      price: 1353000,
-      m_price: 124900,
-      d_price: '기기월납부액(할인적용)',
-      stock: 1,
-      plan: {
-        price: '요금제가격(월)',
-        d_price: '할인된가격(할인적용)',
-      },
-      tags: [
-        {
-          content: '인기',
-          rgb: '#d44602',
-        },
-      ],
-      colors: [
-        {
-          name: '보라 퍼플',
-          code: '#b8aacb',
-          images: [
-            {
-              url: 'SM-F721N-purple-0',
-            },
-          ],
-        },
-        {
-          name: '핑크 골드',
-          code: '#ecdbd3',
-          images: [
-            {
-              url: 'SM-F721N-gold-0',
-            },
-          ],
-        },
-        {
-          name: '블루',
-          code: '#c9d1e4',
-          images: [
-            {
-              url: 'SM-F721N-blue-0',
-            },
-          ],
-        },
-        {
-          name: '그라파이트',
-          code: '#424347',
-          images: [
-            {
-              url: 'SM-F721N-graphite-0',
-            },
-          ],
-        },
-      ],
-    },
-  ],
+  devices: [],
   filter: {
     plan: null,
     discount: null,
@@ -86,8 +28,13 @@ const devicesSlice = createSlice({
   name: 'devices',
   initialState,
   reducers: {
+    getDevice: (state, action) => {
+      console.log('get devices!');
+    },
     getDevicesSuccess: (state, action) => {
+      const { devices } = action.payload;
       console.log('get devices success!');
+      state.devices = devices || [];
     },
     initFilterValue: (state, action) => {
       state.filter = action.payload;

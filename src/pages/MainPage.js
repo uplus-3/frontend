@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { styled } from '@mui/material';
 import RoundBtn from '../components/common/RoundBtn';
+
+import { getDeviceList } from '../lib/api/device';
 
 const MainDiv = styled('div')({
   zIndex: 0,
@@ -35,6 +37,22 @@ const SubTitle = styled('div')({
 });
 
 function MainPage() {
+  const test = async () => {
+    try {
+      const res = await getDeviceList({
+        discountType: -1,
+        installmentPeriod: 24,
+        networkType: 5,
+        plan: -1,
+      });
+      console.log('res', res);
+    } catch (e) {
+      console.log('error', e);
+    }
+  };
+  useEffect(() => {
+    test();
+  }, []);
   return (
     <MainDiv>
       <ContentDiv>

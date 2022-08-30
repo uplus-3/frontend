@@ -11,6 +11,7 @@ import { Box, Divider } from '@mui/material';
 import { ShoppingCartOutlined } from '@mui/icons-material';
 
 import qs from 'qs';
+import { PriceFormatter } from '../../lib/utils';
 
 const DeviceListItemBlock = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -70,6 +71,9 @@ const ItemInfoWapper = styled(Box)({
     fontSize: '1.25rem',
     fontWeight: 600,
     marginBottom: 15,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
     cursor: 'pointer',
   },
   '& .p-price-sub': {
@@ -139,8 +143,8 @@ function DeviceListItem({ data }) {
   return (
     <DeviceListItemBlock>
       <ItemTagWapper>
-        {data.tags.map((tag) => (
-          <span key={tag.content} className="popular" style={{ background: tag.rgb }}>
+        {data?.tags.map((tag) => (
+          <span key={tag.content} style={{ background: tag.rgb }}>
             {tag.content}
           </span>
         ))}
@@ -148,29 +152,32 @@ function DeviceListItem({ data }) {
       <ItemImageWapper
         onClick={handleGoDetailPage}
         style={{ backgroundImage: `url(${colorImages[cIdx]})` }}
+        // style={{ backgroundImage: `url(${data.colors[0]?.images[0]?.imageUrl})` }}
       />
       <ItemColorWapper>
         <ul className="colors">
-          {data.colors.map((color, index) => (
+          {data?.colors.map((color, index) => (
             <li
               key={color.name}
               title={color.name}
-              style={{ background: color.code }}
+              style={{ background: color.rgb }}
               onClick={() => handleClickColor(index)}></li>
           ))}
         </ul>
       </ItemColorWapper>
       <ItemInfoWapper>
         <div onClick={handleGoDetailPage} className="p-name">
-          {data.name}
+          {data?.name}
         </div>
         <div>
           <div className="p-price-sub">
-            <div className="origin-price">정상가 {data.price.toLocaleString('ko-KR')}원</div>
-            <div>휴대폰 월 59,000원</div>
-            <div>통신료 월 65,000원</div>
+            <div className="origin-price">정상가 {PriceFormatter(data?.price)}원</div>
+            <div>휴대폰 월 {PriceFormatter(data?.dprice)}원</div>
+            <div>통신료 월 {PriceFormatter(data?.plan?.dprice)}원</div>
           </div>
-          <div className="p-price">월 {data.m_price.toLocaleString('ko-KR')}원</div>
+          <div className="p-price">
+            월 {PriceFormatter((data?.dprice || 0) + (data?.plan?.dprice || 0))}원
+          </div>
         </div>
       </ItemInfoWapper>
       <Divider />
