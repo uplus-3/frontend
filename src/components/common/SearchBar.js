@@ -54,7 +54,22 @@ const SearchMenu = styled(Paper)(({ theme }) => ({
 
 const SearchSubMenuWrapper = styled('div')(({ theme }) => ({
   marginBottom: 25,
+  minHeight: 220,
+  width: 300,
 }));
+
+const SearchCategoryWrapper = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  marginBottom: 25,
+}));
+
+const SearchMenuWrapper = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'start',
+});
 
 const NetworkTypeToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   fontFamily: 'LGSmart',
@@ -126,6 +141,24 @@ const RelatedSearchTerm = styled('div')(({ theme }) => ({
     background: theme.palette.gray1,
   },
 }));
+
+const RelatecSearchImage = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 10,
+  padding: 10,
+  width: 200,
+  cursor: 'pointer',
+  border: `1px solid ${theme.palette.gray2}`,
+}));
+
+const RelatedSearchImageWrapper = styled('div')({
+  paddingTop: 20,
+  display: 'flex',
+  justifyContent: 'space-between',
+});
 
 const HighlightRelatedSearchTerm = styled('span')(({ theme }) => ({
   color: theme.palette.prime,
@@ -289,9 +322,9 @@ function SearchBar() {
           </IconButton>
           <Popper open={Boolean(anchorEl)} anchorEl={anchorEl} disablePortal>
             <SearchMenu elevation={3}>
-              <SearchSubMenuWrapper>
+              <SearchCategoryWrapper>
                 <div>카테고리</div>
-                <Divider />
+                {/* <Divider /> */}
                 <NetworkTypeToggleButtonGroup
                   exclusive
                   value={searchNetworkType}
@@ -303,67 +336,63 @@ function SearchBar() {
                     4G 휴대폰
                   </ToggleButton>
                 </NetworkTypeToggleButtonGroup>
-              </SearchSubMenuWrapper>
-              <SearchSubMenuWrapper>
-                <div>최근검색어</div>
-                <Divider />
-                {!!recentSearchTerm.length ? (
-                  recentSearchTerm?.map((term, idx) => {
-                    return (
-                      <RecentSearchTerm
-                        key={`recent-search-term-${idx}`}
-                        label={term}
-                        onClick={(event) => {
-                          deleteRecentSearch(idx);
-                          handleSearch(event, term);
-                        }}
-                        onDelete={() => {
-                          deleteRecentSearch(idx);
-                        }}
-                        deleteIcon={<Clear />}
-                      />
-                    );
-                  })
-                ) : (
-                  <EmptyRecentSearchTerm>최근 검색어가 없습니다.</EmptyRecentSearchTerm>
-                )}
-              </SearchSubMenuWrapper>
-              <SearchSubMenuWrapper>
-                <div>연관검색어</div>
-                <Divider />
-                <RelatedSearchTermWrapper>
-                  <div>
-                    {relatedSearchTerm?.results?.map((result, idx) => {
+              </SearchCategoryWrapper>
+              <SearchMenuWrapper>
+                <SearchSubMenuWrapper>
+                  <Divider>최근검색어</Divider>
+                  {!!recentSearchTerm.length ? (
+                    recentSearchTerm?.map((term, idx) => {
                       return (
-                        <RelatedSearchTerm
+                        <RecentSearchTerm
+                          key={`recent-search-term-${idx}`}
+                          label={term}
                           onClick={(event) => {
-                            handleSearch(event, result.name);
+                            deleteRecentSearch(idx);
+                            handleSearch(event, term);
                           }}
-                          onMouseEnter={() => {
-                            setSelectedRelatedSearchTerm(result);
+                          onDelete={() => {
+                            deleteRecentSearch(idx);
                           }}
-                          key={`related-search-term-${idx}`}>
-                          {HightlightSearchTerm(result.name, searchResult)}
-                        </RelatedSearchTerm>
+                          deleteIcon={<Clear />}
+                        />
                       );
-                    })}
-                  </div>
-                  {!!selectedRelatedTerm && (
-                    <RelatedSearchTermImage>
-                      <img width={200} src={selectedRelatedTerm.image} alt="연관검색어 이미지" />
-                      <Tooltip title="상세페이지로 이동하기">
-                        <span
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => {
-                            handleDetailClick(selectedRelatedTerm);
-                          }}>
-                          [상세보기]
-                        </span>
-                      </Tooltip>
-                    </RelatedSearchTermImage>
+                    })
+                  ) : (
+                    <EmptyRecentSearchTerm>최근 검색어가 없습니다.</EmptyRecentSearchTerm>
                   )}
-                </RelatedSearchTermWrapper>
-              </SearchSubMenuWrapper>
+                </SearchSubMenuWrapper>
+                <SearchSubMenuWrapper>
+                  <Divider>연관검색어</Divider>
+                  <RelatedSearchTermWrapper>
+                    <div>
+                      {relatedSearchTerm?.results?.map((result, idx) => {
+                        return (
+                          <RelatedSearchTerm
+                            onClick={(event) => {
+                              handleSearch(event, result.name);
+                            }}
+                            key={`related-search-term-${idx}`}>
+                            {HightlightSearchTerm(result.name, searchResult)}
+                          </RelatedSearchTerm>
+                        );
+                      })}
+                    </div>
+                  </RelatedSearchTermWrapper>
+                </SearchSubMenuWrapper>
+              </SearchMenuWrapper>
+              <Divider>연관상품</Divider>
+              <RelatedSearchImageWrapper>
+                {relatedSearchTerm?.results.slice(0, 3).map((result, idx) => (
+                  <RelatecSearchImage
+                    key={`related-search-image-${idx}`}
+                    onClick={() => {
+                      handleDetailClick(result);
+                    }}>
+                    <img width={150} src={result.image} alt="연관상품" />
+                    <div>{result.name}</div>
+                  </RelatecSearchImage>
+                ))}
+              </RelatedSearchImageWrapper>
             </SearchMenu>
           </Popper>
         </div>
