@@ -12,10 +12,11 @@ function DeviceOrderPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const formRef = useRef();
+  const [deviceInfo, setDeviceInfo] = useState(null);
   const [orderForm, setOrderForm] = useState({
     colorId: 1,
     discountType: 0,
-    installmentPeriod: 1,
+    installmentPeriod: 24,
     planId: 1,
     price: 100236,
     registrationType: 0,
@@ -33,17 +34,28 @@ function DeviceOrderPage() {
   useEffect(() => {
     const { state } = location;
     if (!!!state) navigate(-1);
+    setDeviceInfo(state);
   }, []);
 
   return (
     <DeviceOrderPageWrapper>
-      <OrderForm orderForm={orderForm} setOrderForm={setOrderForm} ref={formRef} />
-      <OrderReceipt
-        deviceInfo={location.state}
-        orderForm={orderForm}
-        checkUserInfo={checkUserInfo}
-        getUserInfo={getUserInfo}
-      />
+      {deviceInfo && (
+        <>
+          <OrderForm
+            orderForm={orderForm}
+            deviceInfo={deviceInfo}
+            setOrderForm={setOrderForm}
+            ref={formRef}
+          />
+          <OrderReceipt
+            setDeviceInfo={setDeviceInfo}
+            deviceInfo={deviceInfo}
+            orderForm={orderForm}
+            checkUserInfo={checkUserInfo}
+            getUserInfo={getUserInfo}
+          />
+        </>
+      )}
     </DeviceOrderPageWrapper>
   );
 }

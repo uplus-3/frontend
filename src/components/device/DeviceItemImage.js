@@ -20,6 +20,10 @@ const MainImageSelector = styled('div')({
   gap: 20,
 });
 
+const DefaultImage = styled('div')({
+  fontWeight: 600,
+});
+
 const MainImageSelectorItem = styled('div')({
   cursor: 'pointer',
   '.not-selected-image': {
@@ -30,23 +34,33 @@ const MainImageSelectorItem = styled('div')({
 function DeviceItemImage({ colors, selectedColor }) {
   const [imageIdx, setImageIdx] = useState(0);
   return (
-    <DeviceItemImageBlock>
-      <MainImage>
-        <img src={selectedColor?.images[imageIdx]?.imageUrl} alt="메인 이미지" />
-      </MainImage>
-      <MainImageSelector>
-        {selectedColor?.images?.map((image, idx) => (
-          <MainImageSelectorItem key={`selected-item-${idx}`} onClick={() => setImageIdx(idx)}>
-            <img
-              width={100}
-              src={image.imageUrl}
-              className={idx !== imageIdx ? 'not-selected-image' : ''}
-              alt={`이미지-${idx}`}
-            />
-          </MainImageSelectorItem>
-        ))}
-      </MainImageSelector>
-    </DeviceItemImageBlock>
+    <>
+      <DeviceItemImageBlock>
+        {colors && selectedColor ? (
+          <>
+            <MainImage>
+              <img src={selectedColor?.images[imageIdx]?.imageUrl} alt="메인 이미지" />
+            </MainImage>
+            <MainImageSelector>
+              {selectedColor?.images?.map((image, idx) => (
+                <MainImageSelectorItem
+                  key={`selected-item-${idx}`}
+                  onClick={() => setImageIdx(idx)}>
+                  <img
+                    width={100}
+                    src={image.imageUrl}
+                    className={idx !== imageIdx ? 'not-selected-image' : ''}
+                    alt={`이미지-${idx}`}
+                  />
+                </MainImageSelectorItem>
+              ))}
+            </MainImageSelector>
+          </>
+        ) : (
+          <DefaultImage>준비중인 페이지입니다</DefaultImage>
+        )}
+      </DeviceItemImageBlock>
+    </>
   );
 }
 
