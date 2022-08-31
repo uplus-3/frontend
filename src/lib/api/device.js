@@ -18,19 +18,13 @@ export const getDeviceDetail = ({
   });
 };
 
-export const getDeviceList = ({
-  discountType = -1,
-  installmentPeriod = 24,
-  networkType = 0,
-  planType = -1,
-}) => {
-  console.log(planType);
+export const getDeviceList = ({ discountType, installmentPeriod, networkType, plan }) => {
   return client.get(`/devices`, {
     params: {
-      'discount-type': parseInt(discountType),
-      'installment-period': parseInt(installmentPeriod),
-      'network-type': parseInt(networkType),
-      plan: parseInt(planType),
+      'discount-type': discountType || -1,
+      'installment-period': installmentPeriod || 24,
+      'network-type': networkType || 0,
+      plan: plan || -1,
     },
   });
 };

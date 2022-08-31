@@ -17,17 +17,44 @@ const DeviceListWrapper = styled(Box)({
   marginTop: 15,
 });
 
-function DeviceList({ devices, loading, error, searchParams, onChangeFilter }) {
+function DeviceList({
+  devices,
+  loading,
+  error,
+  count,
+  searchParams,
+  onChangeFilter,
+  excludeSoldout,
+  setExcludeSoldout,
+  showPrice,
+  setShowPrice,
+  sortbyDir,
+  setSortbyDir,
+  search,
+  onChangeSearch,
+}) {
   if (error) {
     return 'error!';
   }
 
   return (
     <DeviceListBlock>
-      <DeviceListHeader searchParams={searchParams} onChangeFilter={onChangeFilter} />
+      <DeviceListHeader
+        count={count}
+        searchParams={searchParams}
+        onChangeFilter={onChangeFilter}
+        excludeSoldout={excludeSoldout}
+        setExcludeSoldout={setExcludeSoldout}
+        showPrice={showPrice}
+        setShowPrice={setShowPrice}
+        sortbyDir={sortbyDir}
+        setSortbyDir={setSortbyDir}
+        search={search}
+        onChangeSearch={onChangeSearch}
+      />
       <DeviceListWrapper>
         {devices?.map((data) => (
-          <DeviceListItem data={data} />
+          <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
         ))}
       </DeviceListWrapper>
     </DeviceListBlock>

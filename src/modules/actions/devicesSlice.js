@@ -1,8 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { FILTER_DATA } from '../../components/device/DeviceListFileterContents';
+import { FILTER_DATA, SORT_TYPE } from '../../components/device/DeviceListFileterContents';
 
 const ALL = 'all';
+const LAUNCH = 'launch';
+const PURCHASE = 'purchase';
+const PRICE = 'price';
 
 const initialState = {
   devices: null,
@@ -91,4 +94,58 @@ const { actions, reducer } = devicesSlice;
 
 // export actions
 export const devicesActions = actions;
+
+export const filteredDevices = (
+  state,
+  price,
+  company,
+  storage,
+  f_sortby,
+  f_sortbyDir,
+  excludeSoldout,
+  search,
+) => {
+  let devices = state;
+  if (!devices) return null;
+  if (price && Array.isArray(price)) {
+    let min = price[0] || FILTER_DATA.price_range.config.MIN,
+      max = price[1] || FILTER_DATA.price_range.config.MAX;
+    devices = devices.filter(
+      (device) =>
+        device.dprice + device.plan.dprice >= min && device.dprice + device.plan.dprice <= max,
+    );
+  }
+  if (excludeSoldout) {
+    devices = devices.filter((device) => device.colors.every((color) => color.stock === 0));
+  }
+  // if (company && Array.isArray(company) && !company.includes('all')) {
+  //   devices = devices.filter((device) => company.includes(device.company));
+  // }
+  // if (storage && Array.isArray(storage) && !storage.includes('all')) {
+  //   devices = devices.filter((device) => storage.includes(device.storage));
+  // }
+
+  if (f_sortby) {
+    if (!f_sortby || f_sortby === LAUNCH) {
+      // 출시일 순
+      // devices = devices.sort((a, b) => )
+    } else if (f_sortby === PURCHASE) {
+      // 실구매가 순
+      devices = devices.sort((a, b) =>
+        a.dprice + a.plan.dprice > b.dprice + b.plan.dprice && f_sortbyDir ? 1 : -1,
+      );
+    } else if (f_sortby === PRICE) {
+      devices = devices.sort((a, b) => (a.price > b.price && f_sortbyDir ? 1 : -1));
+    }
+  }
+  if (search) {
+    devices = devices.filter((device) =>
+      device.name
+        .replaceAll(' ', '')
+        .toLowerCase()
+        .includes(search.replaceAll(' ', '').toLowerCase()),
+    );
+  }
+  return devices;
+};
 export default reducer;

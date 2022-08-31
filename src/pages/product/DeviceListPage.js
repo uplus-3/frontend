@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { devicesActions } from '../../modules/actions/devicesSlice';
+import { devicesActions, filteredDevices } from '../../modules/actions/devicesSlice';
 import { planActions } from '../../modules/actions/planSlice';
 
 import DeviceList from '../../components/device/DeviceList';
@@ -13,6 +13,7 @@ import { Box } from '@mui/system';
 import { ExpandLess } from '@mui/icons-material';
 import DeviceCompareTab from '../../components/device/compare/DeviceCompareTab';
 import ScrollTopBtn from '../../components/common/ScrollTopBtn';
+import useInput from '../../lib/hooks/useInput';
 
 const ALL = 'all';
 
@@ -28,17 +29,6 @@ const DeviceListWrapper = styled(Box)({
 
 function DeviceListPage({ networkType }) {
   const dispatch = useDispatch();
-  const planInfo = useSelector(({ plan, loading }) => ({
-    plan: plan[`${networkType}g`],
-    loading: loading.plan,
-    error: plan.error,
-  }));
-  const devicesInfo = useSelector(({ devices, loading }) => ({
-    devices: devices.devices,
-    loading: loading.devices,
-    error: devices.error,
-  }));
-
   const [searchParams, setSearchParams] = useSearchParams();
   const f_plan = searchParams.get('plan');
   const f_discount = searchParams.get('discount');
@@ -47,6 +37,31 @@ function DeviceListPage({ networkType }) {
   const f_storage = searchParams.getAll('storage');
   const f_sortby = searchParams.get('sortby');
 
+  const [sortbyDir, setSortbyDir] = useState(true);
+  const [excludeSoldout, setExcludeSoldout] = useState(false);
+  const [showPrice, setShowPrice] = useState(false);
+  const [search, handleChangeSearch, setSearch] = useInput('');
+
+  const planInfo = useSelector(({ plan, loading }) => ({
+    plan: plan[`${networkType}g`],
+    loading: loading.plan,
+    error: plan.error,
+  }));
+  const devicesInfo = useSelector(({ devices, loading }) => ({
+    devices: filteredDevices(
+      devices.devices,
+      f_price,
+      f_company,
+      f_storage,
+      f_sortby,
+      sortbyDir,
+      excludeSoldout,
+      search,
+    ),
+    loading: loading.devices,
+    error: devices.error,
+  }));
+
   useEffect(() => {
     // 요금제 정보 불러오기
     dispatch(planActions.getPlanList(networkType));
@@ -54,7 +69,6 @@ function DeviceListPage({ networkType }) {
 
   useEffect(() => {
     // 요금제 & 할인유형이 바뀐 경우
-    console.log('요금제 할인유형 변경');
     // 단말기 리스트 불러오기
     dispatch(
       devicesActions.getDevice({
@@ -64,11 +78,6 @@ function DeviceListPage({ networkType }) {
       }),
     );
   }, [dispatch, networkType, f_plan, f_discount]);
-
-  useEffect(() => {
-    // 요금제 & 할인유형 이외의 필터가 바뀐 경우
-    console.log('요금제 할인유형 이외 변경');
-  }, [f_price, f_company, f_storage, f_sortby]);
 
   // 필터 선택 시 쿼리스트링 변경
   const handleChangeFilter = (type, value) => {
@@ -85,6 +94,7 @@ function DeviceListPage({ networkType }) {
           discount: f_discount || '',
           company: f_company,
           storage: f_storage,
+          sortby: f_sortby || '',
           [type]: [...value],
         },
         { replace: true },
@@ -108,6 +118,7 @@ function DeviceListPage({ networkType }) {
           price: f_price,
           company: f_company,
           storage: f_storage,
+          sortby: f_sortby || '',
           [type]: [...newValue],
         },
         { replace: true },
@@ -151,11 +162,20 @@ function DeviceListPage({ networkType }) {
           devices={devicesInfo.devices}
           loading={devicesInfo.loading}
           error={devicesInfo.error}
+          count={devicesInfo.devices ? devicesInfo.devices.length : 0}
           searchParams={searchParams}
           onChangeFilter={handleChangeFilter}
+          excludeSoldout={excludeSoldout}
+          setExcludeSoldout={setExcludeSoldout}
+          showPrice={showPrice}
+          setShowPrice={setShowPrice}
+          sortbyDir={sortbyDir}
+          setSortbyDir={setSortbyDir}
+          search={search}
+          onChangeSearch={handleChangeSearch}
         />
       </DeviceListWrapper>
-      <DeviceCompareTab />
+      {/* <DeviceCompareTab /> */}
       <ScrollTopBtn Icon={<ExpandLess />} />
     </div>
   );
