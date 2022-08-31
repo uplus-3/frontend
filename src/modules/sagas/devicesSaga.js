@@ -7,13 +7,13 @@ import { loadingActions } from '../actions/loadingSlice';
 export function* getDevicesSaga(action) {
   const { getDevicesSuccess, getDevicesFailure } = devicesActions;
   const { startLoading, finishLoading } = loadingActions;
+  const { planType, discountType, networkType } = action.payload;
   yield put(startLoading('devices'));
   try {
     const res = yield call(getDeviceList, {
-      discountType: -1,
-      installmentPeriod: 24,
-      networkType: 5,
-      plan: -1,
+      planType,
+      discountType,
+      networkType,
     });
     yield put(
       getDevicesSuccess({

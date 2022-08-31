@@ -17,14 +17,14 @@ const DeviceListWrapper = styled(Box)({
   marginTop: 15,
 });
 
-function DeviceList({ devices, loading, error }) {
+function DeviceList({ devices, loading, error, searchParams, onChangeFilter }) {
   if (error) {
     return 'error!';
   }
 
   return (
     <DeviceListBlock>
-      <DeviceListHeader />
+      <DeviceListHeader searchParams={searchParams} onChangeFilter={onChangeFilter} />
       <DeviceListWrapper>
         {devices?.map((data) => (
           <DeviceListItem data={data} />

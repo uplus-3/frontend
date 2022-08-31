@@ -7,16 +7,10 @@ const loadingSlice = createSlice({
   initialState,
   reducers: {
     startLoading: (state, action) => {
-      state = {
-        ...state,
-        [action.payload]: true,
-      };
+      state[action.payload] = true;
     },
     finishLoading: (state, action) => {
-      state = {
-        ...state,
-        [action.payload]: false,
-      };
+      state[action.payload] = false;
     },
   },
 });

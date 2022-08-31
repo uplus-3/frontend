@@ -9,7 +9,9 @@ export function* getPlanSaga(action) {
   const { getPlanListSuccess, getPlanFailure } = planActions;
   yield put(startLoading('plan'));
   try {
-    const res = yield call(getPlans, action.payload);
+    const res = yield call(getPlans, {
+      networkType: action.payload,
+    });
     yield put(
       getPlanListSuccess({
         payload: res.data,

@@ -22,15 +22,15 @@ export const FILTER_DATA = {
     data: [
       {
         name: '추천',
-        value: '-1',
+        value: -1,
       },
       {
         name: '공시지원금',
-        value: '0',
+        value: 0,
       },
       {
         name: '선택약정24개월',
-        value: '1',
+        value: 1,
       },
     ],
   },

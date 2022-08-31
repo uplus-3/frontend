@@ -12,8 +12,8 @@ const planSlice = createSlice({
   reducers: {
     getPlanList: (state, action) => {},
     getPlanListSuccess: (state, action) => {
-      const { payload, networkType } = action;
-      state[networkType] = payload?.planList;
+      const { payload, networkType } = action.payload;
+      state[`${networkType}g`] = payload?.planList;
     },
     getPlanFailure: (state, action) => {
       const { error } = action;
