@@ -15,6 +15,7 @@ import {
 import { Search, Clear } from '@mui/icons-material';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import useInput from '../../lib/hooks/useInput';
+import { getSearchRelatedKeyword } from '../../lib/api/search';
 
 const SearchBarBlock = styled('div')({
   position: 'absolute',
@@ -43,7 +44,7 @@ const SearchInput = styled('input')(({ theme }) => ({
 
 const SearchMenu = styled(Paper)(({ theme }) => ({
   margin: 5,
-  width: 650,
+  width: 700,
   minHeight: 500,
   padding: 10,
   boxShadow: '0px 4px 5px 0px rgb(0 0 0 / 12%)',
@@ -55,7 +56,7 @@ const SearchMenu = styled(Paper)(({ theme }) => ({
 const SearchSubMenuWrapper = styled('div')(({ theme }) => ({
   marginBottom: 25,
   minHeight: 220,
-  width: 300,
+  width: 320,
 }));
 
 const SearchCategoryWrapper = styled('div')(({ theme }) => ({
@@ -149,7 +150,7 @@ const RelatecSearchImage = styled('div')(({ theme }) => ({
   alignItems: 'center',
   borderRadius: 10,
   padding: 10,
-  width: 200,
+  width: 210,
   cursor: 'pointer',
   border: `1px solid ${theme.palette.gray2}`,
 }));
@@ -157,7 +158,9 @@ const RelatecSearchImage = styled('div')(({ theme }) => ({
 const RelatedSearchImageWrapper = styled('div')({
   paddingTop: 20,
   display: 'flex',
-  justifyContent: 'space-between',
+  gap: 20,
+
+  justifyContent: 'center',
 });
 
 const HighlightRelatedSearchTerm = styled('span')(({ theme }) => ({
@@ -170,46 +173,6 @@ const EmptyRecentSearchTerm = styled('div')(({ theme }) => ({
   margin: 30,
   color: theme.palette.gray3,
 }));
-
-const tempRelatedSearchTerm = {
-  results: [
-    {
-      id: 'SM-F721N',
-      name: '갤럭시 Z Flip 4 (1)',
-      networkType: '5g',
-      image:
-        'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-021216-097-IrwyS2Zu.jpg',
-    },
-    {
-      id: 'SM-F721N-MK',
-      name: '갤럭시 Z Flip 4 메종키츠네 에디션 (2)',
-      networkType: '5g',
-      image:
-        'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-030104-557-H2uealCE.jpg',
-    },
-    {
-      id: 'SM-F721N',
-      name: '갤럭시 Z Flip 4 (3)',
-      networkType: '5g',
-      image:
-        'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-021216-097-IrwyS2Zu.jpg',
-    },
-    {
-      id: 'SM-F721N-MK',
-      name: '갤럭시 Z Flip 4 메종키츠네 에디션 (4)',
-      networkType: '5g',
-      image:
-        'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-030104-557-H2uealCE.jpg',
-    },
-    {
-      id: 'SM-F721N',
-      name: '가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나',
-      networkType: '5g',
-      image:
-        'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-021216-097-IrwyS2Zu.jpg',
-    },
-  ],
-};
 
 const HightlightSearchTerm = (text, query) => {
   if (query === '') return text;
@@ -224,7 +187,7 @@ const HightlightSearchTerm = (text, query) => {
             </HighlightRelatedSearchTerm>
           </>
         ) : (
-          <>{normal}</>
+          <span>{normal}</span>
         ),
       )}
     </>
@@ -233,24 +196,25 @@ const HightlightSearchTerm = (text, query) => {
 
 function SearchBar() {
   const lenValidator = (value) => value.length <= 30;
+  const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchNetworkType, setSearchNetworkType] = useState(null);
   const [recentSearchTerm, setRecentSearchTerm] = useState(
     JSON.parse(localStorage.getItem('recent_search_terms')) || [],
   );
-  const [relatedSearchTerm, setRelatedSearchTerm] = useState({ results: [] });
-  const [selectedRelatedTerm, setSelectedRelatedSearchTerm] = useState(null);
-  const navigate = useNavigate();
+  const [relatedSearchTerm, setRelatedSearchTerm] = useState([]);
   const [searchResult, onChange, setSearchResult] = useInput('', lenValidator);
 
-  useEffect(() => {
-    getRelatedSearchTerm();
-  }, []);
-
   // axios 요청을 통해 관련 검색어를 받아옴.
-  const getRelatedSearchTerm = () => {
-    setRelatedSearchTerm(tempRelatedSearchTerm);
+  const getRelatedSearchTerm = async (term) => {
+    try {
+      const res = await getSearchRelatedKeyword({
+        query: term,
+        networkType: searchNetworkType || 0,
+      });
+      setRelatedSearchTerm(res.data.searchKeywordList || []);
+    } catch (e) {}
   };
 
   // 검색시 호출되는 함수
@@ -283,10 +247,16 @@ function SearchBar() {
     setSearchNetworkType(networkType);
   };
 
+  // 상세페이지로 이동하는 버튼
   const handleDetailClick = (device) => {
-    navigate(`/${device.networkType === '5g' ? '5g-phone' : '4g-phone'}/${device.id}`);
+    navigate(
+      `/${device.networkType === '5g' ? '5g-phone' : '4g-phone'}/${device.serialNumber}?id=${
+        device.id
+      }`,
+    );
     resetSearchBar();
   };
+
   // 최근 검색한 검색어 저장하는 함수
   const saveRecentSearch = (searchTerm) => {
     if (!!!searchTerm) return;
@@ -304,7 +274,10 @@ function SearchBar() {
     setRecentSearchTerm([...currentRecentSearchTerms]);
   };
 
-  // 특정 검색어 하이라이팅 기능
+  useEffect(() => {
+    if (!!!anchorEl || !!setRelatedSearchTerm) return;
+    getRelatedSearchTerm(searchResult);
+  }, [searchResult, searchNetworkType, anchorEl]);
 
   return (
     <SearchBarBlock>
@@ -324,15 +297,14 @@ function SearchBar() {
             <SearchMenu elevation={3}>
               <SearchCategoryWrapper>
                 <div>카테고리</div>
-                {/* <Divider /> */}
                 <NetworkTypeToggleButtonGroup
                   exclusive
                   value={searchNetworkType}
                   onChange={handleSearchNetworkType}>
-                  <ToggleButton value="5G" aria-label="centered" size="small">
+                  <ToggleButton value="5" aria-label="centered" size="small">
                     5G 휴대폰
                   </ToggleButton>
-                  <ToggleButton value="4G" aria-label="right aligned" size="small">
+                  <ToggleButton value="4" aria-label="right aligned" size="small">
                     4G 휴대폰
                   </ToggleButton>
                 </NetworkTypeToggleButtonGroup>
@@ -362,10 +334,12 @@ function SearchBar() {
                   )}
                 </SearchSubMenuWrapper>
                 <SearchSubMenuWrapper>
-                  <Divider>연관검색어</Divider>
+                  <Divider>
+                    {searchResult === '' && !!relatedSearchTerm ? '추천검색어' : '연관검색어'}
+                  </Divider>
                   <RelatedSearchTermWrapper>
                     <div>
-                      {relatedSearchTerm?.results?.map((result, idx) => {
+                      {relatedSearchTerm?.map((result, idx) => {
                         return (
                           <RelatedSearchTerm
                             onClick={(event) => {
@@ -380,16 +354,18 @@ function SearchBar() {
                   </RelatedSearchTermWrapper>
                 </SearchSubMenuWrapper>
               </SearchMenuWrapper>
-              <Divider>연관상품</Divider>
+              <Divider>
+                {searchResult === '' && !!relatedSearchTerm ? '추천상품' : '연관상품'}
+              </Divider>
               <RelatedSearchImageWrapper>
-                {relatedSearchTerm?.results.slice(0, 3).map((result, idx) => (
+                {relatedSearchTerm.slice(0, 3).map((result, idx) => (
                   <RelatecSearchImage
                     key={`related-search-image-${idx}`}
                     onClick={() => {
                       handleDetailClick(result);
                     }}>
-                    <img width={150} src={result.image} alt="연관상품" />
-                    <div>{result.name}</div>
+                    <img width={150} src={result.imageUrl} alt="연관상품" />
+                    <div>{HightlightSearchTerm(result.name, searchResult)}</div>
                   </RelatecSearchImage>
                 ))}
               </RelatedSearchImageWrapper>
