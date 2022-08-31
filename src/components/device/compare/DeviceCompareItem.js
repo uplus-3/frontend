@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/system';
 import { Close } from '@mui/icons-material';
 
+import { PriceFormatter } from '../../../lib/utils';
+
 const DeviceCompareItemBlock = styled('div')(({ theme, data }) => ({
   position: 'relative',
   display: 'flex',
@@ -32,6 +34,10 @@ const CloseIconWapper = styled('div')({
   right: 10,
   top: 10,
   cursor: 'pointer',
+
+  svg: {
+    verticalAlign: 'middle',
+  },
 });
 
 const InfoWapper = styled('div')({
@@ -46,30 +52,32 @@ const InfoWapper = styled('div')({
   },
 });
 
-function DeviceCompareItem({ data, isLink }) {
+const noDeviceImg = 'https://image.lguplus.com/static/pc-static/indv/images/icon/unselected.png';
+
+function DeviceCompareItem({ device, isLink, onClickRemove }) {
   const navigate = useNavigate();
-  const imgUrl = data
-    ? 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-021216-097-IrwyS2Zu.jpg'
-    : 'https://image.lguplus.com/static/pc-static/indv/images/icon/unselected.png';
 
   const handleGoDetail = () => {
     if (isLink) {
-      navigate(`/${data?.serialNumber}`);
+      navigate(`/${device?.serialNumber}`);
     }
   };
+
   return (
-    <DeviceCompareItemBlock data={!!data}>
-      <CloseIconWapper>
-        <Close />
-      </CloseIconWapper>
+    <DeviceCompareItemBlock data={!!device}>
+      {device && (
+        <CloseIconWapper onClick={() => onClickRemove(device.id)}>
+          <Close />
+        </CloseIconWapper>
+      )}
       <DeviceImgWapper isLink onClick={handleGoDetail}>
-        <img src={imgUrl} />
+        <img src={device ? device.colors[0]?.images[0]?.imageUrl : noDeviceImg} alt="단말기 사진" />
       </DeviceImgWapper>
-      {data ? (
+      {device ? (
         <>
           <InfoWapper>
-            <p>갤럭시 Z Flip 4</p>
-            <p>월 124,900원</p>
+            <p>{device.name}</p>
+            <p>월 {PriceFormatter(device.dprice + device.plan.dprice)}원</p>
           </InfoWapper>
         </>
       ) : (

@@ -6,7 +6,12 @@ import { Box, Divider } from '@mui/material';
 import { ShoppingCartOutlined } from '@mui/icons-material';
 
 import qs from 'qs';
+import useAlert from '../../lib/hooks/useAlert';
+import classnames from 'classnames';
+
 import { PriceFormatter } from '../../lib/utils';
+import { devicesActions } from '../../modules/actions/devicesSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const DeviceListItemBlock = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -104,6 +109,12 @@ const ItemCompareWapper = styled(Box)(({ theme }) => ({
 
   '& .compare-add-btn': {
     padding: '5px 25px',
+
+    '&.selected, &.selected:hover': {
+      border: `1px solid ${theme.palette.dark}`,
+      background: theme.palette.dark,
+      color: '#fff',
+    },
   },
 }));
 
@@ -114,8 +125,12 @@ const AddCartIconWapper = styled('div')(({ theme }) => ({
 }));
 
 function DeviceListItem({ data, showPrice, searchParams }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const Calert = useAlert();
+  const comparison = useSelector((state) => state.devices.comparison);
   const [cIdx, setCIdx] = useState(0);
+  const isSelected = !!comparison.find((d) => d.id === data.id);
 
   const queryString = qs.stringify({
     plan: searchParams.get('plan') || -1,
@@ -131,6 +146,16 @@ function DeviceListItem({ data, showPrice, searchParams }) {
       pathname: `./${data.serialNumber}`,
       search: `?id=${data.id}&${queryString}`,
     });
+  };
+
+  const handleClickCompareBtn = async () => {
+    if (comparison.length === 3 && !isSelected) {
+      Calert.fire({
+        title: '최대 3개 상품까지 <br/>비교하기가 가능합니다.',
+      });
+      return;
+    }
+    dispatch(devicesActions.updateComparison(data));
   };
 
   return (
@@ -179,7 +204,13 @@ function DeviceListItem({ data, showPrice, searchParams }) {
         <AddCartIconWapper className="add-btn">
           <ShoppingCartOutlined />
         </AddCartIconWapper>
-        <div className="add-btn compare-add-btn">비교하기</div>
+        <div
+          className={classnames('add-btn', 'compare-add-btn', {
+            selected: isSelected,
+          })}
+          onClick={handleClickCompareBtn}>
+          비교하기
+        </div>
       </ItemCompareWapper>
     </DeviceListItemBlock>
   );

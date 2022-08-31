@@ -10,6 +10,9 @@ const PRICE = 'price';
 const initialState = {
   devices: null,
   error: null,
+  comparison: [],
+
+  // TODO - 삭제
   filter: {
     plan: null,
     discount: null,
@@ -43,6 +46,21 @@ const devicesSlice = createSlice({
     getDevicesFailure: (state, action) => {
       const { error } = action.payload;
       state.error = error;
+    },
+    updateComparison: (state, action) => {
+      const { id } = action.payload;
+      const isExist = state.comparison.find((d) => d.id === id);
+      if (isExist) {
+        state.comparison = state.comparison.filter((d) => d.id !== id);
+      } else {
+        state.comparison.push(action.payload);
+      }
+    },
+    removeComparison: (state, action) => {
+      state.comparison = state.comparison.filter((d) => d.id !== action.payload);
+    },
+    removeComparisonAll: (state, action) => {
+      state.comparison = [];
     },
     initFilterValue: (state, action) => {
       state.filter = action.payload;
