@@ -43,14 +43,14 @@ function DeviceListPage({ networkType }) {
   const [showPrice, setShowPrice] = useState(false);
   const [search, handleChangeSearch, setSearch] = useInput('');
 
-  const planInfo = useSelector(({ plan, loading }) => ({
+  const planInfo = useSelector(({ plan, loading, error }) => ({
     plan: plan[`${networkType}g`],
-    loading: loading.plan,
-    error: plan.error,
+    loading: loading['plan'],
+    error: error['plan'],
   }));
-  const devicesInfo = useSelector(({ devices, loading }) => ({
+  const devicesInfo = useSelector(({ devices: rDvices, loading, error }) => ({
     devices: filteredDevices(
-      devices.devices,
+      rDvices,
       f_price,
       f_company,
       f_storage,
@@ -60,23 +60,29 @@ function DeviceListPage({ networkType }) {
       search,
     ),
     loading: loading.devices,
-    error: devices.error,
+    error: error.devices,
   }));
   const comparison = useSelector((state) => state.devices.comparison);
 
   useEffect(() => {
     // 요금제 정보 불러오기
     dispatch(planActions.getPlanList(networkType));
+    // 네트워크별 단말기 리스트 불러오기
+    dispatch(
+      devicesActions.getDevice({
+        networkType,
+      }),
+    );
   }, [dispatch, networkType]);
 
   useEffect(() => {
     // 요금제 & 할인유형이 바뀐 경우
-    // 단말기 리스트 불러오기
+    // 단말기 별 요금 정보 불러오기
     dispatch(
-      devicesActions.getDevice({
+      devicesActions.getDevicePrice({
         discountType: f_discount,
         networkType,
-        planType: f_plan,
+        planId: f_plan,
       }),
     );
   }, [dispatch, networkType, f_plan, f_discount]);

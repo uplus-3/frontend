@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { styled } from '@mui/system';
@@ -25,11 +25,13 @@ const ItemTagWapper = styled(Box)({
   top: 5,
   left: 10,
 
-  '& .popular': {
-    background: '#d44602',
-    color: '#fff',
-    padding: '5px',
+  display: 'flex',
+  gap: 5,
+
+  span: {
+    padding: '0 5px',
     fontSize: '0.75rem',
+    color: '#fff',
   },
 });
 
@@ -39,6 +41,7 @@ const ItemImageWapper = styled(Box)({
   borderRadius: '0.875rem',
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
+  transform: 'scale(0.8)',
   cursor: 'pointer',
 });
 
@@ -169,7 +172,7 @@ function DeviceListItem({ data, showPrice, searchParams }) {
       </ItemTagWapper>
       <ItemImageWapper
         onClick={handleGoDetailPage}
-        style={{ backgroundImage: `url(${data?.colors[cIdx]?.images[0]?.imageUrl})` }}
+        style={{ backgroundImage: `url(${data?.colors[cIdx]?.imageUrl})` }}
       />
       <ItemColorWapper>
         <ul className="colors">
@@ -189,13 +192,13 @@ function DeviceListItem({ data, showPrice, searchParams }) {
         <div>
           <div className="p-price-sub">
             {showPrice && (
-              <div className="origin-price">정상가 {PriceFormatter(data?.price)}원</div>
+              <div className="origin-price">정상가 {PriceFormatter(data?.price || 0)}원</div>
             )}
-            <div>휴대폰 월 {PriceFormatter(data?.dprice)}원</div>
-            <div>통신료 월 {PriceFormatter(data?.plan?.dprice)}원</div>
+            <div>휴대폰 월 {PriceFormatter(data?.ddevicePrice || 0)}원</div>
+            <div>통신료 월 {PriceFormatter(data?.dplanPrice || 0)}원</div>
           </div>
           <div className="p-price">
-            월 {PriceFormatter((data?.dprice || 0) + (data?.plan?.dprice || 0))}원
+            월 {PriceFormatter((data?.ddevicePrice || 0) + (data?.dplanPrice || 0))}원
           </div>
         </div>
       </ItemInfoWapper>
