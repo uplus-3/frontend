@@ -1,110 +1,114 @@
 import React, { useEffect, useState } from 'react';
 
 import { styled } from '@mui/material';
-
+import { getDeviceDetail, getDeviceList } from '../../lib/api/device';
+import axios from 'axios';
 import DeviceItemImage from '../../components/device/DeviceItemImage';
 import DeviceItemInfo from '../../components/device/DeviceItemInfo';
+import { useSearchParams } from 'react-router-dom';
 
 const DeviceDetailPageWrapper = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
 });
 const tempData = {
-  id: 'SM-F721N',
-  name: '갤럭시 Z Flip 4',
-  price: 1353000,
-  m_price: '기기월납부액',
-  d_price: 59690,
-  storage: 256,
-  stock: 1,
+  id: 1,
+  serialNumber: 'SM-S901N',
+  name: '갤럭시 S22 256GB',
+  price: 999900,
   plan: {
-    name: '5G 라이트',
-    price: 65000,
-    d_price: '할인된가격(할인적용)',
-    sDiscount: '선택약정 금액',
+    id: 1,
+    name: '5G 시그니처',
+    price: 130000,
+    dprice: 97500,
+    sdiscount: 32500,
   },
+  psupport: 0,
   tags: [
     {
-      content: '인기',
-      rgb: '#d44602',
+      content: '최신',
+      rgb: '#7C37D5',
     },
   ],
   colors: [
     {
-      name: '보라퍼플',
-      code: 'rgb(184, 170, 203)',
+      name: '보라 퍼플',
+      rgb: '#B8AACB',
+      stock: 0,
       images: [
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020618-663-OMVftJP5.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-wy20d2Cz.jpg',
         },
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020618-678-C8yYoMIx.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-fheChOkq.jpg',
         },
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020618-674-ItkOP0vp.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-A0ixpojC.jpg',
         },
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020618-663-cMCHj8k6.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-Jd51xejS.jpg',
         },
       ],
     },
     {
-      name: '핑크골드',
-      code: 'rgb(236, 219, 211)',
+      name: '새하얀 화이트',
+      rgb: '#FFFFFF',
+      stock: 0,
       images: [
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020631-391-bPE9jcWN.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-wy20d2Cz.jpg',
         },
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020631-412-gCsMNDbi.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-fheChOkq.jpg',
         },
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020631-408-G3z83woI.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-A0ixpojC.jpg',
         },
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020631-401-2JepFcRu.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-Jd51xejS.jpg',
         },
       ],
     },
     {
-      name: '블루',
-      code: 'rgb(201, 209, 228)',
+      name: '시퍼런 블루',
+      rgb: '#B8AACB',
+      stock: 10,
       images: [
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020644-529-ZPW12jIy.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-wy20d2Cz.jpg',
         },
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020644-547-64XjTeRC.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-fheChOkq.jpg',
         },
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020644-560-4vO3OWch.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-A0ixpojC.jpg',
         },
         {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020644-539-mlrSiD9s.jpg',
-        },
-      ],
-    },
-    {
-      name: '그라파이트',
-      code: 'rgb(66, 67, 71)',
-      images: [
-        {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020701-465-vFiTeAxV.jpg',
-        },
-        {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020701-465-VGEBhGV7.jpg',
-        },
-        {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020701-471-PIQiO80S.jpg',
-        },
-        {
-          url: 'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020701-460-sxZD3Tpa.jpg',
+          imageUrl:
+            'https://image.lguplus.com/static/pc-contents/images/prdv/20220810-050335-443-Jd51xejS.jpg',
         },
       ],
     },
   ],
+  storage: '256GB',
+  mprice: 41662,
+  dprice: 41662,
+  asupport: 0,
 };
 function DeviceDetailPage() {
+  const [searchParams] = useSearchParams();
+
   useEffect(() => {
     getDeviceDetailInfo();
   }, []);
@@ -113,9 +117,20 @@ function DeviceDetailPage() {
   const [selectedColor, setSelectedColor] = useState(null);
 
   // 서버와 통신해 디바이스 정보를 가져옴
-  const getDeviceDetailInfo = () => {
-    setDeviceDetailInfo(tempData);
-    setSelectedColor(tempData.colors[0]);
+  const getDeviceDetailInfo = async () => {
+    try {
+      const req = {
+        deviceId: searchParams.get('id'),
+        discountType: searchParams.get('discountType') || -1,
+        installmentPeriod: searchParams.get('installmentPeriod') || 24,
+        plan: -1,
+      };
+      const res = await getDeviceDetail(req);
+      setDeviceDetailInfo({ ...res.data, colors: tempData.colors, tags: tempData.tags });
+      setSelectedColor(tempData.colors[0]);
+    } catch (e) {
+      console.log(e.response);
+    }
   };
 
   return (

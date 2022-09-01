@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import purple from '../../assets/images/SM-F721N-purple-0.jpg';
-import blue from '../../assets/images/SM-F721N-blue-0.jpg';
-import gold from '../../assets/images/SM-F721N-gold-0.jpg';
-import graphite from '../../assets/images/SM-F721N-graphite-0.jpg';
 
 import { styled } from '@mui/system';
 import { Box, Divider } from '@mui/material';
 import { ShoppingCartOutlined } from '@mui/icons-material';
 
 import qs from 'qs';
+import useAlert from '../../lib/hooks/useAlert';
+import classnames from 'classnames';
+
 import { PriceFormatter } from '../../lib/utils';
+import { devicesActions } from '../../modules/actions/devicesSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const DeviceListItemBlock = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -42,7 +42,7 @@ const ItemImageWapper = styled(Box)({
   cursor: 'pointer',
 });
 
-const ItemColorWapper = styled(Box)({
+const ItemColorWapper = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -55,6 +55,7 @@ const ItemColorWapper = styled(Box)({
       width: 12,
       height: 12,
       borderRadius: '100%',
+      boxShadow: `0 2px 0px 0px ${theme.palette.gray3}`,
       cursor: 'pointer',
       transition: 'transform 0.25s',
     },
@@ -63,7 +64,7 @@ const ItemColorWapper = styled(Box)({
       transition: 'transform 0.25s',
     },
   },
-});
+}));
 
 const ItemInfoWapper = styled(Box)({
   padding: '1.5rem',
@@ -108,6 +109,12 @@ const ItemCompareWapper = styled(Box)(({ theme }) => ({
 
   '& .compare-add-btn': {
     padding: '5px 25px',
+
+    '&.selected, &.selected:hover': {
+      border: `1px solid ${theme.palette.dark}`,
+      background: theme.palette.dark,
+      color: '#fff',
+    },
   },
 }));
 
@@ -117,16 +124,17 @@ const AddCartIconWapper = styled('div')(({ theme }) => ({
   padding: '0 5px',
 }));
 
-const colorImages = [purple, gold, blue, graphite];
-
-function DeviceListItem({ data }) {
+function DeviceListItem({ data, showPrice, searchParams }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const filter = useSelector((state) => state.devices.filter);
+  const Calert = useAlert();
+  const comparison = useSelector((state) => state.devices.comparison);
   const [cIdx, setCIdx] = useState(0);
+  const isSelected = !!comparison.find((d) => d.id === data.id);
 
   const queryString = qs.stringify({
-    plan: filter.plan,
-    discount: filter.discount,
+    plan: searchParams.get('plan') || -1,
+    discount: searchParams.get('discount') || -1,
   });
 
   const handleClickColor = (idx) => {
@@ -140,6 +148,16 @@ function DeviceListItem({ data }) {
     });
   };
 
+  const handleClickCompareBtn = async () => {
+    if (comparison.length === 3 && !isSelected) {
+      Calert.fire({
+        title: '최대 3개 상품까지 <br/>비교하기가 가능합니다.',
+      });
+      return;
+    }
+    dispatch(devicesActions.updateComparison(data));
+  };
+
   return (
     <DeviceListItemBlock>
       <ItemTagWapper>
@@ -151,8 +169,7 @@ function DeviceListItem({ data }) {
       </ItemTagWapper>
       <ItemImageWapper
         onClick={handleGoDetailPage}
-        style={{ backgroundImage: `url(${colorImages[cIdx]})` }}
-        // style={{ backgroundImage: `url(${data.colors[0]?.images[0]?.imageUrl})` }}
+        style={{ backgroundImage: `url(${data?.colors[cIdx]?.images[0]?.imageUrl})` }}
       />
       <ItemColorWapper>
         <ul className="colors">
@@ -171,7 +188,9 @@ function DeviceListItem({ data }) {
         </div>
         <div>
           <div className="p-price-sub">
-            <div className="origin-price">정상가 {PriceFormatter(data?.price)}원</div>
+            {showPrice && (
+              <div className="origin-price">정상가 {PriceFormatter(data?.price)}원</div>
+            )}
             <div>휴대폰 월 {PriceFormatter(data?.dprice)}원</div>
             <div>통신료 월 {PriceFormatter(data?.plan?.dprice)}원</div>
           </div>
@@ -185,7 +204,13 @@ function DeviceListItem({ data }) {
         <AddCartIconWapper className="add-btn">
           <ShoppingCartOutlined />
         </AddCartIconWapper>
-        <div className="add-btn compare-add-btn">비교하기</div>
+        <div
+          className={classnames('add-btn', 'compare-add-btn', {
+            selected: isSelected,
+          })}
+          onClick={handleClickCompareBtn}>
+          비교하기
+        </div>
       </ItemCompareWapper>
     </DeviceListItemBlock>
   );

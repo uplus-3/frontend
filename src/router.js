@@ -24,7 +24,7 @@ function Router() {
           children: [
             {
               path: '',
-              element: <DeviceListPage />,
+              element: <DeviceListPage networkType="5" />,
             },
             {
               path: ':id',
@@ -37,7 +37,7 @@ function Router() {
           children: [
             {
               path: '',
-              element: <DeviceListPage />,
+              element: <DeviceListPage networkType="4" />,
             },
             {
               path: ':id',

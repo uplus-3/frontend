@@ -32,14 +32,14 @@ function DeviceItemImage({ colors, selectedColor }) {
   return (
     <DeviceItemImageBlock>
       <MainImage>
-        <img src={selectedColor?.images[imageIdx]?.url} alt="메인 이미지" />
+        <img src={selectedColor?.images[imageIdx]?.imageUrl} alt="메인 이미지" />
       </MainImage>
       <MainImageSelector>
         {selectedColor?.images?.map((image, idx) => (
           <MainImageSelectorItem key={`selected-item-${idx}`} onClick={() => setImageIdx(idx)}>
             <img
               width={100}
-              src={image.url}
+              src={image.imageUrl}
               className={idx !== imageIdx ? 'not-selected-image' : ''}
               alt={`이미지-${idx}`}
             />
