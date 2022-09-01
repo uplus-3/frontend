@@ -4,6 +4,7 @@ import MainLayout from './layout/MainLayout';
 import MainPage from './pages/MainPage';
 import NotFoundPage from './pages/NotFoundPage';
 import DeviceOrderHistoryPage from './pages/order/DeviceOrderHistoryPage';
+import DeviceOrderSearchInputPage from './pages/order/DeviceOrderSearchInputPage';
 import DeviceOrderPage from './pages/order/DeviceOrderPage';
 import DeviceDetailPage from './pages/product/DeviceDetailPage';
 import DeviceListPage from './pages/product/DeviceListPage';
@@ -60,6 +61,10 @@ function Router() {
             {
               path: ':id',
               element: <DeviceOrderHistoryPage />,
+            },
+            {
+              path: 'search',
+              element: <DeviceOrderSearchInputPage />,
             },
           ],
         },
