@@ -1,0 +1,53 @@
+name: Build React Artifact and Deploy Image to ECR
+
+on:
+  push:
+    branches: [ "develop" ]
+  workflow_dispatch:
+    branches: [ "develop" ]
+
+env:
+  AWS_REGION : ap-northeast-2
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  pushed:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - run: echo The PR was merged
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+
+    - name: Create .env file
+      run: |
+        touch .env.production
+        echo "${{ secrets.DEV_ENV }}" > .env.production
+
+    - run: yarn install
+    - run: CI=false yarn build
+
+    # Configure the GitHub Actions environment with a role using GitHub's OIDC provider and your desired region
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+    
+    - name: Deploy static site to S3 bucket
+      run: aws s3 sync ./build s3://uplus3-dev
