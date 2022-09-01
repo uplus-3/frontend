@@ -25,6 +25,7 @@ const Title = styled('h2')({
 const DeviceListWrapper = styled(Box)({
   display: 'flex',
   gap: 32,
+  paddingBottom: 80,
 });
 
 function DeviceListPage({ networkType }) {
@@ -61,6 +62,7 @@ function DeviceListPage({ networkType }) {
     loading: loading.devices,
     error: devices.error,
   }));
+  const comparison = useSelector((state) => state.devices.comparison);
 
   useEffect(() => {
     // 요금제 정보 불러오기
@@ -175,7 +177,7 @@ function DeviceListPage({ networkType }) {
           onChangeSearch={handleChangeSearch}
         />
       </DeviceListWrapper>
-      {/* <DeviceCompareTab /> */}
+      {!!comparison?.length && <DeviceCompareTab devices={comparison} />}
       <ScrollTopBtn Icon={<ExpandLess />} />
     </div>
   );

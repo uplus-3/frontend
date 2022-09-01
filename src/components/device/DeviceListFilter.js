@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FILTER_DATA } from './DeviceListFileterContents';
 import { PriceFormatter } from '../../lib/utils';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { devicesActions } from '../../modules/actions/devicesSlice';
-import { getPlans } from '../../lib/api/plan';
 
 import { styled } from '@mui/system';
 import {
@@ -26,7 +22,6 @@ import {
   RadioButtonChecked,
   RadioButtonUnchecked,
 } from '@mui/icons-material';
-import { useNavigate, useParams } from 'react-router-dom';
 
 const ALL = 'all';
 
@@ -48,7 +43,6 @@ const DeviceListFilterBlock = styled('div')(({ theme }) => ({
 
 // TODO - sticky 적용시 하단에 공백 생성됨 : maxHeight때문
 const StyledListFilter = styled(List)(({ theme }) => ({
-  width: 'calc(100% - 10px)',
   background: theme.palette.gray1,
   position: 'sticky',
   top: '60px',
@@ -68,6 +62,9 @@ const StyledListFilter = styled(List)(({ theme }) => ({
   '&::-webkit-scrollbar-track': {
     background: theme.palette.gray2,
     borderRadius: 50,
+  },
+  '& .MuiCollapse-root': {
+    paddingRight: 10,
   },
 }));
 
