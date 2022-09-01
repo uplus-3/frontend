@@ -32,6 +32,20 @@ jobs:
 
     - run: echo The PR was merged
 
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+
+    - name: Create .env file
+      run: |
+        touch .env.production
+        echo "${{ secrets.DEV_ENV }}" > .env.production
+
+    - run: yarn install
+    - run: CI=false yarn build
+
     # Configure the GitHub Actions environment with a role using GitHub's OIDC provider and your desired region
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -39,41 +53,90 @@ jobs:
         aws-access-key-id: ${{ secrets.ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
+    
+    - name: Deploy static site to S3 bucket
+      run: aws s3 sync ./build s3://uplus3-dev
 
-    # Login to Amazon ECR Private, then build and push a Docker image
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push docker image to Amazon ECR
-      id: build-image
-      env:
-        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        REPOSITORY: dev3nginx
-        IMAGE_TAG: ${{ github.sha }} # Github commit ID (sha)
-      run: |
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$REGISTRY/$REPOSITORY:$IMAGE_TAG"
+# Live environment
+# name: Build React Artifact and Deploy Image to ECR
 
-    - name: Download Task Definition
-      run: |
-        aws ecs describe-task-definition \
-        --task-definition dev3task \
-        --query taskDefinition > task-definition.json
+# on:
+#   pull_request:
+#     branches: [ "develop" ]
+#     types:
+#       - closed
+#   workflow_dispatch:
+#     branches: [ "develop" ]
+
+# env:
+#   AWS_REGION : ap-northeast-2
+
+# permissions:
+#   id-token: write
+#   contents: read
+
+# jobs:
+#   ifmerged:
+#     if: github.event.pull_request.merged == true
+#     runs-on: ubuntu-latest
+
+#     strategy:
+#       matrix:
+#         node-version: [16.x]
+#         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+#     steps:
+#     - uses: actions/checkout@v3
+
+#     - run: echo The PR was merged
+
+#     # Configure the GitHub Actions environment with a role using GitHub's OIDC provider and your desired region
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+#         aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+#         aws-region: ap-northeast-2
+
+#     # Login to Amazon ECR Private, then build and push a Docker image
+#     - name: Login to Amazon ECR
+#       id: login-ecr
+#       uses: aws-actions/amazon-ecr-login@v1
+
+#     - name: Build, tag, and push docker image to Amazon ECR
+#       id: build-image
+#       env:
+#         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#         REPOSITORY: dev3nginx
+#         IMAGE_TAG: ${{ github.sha }} # Github commit ID (sha)
+#       run: |
+#         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+#         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+#         echo "::set-output name=image::$REGISTRY/$REPOSITORY:$IMAGE_TAG"
+
+#     - name: Download Task Definition
+#       run: |
+#         aws ecs describe-task-definition \
+#         --task-definition dev3task \
+#         --query taskDefinition > task-definition.json
         
-    - name: Fill in the new image ID in the Amazon ECS task definition
-      id: task-def
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: task-definition.json
-        container-name: dev3nginx
-        image: ${{ steps.build-image.outputs.image }}
+#     - name: Fill in the new image ID in the Amazon ECS task definition
+#       id: task-def
+#       uses: aws-actions/amazon-ecs-render-task-definition@v1
+#       with:
+#         task-definition: task-definition.json
+#         container-name: dev3nginx
+#         image: ${{ steps.build-image.outputs.image }}
 
-    - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
-        cluster: u3-dev
-        service: dev3service
-        wait-for-service-stability: true
+#     - name: Deploy Amazon ECS task definition
+#       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#       with:
+#         task-definition: ${{ steps.task-def.outputs.task-definition }}
+#         cluster: u3-dev
+#         service: dev3service
+#         wait-for-service-stability: true
+
+
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
