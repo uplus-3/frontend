@@ -96,6 +96,7 @@ function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
         kakao.init('64ca1622b62f15240ae2889c61165009');
       }
       kakao.Share.sendCustom({
+        requestUrl: window.location.host,
         templateId: 82187,
         templateArgs: {
           image: deviceInfo.selectedColor.images[0].imageUrl,

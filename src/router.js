@@ -8,7 +8,6 @@ import DeviceOrderPage from './pages/order/DeviceOrderPage';
 import DeviceDetailPage from './pages/product/DeviceDetailPage';
 import DeviceListPage from './pages/product/DeviceListPage';
 import SearchResultPage from './pages/SearchResultPage';
-import CartListPage from './pages/cart/CartListPage';
 
 function Router() {
   return useRoutes([
@@ -25,7 +24,7 @@ function Router() {
           children: [
             {
               path: '',
-              element: <DeviceListPage />,
+              element: <DeviceListPage networkType="5" />,
             },
             {
               path: ':id',
@@ -38,7 +37,7 @@ function Router() {
           children: [
             {
               path: '',
-              element: <DeviceListPage />,
+              element: <DeviceListPage networkType="4" />,
             },
             {
               path: ':id',
@@ -62,10 +61,6 @@ function Router() {
               element: <DeviceOrderHistoryPage />,
             },
           ],
-        },
-        {
-          path: 'cart',
-          element: <CartListPage />,
         },
         { path: '/404', element: <NotFoundPage /> },
       ],

@@ -85,10 +85,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 }));
 
 // TODO - options 적용
-function DeviceListHeader() {
-  // const sort = useSelector((state) => state.devices.options.sort);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = Object.fromEntries([...searchParams]);
+function DeviceListHeader({ searchParams, onChangeFilter }) {
   const [sortDreiction, setSortDirection] = useState(true); // 정렬 기준 (true : 내림차순, false : 오름차순)
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(
@@ -109,8 +106,7 @@ function DeviceListHeader() {
     setAnchorEl(null);
     setSortDirection(true);
 
-    searchParams.set('sortby', data);
-    setSearchParams(searchParams, { replace: true });
+    onChangeFilter('sortby', data);
   };
 
   const handleClose = () => {
@@ -180,10 +176,6 @@ function DeviceListHeader() {
             ))}
           </Menu>
         </StyledSortWapper>
-        {/* <Stack direction="row" alignItems="center" onClick={handleChangeSortDirection}>
-          <label>출시순</label>
-          {sort ? <ExpandMore /> : <ExpandLess />}
-        </Stack> */}
       </Stack>
     </DeviceListHeaderBlock>
   );
