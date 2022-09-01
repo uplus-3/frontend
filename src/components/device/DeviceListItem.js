@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import purple from '../../assets/images/SM-F721N-purple-0.jpg';
-import blue from '../../assets/images/SM-F721N-blue-0.jpg';
-import gold from '../../assets/images/SM-F721N-gold-0.jpg';
-import graphite from '../../assets/images/SM-F721N-graphite-0.jpg';
 
 import { styled } from '@mui/system';
 import { Box, Divider } from '@mui/material';
@@ -42,7 +37,7 @@ const ItemImageWapper = styled(Box)({
   cursor: 'pointer',
 });
 
-const ItemColorWapper = styled(Box)({
+const ItemColorWapper = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -55,6 +50,7 @@ const ItemColorWapper = styled(Box)({
       width: 12,
       height: 12,
       borderRadius: '100%',
+      boxShadow: `0 2px 0px 0px ${theme.palette.gray3}`,
       cursor: 'pointer',
       transition: 'transform 0.25s',
     },
@@ -63,7 +59,7 @@ const ItemColorWapper = styled(Box)({
       transition: 'transform 0.25s',
     },
   },
-});
+}));
 
 const ItemInfoWapper = styled(Box)({
   padding: '1.5rem',
@@ -117,16 +113,13 @@ const AddCartIconWapper = styled('div')(({ theme }) => ({
   padding: '0 5px',
 }));
 
-const colorImages = [purple, gold, blue, graphite];
-
-function DeviceListItem({ data }) {
+function DeviceListItem({ data, showPrice, searchParams }) {
   const navigate = useNavigate();
-  const filter = useSelector((state) => state.devices.filter);
   const [cIdx, setCIdx] = useState(0);
 
   const queryString = qs.stringify({
-    plan: filter.plan,
-    discount: filter.discount,
+    plan: searchParams.get('plan') || -1,
+    discount: searchParams.get('discount') || -1,
   });
 
   const handleClickColor = (idx) => {
@@ -151,8 +144,7 @@ function DeviceListItem({ data }) {
       </ItemTagWapper>
       <ItemImageWapper
         onClick={handleGoDetailPage}
-        style={{ backgroundImage: `url(${colorImages[cIdx]})` }}
-        // style={{ backgroundImage: `url(${data.colors[0]?.images[0]?.imageUrl})` }}
+        style={{ backgroundImage: `url(${data?.colors[cIdx]?.images[0]?.imageUrl})` }}
       />
       <ItemColorWapper>
         <ul className="colors">
@@ -171,7 +163,9 @@ function DeviceListItem({ data }) {
         </div>
         <div>
           <div className="p-price-sub">
-            <div className="origin-price">정상가 {PriceFormatter(data?.price)}원</div>
+            {showPrice && (
+              <div className="origin-price">정상가 {PriceFormatter(data?.price)}원</div>
+            )}
             <div>휴대폰 월 {PriceFormatter(data?.dprice)}원</div>
             <div>통신료 월 {PriceFormatter(data?.plan?.dprice)}원</div>
           </div>
