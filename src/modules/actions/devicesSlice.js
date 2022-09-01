@@ -152,23 +152,21 @@ export const filteredDevices = (
         device.ddevicePrice + device.dplanPrice <= max,
     );
   }
-  if (f_sortby) {
-    if (!f_sortby || f_sortby === LAUNCH) {
-      // 출시일 순
-      devicesWithPrice = devicesWithPrice.sort((a, b) =>
-        new Date(a.launchedDate) < new Date(b.launchedDate) && f_sortbyDir ? 1 : -1,
-      );
-    } else if (f_sortby === PURCHASE) {
-      // 실구매가 순
-      devicesWithPrice = devicesWithPrice.sort((a, b) =>
-        a.ddevicePrice + a.dplanPrice > b.ddevicePrice + b.dplanPrice && f_sortbyDir ? 1 : -1,
-      );
-    } else if (f_sortby === PRICE) {
-      devicesWithPrice = devicesWithPrice.sort((a, b) =>
-        a.price > b.price && f_sortbyDir ? 1 : -1,
-      );
-    }
+
+  if (!f_sortby || f_sortby === LAUNCH) {
+    // 출시일 순
+    devicesWithPrice = devicesWithPrice.sort((a, b) =>
+      new Date(a.launchedDate) < new Date(b.launchedDate) && f_sortbyDir ? 1 : -1,
+    );
+  } else if (f_sortby === PURCHASE) {
+    // 실구매가 순
+    devicesWithPrice = devicesWithPrice.sort((a, b) =>
+      a.ddevicePrice + a.dplanPrice > b.ddevicePrice + b.dplanPrice && f_sortbyDir ? 1 : -1,
+    );
+  } else if (f_sortby === PRICE) {
+    devicesWithPrice = devicesWithPrice.sort((a, b) => (a.price > b.price && f_sortbyDir ? 1 : -1));
   }
+
   if (search) {
     devicesWithPrice = devicesWithPrice.filter((device) =>
       device.name
