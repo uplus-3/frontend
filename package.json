@@ -51,6 +51,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://13.209.204.114:8080/api"
+  }
 }

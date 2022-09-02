@@ -12,7 +12,7 @@ import {
   Chip,
   ClickAwayListener,
 } from '@mui/material';
-import { Search, Clear } from '@mui/icons-material';
+import { Search, Clear, Work } from '@mui/icons-material';
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import useInput from '../../lib/hooks/useInput';
 import { getSearchRelatedKeyword } from '../../lib/api/search';
@@ -187,7 +187,7 @@ const HightlightSearchTerm = (text, query) => {
             </HighlightRelatedSearchTerm>
           </>
         ) : (
-          <span>{normal}</span>
+          <span key={`highlight-related-search-term-${idx}`}>{normal}</span>
         ),
       )}
     </>
@@ -195,7 +195,6 @@ const HightlightSearchTerm = (text, query) => {
 };
 
 function SearchBar() {
-  const lenValidator = (value) => value.length <= 30;
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -204,7 +203,8 @@ function SearchBar() {
     JSON.parse(localStorage.getItem('recent_search_terms')) || [],
   );
   const [relatedSearchTerm, setRelatedSearchTerm] = useState([]);
-  const [searchResult, onChange, setSearchResult] = useInput('', lenValidator);
+
+  const [searchResult, setSearchResult] = useState('');
 
   // axios 요청을 통해 관련 검색어를 받아옴.
   const getRelatedSearchTerm = async (term) => {
@@ -239,7 +239,19 @@ function SearchBar() {
   // 검색창 초기화
   const resetSearchBar = () => {
     setSearchResult('');
+    setRelatedSearchTerm([]);
     setAnchorEl(null);
+  };
+
+  const handleChangeSearchResult = (event) => {
+    const {
+      target: { value },
+    } = event;
+
+    const newSearchResult = value.replace(/ +/g, ' ');
+    if (newSearchResult.length > 30) return;
+
+    setSearchResult(newSearchResult);
   };
 
   // 카테고리 토글버튼 클릭 시 실행되는 함수
@@ -275,7 +287,7 @@ function SearchBar() {
   };
 
   useEffect(() => {
-    if (!!!anchorEl || !!setRelatedSearchTerm) return;
+    if ((!!!anchorEl || !!relatedSearchTerm.length) && !!anchorEl && !!!searchResult) return;
     getRelatedSearchTerm(searchResult);
   }, [searchResult, searchNetworkType, anchorEl]);
 
@@ -287,7 +299,7 @@ function SearchBar() {
             onFocus={(event) => setAnchorEl(event.currentTarget)}
             placeholder="갤럭시 Z Fold4"
             value={searchResult}
-            onChange={onChange}
+            onChange={handleChangeSearchResult}
             onKeyDown={handleSearch}
           />
           <IconButton onClick={handleSearch}>

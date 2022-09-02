@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { styled } from '@mui/system';
 import { Paper, Divider, IconButton, Tooltip, useTheme } from '@mui/material';
 import RoundBtn from '../common/RoundBtn';
@@ -8,6 +8,7 @@ import { PriceFormatter } from '../../lib/utils';
 import { postOrder } from '../../lib/api/order';
 
 import KakaoIcon from '../../assets/images/icon-kakao.png';
+import { getDeviceDetail } from '../../lib/api/device';
 const OrderReceiptBlock = styled('div')({});
 const OrderReceiptWrapper = styled(Paper)({
   position: 'sticky',
@@ -38,6 +39,9 @@ const OrderFinalPrice = styled('div')(({ theme }) => ({
   fontWeight: 600,
   height: 70,
   width: 300,
+  span: {
+    paddingRight: 25,
+  },
 }));
 
 const OrderReceiptDevice = styled('div')(({ theme }) => ({
@@ -61,6 +65,7 @@ const AlignCenter = styled('div')(({ direction }) => ({
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: direction || 'row',
+  gap: 10,
 }));
 
 const Title = styled('div')({
@@ -71,7 +76,7 @@ const Title = styled('div')({
 const CustomDivider = styled(Divider)({
   margin: '15px 0',
 });
-function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
+function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, setDeviceInfo, getUserInfo }) {
   const Calert = useAlert();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -109,40 +114,59 @@ function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
   };
 
   const order = async () => {
-    // try {
-    //   if (checkUserInfo()) {
-    //     const res = postOrder({ ...orderForm, ...getUserInfo() });
-    //   }
-    // } catch (e) {}
-    const number = 2020202020;
-    Calert.fire({
-      title: '주문이 완료되었습니다',
-      html: (
-        <ShareDiv>
-          <div>{`주문번호: ${number}`}</div>
-          <Tooltip title="주문내역 공유하기">
-            <IconButton onClick={() => shareInfoByKakao(20202020)}>
-              <img src={KakaoIcon} alt="공유하기" />
-            </IconButton>
-          </Tooltip>
-        </ShareDiv>
-      ),
-    }).then((res) => {
-      if (res.isConfirmed) {
-        navigate(-1);
+    try {
+      if (checkUserInfo()) {
+        const res = postOrder({ ...orderForm, ...getUserInfo() });
+        const number = 2020202020;
+        Calert.fire({
+          title: '주문이 완료되었습니다',
+          html: (
+            <ShareDiv>
+              <div>{`주문번호: ${number}`}</div>
+              <Tooltip title="주문내역 공유하기">
+                <IconButton onClick={() => shareInfoByKakao(20202020)}>
+                  <img src={KakaoIcon} alt="공유하기" />
+                </IconButton>
+              </Tooltip>
+            </ShareDiv>
+          ),
+        }).then((res) => {
+          if (res.isConfirmed) {
+            navigate(-1);
+          }
+        });
       }
-    });
-    // 실패했을 경우
-    // Calert.fire({
-    //   title: '해당 상품은 이미 품절되었습니다',
-    //   text: `이전페이지로 돌아가겠습니까?`,
-    //   confirmButtonText: '확인',
-    // }).then((res) => {
-    //   if (res.isConfirmed) {
-    //     navigate(-1);
-    //   }
-    // });
+    } catch (e) {
+      if (e.response.status === 403) {
+        // 실패했을 경우
+        Calert.fire({
+          title: '해당 상품은 이미 품절되었습니다',
+          text: `이전페이지로 돌아가겠습니까?`,
+          confirmButtonText: '확인',
+        }).then((res) => {
+          if (res.isConfirmed) {
+            navigate(-1);
+          }
+        });
+      }
+    }
   };
+
+  const getDeviceInfo = async () => {
+    const selectedColor = { ...deviceInfo.selectedColor };
+    const res = await getDeviceDetail({
+      deviceId: deviceInfo.id,
+      installmentPeriod: orderForm.installmentPeriod,
+      discountType: orderForm.discountType,
+      plan: orderForm.planId,
+    });
+    console.log(res.data);
+    setDeviceInfo({ ...res.data, selectedColor });
+  };
+
+  useEffect(() => {
+    getDeviceInfo();
+  }, [orderForm.installmentPeriod, orderForm.planId, orderForm.discountType]);
   return (
     <OrderReceiptBlock>
       <OrderReceiptWrapper elevation={2}>
@@ -173,7 +197,7 @@ function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
           {orderForm.installmentPeriod === 1 ? (
             <>
               <div>기기 완납 결제 가격</div>
-              <div>{PriceFormatter(deviceInfo.price)}</div>
+              <div>{PriceFormatter(deviceInfo.tprice)}</div>
             </>
           ) : (
             <>
@@ -186,13 +210,13 @@ function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
           <div>정상가</div>
           <div>{PriceFormatter(deviceInfo.price)}원</div>
         </OrderReceiptPrice>
-        {!!deviceInfo.psupport && (
+        {deviceInfo.discountType === 0 && (
           <OrderReceiptPrice>
             <div>공시 지원금</div>
             <div>-{PriceFormatter(deviceInfo.psupport)}원</div>
           </OrderReceiptPrice>
         )}
-        {!!deviceInfo.asupport && (
+        {deviceInfo.discountType === 0 && (
           <OrderReceiptPrice>
             <div>추가 지원금</div>
             <div>-{PriceFormatter(deviceInfo.asupport)}원</div>
@@ -200,7 +224,7 @@ function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
         )}
         <OrderReceiptPrice>
           <div>실 구매가</div>
-          <div>{PriceFormatter(deviceInfo.dprice)}원</div>
+          <div>{PriceFormatter(deviceInfo.tprice)}원</div>
         </OrderReceiptPrice>
         <OrderReceiptPrice>
           <div>할부 개월수</div>
@@ -217,17 +241,25 @@ function OrderReceipt({ deviceInfo, orderForm, checkUserInfo, getUserInfo }) {
           <div>{deviceInfo.plan.name}</div>
           <div>{PriceFormatter(deviceInfo.plan.price)}</div>
         </OrderReceiptPrice>
-        {!!!deviceInfo.psupport && (
+        {deviceInfo.discountType === 1 && (
           <OrderReceiptPrice color={theme.palette.prime}>
             <div>선택 약정 할인</div>
             <div>-{PriceFormatter(deviceInfo.plan.sdiscount)}</div>
           </OrderReceiptPrice>
         )}
         <OrderFinalPrice>
-          월 납부금액 {PriceFormatter(deviceInfo.dprice + deviceInfo.plan.dprice)}원
+          <span>월 납부금액</span>
+          {PriceFormatter(deviceInfo.dprice + deviceInfo.plan.dprice)}원
         </OrderFinalPrice>
         <AlignCenter>
-          <RoundBtn width={200} onClick={order}>
+          <RoundBtn
+            width={90}
+            backgroundColor="#FFFFFF"
+            border={`1px solid ${theme.palette.prime}`}
+            color={theme.palette.prime}>
+            장바구니
+          </RoundBtn>
+          <RoundBtn width={180} onClick={order}>
             온라인 주문
           </RoundBtn>
         </AlignCenter>
