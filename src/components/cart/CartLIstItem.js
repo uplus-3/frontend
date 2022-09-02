@@ -26,9 +26,9 @@ const CartLIstItemBlock = styled('div')(({ theme }) => ({
   },
 }));
 
-const DeviceWapper = styled('div')({});
+const DeviceWrapper = styled('div')({});
 
-const ImageWapper = styled('div')({
+const ImageWrapper = styled('div')({
   width: 120,
   heigth: 120,
   marginRight: 25,
@@ -39,7 +39,7 @@ const ImageWapper = styled('div')({
   },
 });
 
-const DeviceInfoWapper = styled('div')(({ theme }) => ({
+const DeviceInfoWrapper = styled('div')(({ theme }) => ({
   flex: 1,
   '&  p:nth-of-type(1)': {
     fontSize: '0.75rem',
@@ -68,7 +68,7 @@ const DeviceInfoWapper = styled('div')(({ theme }) => ({
   },
 }));
 
-const DetailWapper = styled('div')(({ theme }) => ({
+const DetailWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   margin: ' 0 80px',
@@ -99,7 +99,7 @@ const DetailWapper = styled('div')(({ theme }) => ({
   },
 }));
 
-const OrderWapper = styled('div')({
+const OrderWrapper = styled('div')({
   fontSize: '1rem',
 });
 
@@ -109,10 +109,10 @@ const imgsrc =
 function CartLIstItem() {
   return (
     <CartLIstItemBlock>
-      <ImageWapper>
+      <ImageWrapper>
         <img src={imgsrc} alt="" />
-      </ImageWapper>
-      <DeviceInfoWapper>
+      </ImageWrapper>
+      <DeviceInfoWrapper>
         <p>2022년 8월 30일 (화)</p>
         <p>갤럭시 Z Flip 4</p>
         <p>(갤럭시워치5G) 5G 다이렉트 65</p>
@@ -121,8 +121,8 @@ function CartLIstItem() {
           <span>256GB</span>
           <span>24개월 할부</span>
         </p>
-      </DeviceInfoWapper>
-      <DetailWapper>
+      </DeviceInfoWrapper>
+      <DetailWrapper>
         <div>
           <span>기기변경</span>
         </div>
@@ -130,10 +130,10 @@ function CartLIstItem() {
           <p>월 예상 납부 금액</p>
           <p>124,900원</p>
         </div>
-      </DetailWapper>
-      <OrderWapper>
+      </DetailWrapper>
+      <OrderWrapper>
         <RoundBtn content="가입하기" padding="6px 50px" />
-      </OrderWapper>
+      </OrderWrapper>
     </CartLIstItemBlock>
   );
 }
