@@ -48,3 +48,7 @@ export const getDevicePriceList = ({ discountType, installmentPeriod, networkTyp
     },
   });
 };
+
+export const getDeviceSimple = () => {
+  return client.get('/devices/simple');
+};

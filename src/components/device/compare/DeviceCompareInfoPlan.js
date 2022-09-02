@@ -33,12 +33,14 @@ function DeviceCompareInfoPlan({ device, onChangePriceFilter }) {
 
   useEffect(() => {
     // 단말기 요금 정보 재요청
-    console.log(device, rendered.current);
-    if (!rendered.current || !device) return;
-    console.log('hi');
+    const prev = rendered.current;
     rendered.current = true;
+    console.log(prev, rendered.current);
+    // if (!prev || !device) return;
+    if (!device?.id) return;
+    console.log('hi');
     onChangePriceFilter(device.id, planId, discountType, installmentPeriod);
-  }, [planId, discountType, installmentPeriod, device, onChangePriceFilter]);
+  }, [planId, discountType, installmentPeriod, device?.id, onChangePriceFilter]);
 
   const handleChangePI = useCallback((e) => {
     setPlanId(e.target.value);

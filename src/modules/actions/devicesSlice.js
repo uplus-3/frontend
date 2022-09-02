@@ -11,6 +11,7 @@ const initialState = {
   devices: null,
   price: null,
   comparison: [],
+  simple: null,
 
   // TODO - 삭제
   filter: {
@@ -65,7 +66,7 @@ const devicesSlice = createSlice({
     updateComparisonDevicePrice: (state, action) => {
       const { deviceId, price } = action.payload;
       const idx = state.comparison.findIndex((d) => d.id === deviceId);
-      if (idx) {
+      if (typeof idx === 'number') {
         state.comparison[idx] = {
           ...state.comparison[idx],
           ...price,
@@ -77,6 +78,10 @@ const devicesSlice = createSlice({
     },
     removeComparisonAll: (state, action) => {
       state.comparison = [];
+    },
+    getDeviceSimple: (state, action) => {},
+    getDeviceSimpleSuccess: (state, action) => {
+      state.simple = action.payload?.devices;
     },
     initFilterValue: (state, action) => {
       state.filter = action.payload;
@@ -192,4 +197,7 @@ export const filteredDevices = (
   }
   return devicesWithPrice;
 };
+
+export const filteredSimple = (state, company) =>
+  state.devices.simple?.filter((device) => device.company === company);
 export default reducer;

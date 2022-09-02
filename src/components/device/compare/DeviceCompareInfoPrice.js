@@ -9,65 +9,48 @@ const DeviceCompareInfoPriceBlock = styled('div')({
   gap: 20,
 });
 
-function DeviceCompareInfoPrice({ device, discountType, installmentPeriod, planId = -1 }) {
+function DeviceCompareInfoPrice({ device }) {
   const [priceInfo, setPriceInfo] = useState(null);
 
   useEffect(() => {
-    if (device) {
-      getPriceInfo();
-    }
-  }, []);
+    if (!device) return;
+    const p_price = [
+      {
+        label: '출고가',
+        value: device?.price,
+      },
+      {
+        label: '공시지원금',
+        value: device?.discountType === 0 ? device?.psupport : 0,
+      },
+      {
+        label: '15% 추가지원금',
+        value: device?.asupport,
+      },
+      {
+        label: '실구매가',
+        value: device?.tdevicePrice,
+      },
+    ];
 
-  const getPriceInfo = async () => {
-    try {
-      const res = await getDevicePrice({
-        deviceId: device.id,
-        discountType,
-        installmentPeriod,
-        planId,
-      });
-      const data = res.data;
-      console.log(data);
-      const p_price = [
-        {
-          label: '출고가',
-          value: device?.price,
-        },
-        {
-          label: '공시지원금',
-          value: data?.psupport,
-        },
-        {
-          label: '15% 추가지원금',
-          value: data?.asupport,
-        },
-        {
-          label: '실구매가',
-          value: data?.tdevicePrice,
-        },
-      ];
+    const c_price = [
+      {
+        label: '월정액',
+        value: device?.mplanPrice,
+      },
+      {
+        label: '선택약정할인',
+        value: device?.discountType === 1 ? -device?.sdiscount : 0,
+      },
+    ];
 
-      const c_price = [
-        {
-          label: '월정액',
-          value: data?.mplanPrice,
-        },
-        {
-          label: '선택약정할인',
-          value: -data?.sdiscount,
-        },
-      ];
-
-      setPriceInfo({
-        ddevicePrice: data.ddevicePrice,
-        dplanPrice: data.dplanPrice,
-        p_price,
-        c_price,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    setPriceInfo({
+      ddevicePrice: device?.ddevicePrice,
+      dplanPrice: device?.dplanPrice,
+      p_price,
+      c_price,
+    });
+  }, [device]);
 
   return (
     <DeviceCompareInfoPriceBlock>

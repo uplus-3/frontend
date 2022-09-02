@@ -97,9 +97,20 @@ function DeviceCompareModal({ open, setOpen }) {
       <BodyWrapper onScroll={onScroll} dividers={true}>
         <DeviceListWrapper className={classnames({ shadow })}>
           {[...comparison, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
-            <li key={`${index}-${data?.id}`}>
-              <DeviceCompareItem device={data} isLink={!!data} onClickRemove={handleClickRemove} />
-            </li>
+            <>
+              {!!data ? (
+                <li key={`${index}-${data?.id}`}>
+                  <DeviceCompareItem
+                    device={data}
+                    isLink={!!data}
+                    onClickRemove={handleClickRemove}
+                    isModal={true}
+                  />
+                </li>
+              ) : (
+                <DeviceCompareItemSelector />
+              )}
+            </>
           ))}
         </DeviceListWrapper>
         <DeviceCompareInfo devices={comparison}></DeviceCompareInfo>

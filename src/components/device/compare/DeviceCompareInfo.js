@@ -47,27 +47,25 @@ function DeviceCompareInfo({ devices }) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const handleChangePriceFilter = async (deviceId, planId, discountType, installmentPeriod) => {
-    // 요금제, 할인유형이 바뀐것을 감지
-    // 요금제, 할인유형, 할부개월에 따른 가격 정보를 가져온다
-    // redux에서 index의 정보에 덮어쓴다.
-
-    try {
-      const res = await getDevicePrice({
-        deviceId,
-        discountType,
-        installmentPeriod,
-        planId,
-      });
-      console.log(res.data);
-      dispatch(
-        devicesActions.updateComparisonDevicePrice({
+  const handleChangePriceFilter = useCallback(
+    async (deviceId, planId, discountType, installmentPeriod) => {
+      try {
+        const res = await getDevicePrice({
           deviceId,
-          price: res.data,
-        }),
-      );
-    } catch (e) {}
-  };
+          discountType,
+          installmentPeriod,
+          planId,
+        });
+        dispatch(
+          devicesActions.updateComparisonDevicePrice({
+            deviceId,
+            price: res.data,
+          }),
+        );
+      } catch (e) {}
+    },
+    [dispatch],
+  );
 
   return (
     <DeviceCompareInfoBlock>
@@ -104,15 +102,11 @@ function DeviceCompareInfo({ devices }) {
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>기기 성능</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWrapper>
-            <DeviceCompareInfoSpec />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoSpec />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoSpec />
-          </DetailWrapper>
+          {[...devices, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
+            <DetailWrapper key={`${index}-${data?.id}`}>
+              <DeviceCompareInfoSpec device={data} />
+            </DetailWrapper>
+          ))}
         </StyledAccordionDetails>
       </Accordion>
     </DeviceCompareInfoBlock>

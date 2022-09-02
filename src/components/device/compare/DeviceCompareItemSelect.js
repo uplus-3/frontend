@@ -3,6 +3,8 @@ import { FormControl, Select } from '@mui/material';
 import styled from '@emotion/styled';
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  margin: 1,
+  minWidth: 250,
   '& .MuiInputBase-root::after': {
     borderBottom: `2px solid ${theme.palette.prime}`,
   },
@@ -10,7 +12,7 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
 
 function DeviceCompareItemSelect({ value, onChange, renderValue, children }) {
   return (
-    <StyledFormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+    <StyledFormControl variant="standard">
       <Select displayEmpty value={value} onChange={onChange} renderValue={renderValue}>
         {children}
       </Select>

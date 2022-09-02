@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from '@mui/system';
+import { getDeviceDetail } from '../../../lib/api/device';
 
 const DeviceCompareInfoSpecBlock = styled('div')({
   display: 'flex',
@@ -13,17 +14,50 @@ const DeviceCompareInfoSpecBlock = styled('div')({
   },
 });
 
-function DeviceCompareInfoSpec() {
+function DeviceCompareInfoSpec({ device }) {
+  const [specInfo, setSpecInfo] = useState(null);
+
+  const getDeviceSepc = useCallback(async (deviceId) => {
+    try {
+      const res = await getDeviceDetail(deviceId);
+      const info = [
+        {
+          name: '색상',
+          value: res.data?.colors.map((color) => color.name)?.join(', '),
+        },
+        {
+          name: '용량',
+          value: res.data?.storage,
+        },
+        {
+          name: 'CPU',
+          value: res.data?.cpu,
+        },
+        {
+          name: '디스플레이',
+          value: res.data?.display,
+        },
+      ];
+      console.log(info);
+      setSpecInfo(info);
+    } catch (e) {}
+  }, []);
+
+  useEffect(() => {
+    if (device) {
+      getDeviceSepc(device.id);
+    }
+  }, [device, getDeviceSepc]);
+
   return (
     <DeviceCompareInfoSpecBlock>
-      <dl>
-        <dt>색상</dt>
-        <dd>보라 퍼플, 핑크 골드, 블루, 그라파이트</dd>
-      </dl>
-      <dl>
-        <dt>용량</dt>
-        <dd>RAM 12GB, ROM 256GB</dd>
-      </dl>
+      {specInfo &&
+        specInfo.map((info) => (
+          <dl>
+            <dt>{info.name}</dt>
+            <dd>{info.value}</dd>
+          </dl>
+        ))}
     </DeviceCompareInfoSpecBlock>
   );
 }
