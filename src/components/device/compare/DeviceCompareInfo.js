@@ -41,10 +41,12 @@ const DetailWrapper = styled('div')({
 // TODO - expanded 다 되도록 수정
 function DeviceCompareInfo({ devices }) {
   const dispatch = useDispatch();
-  const [expanded, setExpanded] = useState(0);
+  const [expanded, setExpanded] = useState([0]);
 
   const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
+    setExpanded(isExpanded ? [...expanded, panel] : expanded.filter((e) => e === panel));
+
+    // setExpanded(isExpanded ? panel : false);
   };
 
   const handleChangePriceFilter = useCallback(
@@ -69,7 +71,7 @@ function DeviceCompareInfo({ devices }) {
 
   return (
     <DeviceCompareInfoBlock>
-      <Accordion expanded={expanded === 0} onChange={handleChange(0)}>
+      <Accordion expanded={expanded.includes[0]} onChange={handleChange(0)}>
         <StyledAccordionSummary expandIcon={<ExpandMore />}>
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>월 납부금액</Typography>
         </StyledAccordionSummary>
@@ -81,7 +83,7 @@ function DeviceCompareInfo({ devices }) {
           ))}
         </StyledAccordionDetails>
       </Accordion>
-      <Accordion expanded={expanded === 1} onChange={handleChange(1)}>
+      <Accordion expanded={expanded.includes[1]} onChange={handleChange(1)}>
         <StyledAccordionSummary expandIcon={<ExpandMore />}>
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>할인유형, 요금제</Typography>
         </StyledAccordionSummary>
@@ -97,7 +99,7 @@ function DeviceCompareInfo({ devices }) {
           ))}
         </StyledAccordionDetails>
       </Accordion>
-      <Accordion expanded={expanded === 2} onChange={handleChange(2)}>
+      <Accordion expanded={expanded.includes[2]} onChange={handleChange(2)}>
         <StyledAccordionSummary expandIcon={<ExpandMore />}>
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>기기 성능</Typography>
         </StyledAccordionSummary>
