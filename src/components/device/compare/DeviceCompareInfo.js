@@ -34,6 +34,7 @@ const DetailWrapper = styled('div')({
   width: '100%',
 });
 
+// TODO - expanded 다 되도록 수정
 function DeviceCompareInfo({ devices }) {
   const [expanded, setExpanded] = useState(0);
 

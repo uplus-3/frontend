@@ -14,7 +14,6 @@ const planSlice = createSlice({
     getPlanList: (state, action) => {},
     getPlanListSuccess: (state, action) => {
       const { payload, networkType } = action.payload;
-      console.log(action.payload);
       state[`${networkType}g`] = payload?.planList;
     },
     getPlanFailure: (state, action) => {
