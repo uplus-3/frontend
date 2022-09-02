@@ -119,7 +119,7 @@ const installmentPeriodList = [
   { id: 36, content: '36개월' },
 ];
 
-function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
+function OrderForm({ orderForm, setOrderForm, devicePriceInfo }, ref) {
   const phonenumberValidator = (num) => num.indexOf('-') === -1;
   const theme = useTheme();
   const [name, onNameChange, setName] = useInput('');
@@ -351,7 +351,7 @@ function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
                   <div className="discount-sub-description">휴대폰가격 1회 할인</div>
                 </div>
                 <div className="discount-price">
-                  -{PriceFormatter(deviceInfo.psupport + deviceInfo.asupport)}원
+                  -{PriceFormatter(devicePriceInfo.psupport + devicePriceInfo.asupport)}원
                 </div>
               </DiscountContent>
             </SquareBtn>
@@ -366,7 +366,7 @@ function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
                   <div>선택약정 (24개월)</div>
                   <div className="discount-sub-description">통신요금 25% 할인</div>
                 </div>
-                <div className="discount-price">-{PriceFormatter(deviceInfo.plan.sdiscount)}원</div>
+                <div className="discount-price">-{PriceFormatter(devicePriceInfo.sdiscount)}원</div>
               </DiscountContent>
             </SquareBtn>
           </ButtonWrapper>
