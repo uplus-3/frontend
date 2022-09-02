@@ -51,3 +51,11 @@ export const getDevicePriceList = ({ discountType, installmentPeriod, networkTyp
 export const getDeviceSimple = () => {
   return client.get('/devices/simple');
 };
+
+export const getLaunchingDeviceList = (networkType) => {
+  return client.get('/launching-devices', {
+    params: {
+      'network-type': networkType || 0,
+    },
+  });
+};

@@ -13,6 +13,7 @@ const initialState = {
   price: null,
   comparison: [],
   simple: null,
+  launchingDevices: null,
 
   // TODO - 삭제
   filter: {
@@ -84,6 +85,10 @@ const devicesSlice = createSlice({
     getDeviceSimpleSuccess: (state, action) => {
       state.simple = action.payload?.devices;
     },
+    getLaunchingDevices: (state, action) => {},
+    getLaunchingDevicesSuccess: (state, action) => {
+      state.launchingDevices = action.payload?.launchingDevices;
+    },
     initFilterValue: (state, action) => {
       state.filter = action.payload;
     },
@@ -135,6 +140,12 @@ const { actions, reducer } = devicesSlice;
 // export actions
 export const devicesActions = actions;
 
+// TODO - 가격 필터링 수정
+// TODO - 가격 필터링 수정
+// TODO - 가격 필터링 수정
+// TODO - 가격 필터링 수정
+// TODO - 가격 필터링 수정
+// TODO - 가격 필터링 수정
 export const filteredDevices = (
   state,
   price,
@@ -147,19 +158,22 @@ export const filteredDevices = (
 ) => {
   let devices = state.devices;
   let devicePrice = state.price;
+  let launchingDevices = state.launchingDevices;
+
   if (!devices) return null;
+  if (launchingDevices) devices = [...devices, ...launchingDevices];
   if (excludeSoldout) {
-    devices = devices.filter((device) => !device.colors.every((color) => color.stock === 0));
+    devices = devices.filter((device) => !device.colors.every((color) => color?.stock === 0));
   }
   if (company && Array.isArray(company) && !!company.length && !company.includes('all')) {
-    let temp = devices.filter((device) => company.includes(device.company));
+    let temp = devices.filter((device) => company.includes(device?.company));
     let etc = company.includes(ETC)
-      ? devices.filter((device) => !['삼성', '애플'].includes(device.company))
+      ? devices.filter((device) => !['삼성', '애플'].includes(device?.company))
       : [];
     devices = [...temp, ...etc];
   }
   if (storage && Array.isArray(storage) && !!storage.length && !storage.includes('all')) {
-    devices = devices.filter((device) => storage.includes(device.storage));
+    devices = devices.filter((device) => storage.includes(device?.storage));
   }
 
   let devicesWithPrice = devices.reduce((acc, cur, idx) => {
@@ -173,11 +187,14 @@ export const filteredDevices = (
       max = price[1] || FILTER_DATA.price_range.config.MAX;
     devicesWithPrice = devicesWithPrice.filter(
       (device) =>
-        device.ddevicePrice + device.dplanPrice >= min &&
-        device.ddevicePrice + device.dplanPrice <= max,
+        device?.ddevicePrice &&
+        device?.dplanPrice &&
+        device?.ddevicePrice + device?.dplanPrice >= min &&
+        device?.ddevicePrice + device?.dplanPrice <= max,
     );
   }
 
+  console.log(devicesWithPrice);
   if (!f_sortby || f_sortby === LAUNCH) {
     // 출시일 순
     devicesWithPrice = devicesWithPrice.sort((a, b) =>
@@ -186,12 +203,13 @@ export const filteredDevices = (
   } else if (f_sortby === PURCHASE) {
     // 실구매가 순
     devicesWithPrice = devicesWithPrice.sort((a, b) =>
-      a.ddevicePrice + a.dplanPrice > b.ddevicePrice + b.dplanPrice && f_sortbyDir ? 1 : -1,
+      a?.ddevicePrice + a?.dplanPrice > b?.ddevicePrice + b?.dplanPrice && f_sortbyDir ? 1 : -1,
     );
   } else if (f_sortby === PRICE) {
     devicesWithPrice = devicesWithPrice.sort((a, b) => (a.price > b.price && f_sortbyDir ? 1 : -1));
   }
 
+  // TODO - regex로 수정
   if (search) {
     devicesWithPrice = devicesWithPrice.filter((device) =>
       device.name

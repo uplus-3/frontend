@@ -64,6 +64,7 @@ function DeviceListPage({ networkType }) {
     error: error.devices,
   }));
   const comparison = useSelector((state) => state.devices.comparison);
+  const launchingDevices = useSelector((state) => state.devices.launchingDevices);
 
   useEffect(() => {
     // 요금제 정보 불러오기
@@ -74,6 +75,8 @@ function DeviceListPage({ networkType }) {
         networkType,
       }),
     );
+    // 출시 예정 단말기 리스트 불러오기
+    dispatch(devicesActions.getLaunchingDevices(networkType));
   }, [dispatch, networkType]);
 
   useEffect(() => {
@@ -169,6 +172,7 @@ function DeviceListPage({ networkType }) {
         />
         <DeviceList
           devices={devicesInfo.devices}
+          launchingDevices={launchingDevices}
           loading={devicesInfo.loading}
           error={devicesInfo.error}
           count={devicesInfo.devices ? devicesInfo.devices.length : 0}

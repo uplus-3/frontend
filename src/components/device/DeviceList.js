@@ -5,6 +5,8 @@ import DeviceListItem from './DeviceListItem';
 
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
+import LaunchingDeviceList from './launching/LaunchingDeviceList';
+import LaunchingDeviceListItem from './launching/LaunchingDeviceListItem';
 
 const DeviceListBlock = styled('div')({
   width: '100%',
@@ -17,8 +19,11 @@ const DeviceListWrapper = styled(Box)({
   marginTop: 15,
 });
 
+const LaunchingDeviceListWrapper = styled(Box)({});
+
 function DeviceList({
   devices,
+  launchingDevices,
   loading,
   error,
   count,
@@ -52,12 +57,27 @@ function DeviceList({
         search={search}
         onChangeSearch={onChangeSearch}
       />
+      {/* <LaunchingDeviceListWrapper>
+       
+      </LaunchingDeviceListWrapper> */}
       <DeviceListWrapper>
         {loading && 'Loading..'}
+        {/* <LaunchingDeviceList launchingDevices={launchingDevices} /> */}
+        {/* {launchingDevices &&
+          launchingDevices.map((data) => (
+            <LaunchingDeviceListItem data={data} searchParams={searchParams} />
+          ))} */}
         {!loading &&
           devices &&
           devices.map((data) => (
-            <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
+            <>
+              {launchingDevices &&
+              !!launchingDevices.find((d) => d.serialNumber === data.serialNumber) ? (
+                <LaunchingDeviceListItem data={data} searchParams={searchParams} />
+              ) : (
+                <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
+              )}
+            </>
           ))}
       </DeviceListWrapper>
     </DeviceListBlock>

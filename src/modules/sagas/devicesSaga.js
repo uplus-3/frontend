@@ -4,7 +4,7 @@ import { getDeviceList } from '../../lib/api/device';
 import { loadingActions } from '../actions/loadingSlice';
 import { errorActions } from '../actions/errorSlice';
 
-import { getDevicePriceList, getDeviceSimple } from '../../lib/api/device';
+import { getDevicePriceList, getDeviceSimple, getLaunchingDeviceList } from '../../lib/api/device';
 
 // Devices 데이터를 가져오는 Saga (api 호출)
 export function* getDevicesSaga(action) {
@@ -76,13 +76,31 @@ export function* getDeviceSimpleSaga(action) {
   }
 }
 
+export function* getLaunchingDeviceListSaga(action) {
+  const { getLaunchingDevicesSuccess } = devicesActions;
+  const { startLoading, finishLoading } = loadingActions;
+  const { initError, setError } = errorActions;
+  const networkType = action.payload;
+  yield put(startLoading('launchingDevices'));
+  yield put(initError('launchingDevices'));
+  try {
+    const res = yield call(getLaunchingDeviceList, networkType);
+    yield put(getLaunchingDevicesSuccess(res.data));
+  } catch (e) {
+    yield put(setError('launchingDevices'));
+  } finally {
+    yield put(finishLoading('launchingDevices'));
+  }
+}
+
 // Main Saga
 export function* devicesSaga() {
-  const { getDevice, getDevicePrice, getDeviceSimple } = devicesActions;
+  const { getDevice, getDevicePrice, getDeviceSimple, getLaunchingDevices } = devicesActions;
 
   // getDevices action이 실행되면, 마지막으로 호출된 요청만 실행되며 실행내용은 getDeviceSaga 함수이다.
   yield takeLatest(getDevice, getDevicesSaga);
   yield takeLatest(getDevicePrice, getDevicePricesSaga);
   yield takeLatest(getDeviceSimple, getDeviceSimpleSaga);
+  yield takeLatest(getLaunchingDevices, getLaunchingDeviceListSaga);
   // yield takeLatest(setFilterValue, getDevicesSaga);
 }
