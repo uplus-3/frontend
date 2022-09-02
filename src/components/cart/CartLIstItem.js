@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { styled } from '@mui/system';
-
+import { IconButton } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import RoundBtn from '../common/RoundBtn';
+import { PriceFormatter } from '../../lib/utils';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+import useCart from '../../lib/hooks/useCart';
 
 const CartLIstItemBlock = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  padding: '20px 0',
+  padding: '20px 40px 20px 0',
   position: 'relative',
 
   '&::before': {
@@ -26,13 +30,11 @@ const CartLIstItemBlock = styled('div')(({ theme }) => ({
   },
 }));
 
-const DeviceWrapper = styled('div')({});
-
 const ImageWrapper = styled('div')({
   width: 120,
   heigth: 120,
   marginRight: 25,
-
+  cursor: 'pointer',
   '& img': {
     width: '100%',
     height: '100%',
@@ -71,16 +73,17 @@ const DeviceInfoWrapper = styled('div')(({ theme }) => ({
 const DetailWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'end',
+  width: 530,
   margin: ' 0 80px',
-
   '& > div:first-of-type': {
     paddingRight: 40,
   },
-
-  '& > div:last-child': {
+  '& > div:nth-of-type(n+2)': {
+    paddingRight: 40,
     paddingLeft: 40,
     position: 'relative',
-    '&::before': {
+    '&::after': {
       content: "''",
       position: 'absolute',
       top: 0,
@@ -103,37 +106,100 @@ const OrderWrapper = styled('div')({
   fontSize: '1rem',
 });
 
-const imgsrc =
-  'https://image.lguplus.com/static/pc-contents/images/prdv/20220812-020618-663-OMVftJP5.jpg';
+const DeleteButton = styled(IconButton)({
+  position: 'absolute',
+  top: 0,
+  right: 0,
+});
 
-function CartLIstItem() {
+function CartLIstItem({ cartItem, setCartList }) {
+  const navigate = useNavigate();
+  const { deleteCart } = useCart();
+  const {
+    colorName,
+    createdAt,
+    serialNumber,
+    networkType,
+    deviceName,
+    planId,
+    discountType,
+    deviceId,
+    imageUrl,
+    installmentPeriod,
+    planName,
+    price,
+    registrationType,
+    storage,
+  } = cartItem;
+
+  const stringRegistrationType = useMemo(() => {
+    switch (registrationType) {
+      case 0:
+        return '기기변경';
+      case 1:
+        return '신규가입';
+      case 2:
+        return '번호이동';
+      default:
+        return '기기변경';
+    }
+  }, [registrationType]);
+
+  const navigateDeviceDetail = () => {
+    const params = {
+      id: deviceId,
+      'installment-period': installmentPeriod,
+      'discount-type': discountType,
+      plan: planId,
+    };
+
+    navigate({
+      pathname: `/${networkType}/${serialNumber}`,
+      search: createSearchParams(params).toString(),
+    });
+  };
+
+  const handleDeleteCartItem = () => {
+    deleteCart(cartItem.id).then((res) => {
+      setCartList((items) => {
+        return items.filter((item) => item.id !== cartItem.id);
+      });
+    });
+  };
+
   return (
     <CartLIstItemBlock>
-      <ImageWrapper>
-        <img src={imgsrc} alt="" />
+      <ImageWrapper onClick={navigateDeviceDetail}>
+        <img src={imageUrl} alt="" />
       </ImageWrapper>
       <DeviceInfoWrapper>
-        <p>2022년 8월 30일 (화)</p>
-        <p>갤럭시 Z Flip 4</p>
-        <p>(갤럭시워치5G) 5G 다이렉트 65</p>
+        <p>{createdAt}</p>
+        <p>{deviceName}</p>
+        <p>{planName}</p>
         <p>
-          <span>보라퍼플</span>
-          <span>256GB</span>
-          <span>24개월 할부</span>
+          <span>{colorName}</span>
+          <span>{storage}</span>
+          <span>{installmentPeriod === 1 ? '일시불' : `${installmentPeriod}개월 할부`}</span>
         </p>
       </DeviceInfoWrapper>
       <DetailWrapper>
         <div>
-          <span>기기변경</span>
+          <span>{discountType === 0 ? '공시지원금' : '선택약정'}</span>
+        </div>
+        <div>
+          <span>{stringRegistrationType}</span>
         </div>
         <div>
           <p>월 예상 납부 금액</p>
-          <p>124,900원</p>
+          <p>{PriceFormatter(price)}원</p>
         </div>
       </DetailWrapper>
       <OrderWrapper>
-        <RoundBtn content="가입하기" padding="6px 50px" />
+        <RoundBtn onClick={navigateDeviceDetail} content="자세히보기" padding="6px 50px" />
       </OrderWrapper>
+      <DeleteButton onClick={handleDeleteCartItem}>
+        <Close />
+      </DeleteButton>
     </CartLIstItemBlock>
   );
 }
