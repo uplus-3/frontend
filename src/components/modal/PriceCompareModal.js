@@ -63,7 +63,7 @@ const PlanTooltip = styled(({ className, ...props }) => (
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: theme.palette.gray2,
     minWidth: 250,
-    minHeight: 150,
+    minHeight: 100,
     padding: 10,
     color: '#000000',
   },
