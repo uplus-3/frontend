@@ -70,7 +70,14 @@ function DeviceCompareItem({ device, isLink, onClickRemove, isModal }) {
         </CloseIconWrapper>
       )}
       <DeviceImgWrapper isLink={isLink} onClick={handleGoDetail}>
-        <img src={device ? device.colors[0]?.imageUrl : noDeviceImg} alt="단말기 사진" />
+        <img
+          src={
+            device
+              ? device.colors[0]?.imageUrl || device.colors[0]?.images[0]?.imageUrl
+              : noDeviceImg
+          }
+          alt="단말기 사진"
+        />
       </DeviceImgWrapper>
       {device ? (
         <>

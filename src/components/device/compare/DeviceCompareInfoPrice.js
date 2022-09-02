@@ -53,18 +53,22 @@ function DeviceCompareInfoPrice({ device }) {
   }, [device]);
 
   return (
-    <DeviceCompareInfoPriceBlock>
-      <DeviceCompareInfoPriceItem
-        mPrice={priceInfo?.ddevicePrice}
-        hdata="휴대폰 가격"
-        bdata={priceInfo?.p_price}
-      />
-      <DeviceCompareInfoPriceItem
-        mPrice={priceInfo?.dplanPrice}
-        hdata="통신료"
-        bdata={priceInfo?.c_price}
-      />
-    </DeviceCompareInfoPriceBlock>
+    <>
+      {device && (
+        <DeviceCompareInfoPriceBlock>
+          <DeviceCompareInfoPriceItem
+            mPrice={priceInfo?.ddevicePrice}
+            hdata="휴대폰 가격"
+            bdata={priceInfo?.p_price}
+          />
+          <DeviceCompareInfoPriceItem
+            mPrice={priceInfo?.dplanPrice}
+            hdata="통신료"
+            bdata={priceInfo?.c_price}
+          />
+        </DeviceCompareInfoPriceBlock>
+      )}
+    </>
   );
 }
 

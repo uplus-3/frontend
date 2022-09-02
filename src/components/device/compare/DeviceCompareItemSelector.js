@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { devicesActions, filteredSimple } from '../../../modules/actions/devicesSlice';
+import { getDeviceDetail } from '../../../lib/api/device';
 import { FILTER_DATA } from '../DeviceListFileterContents';
 import DeviceCompareItemSelect from './DeviceCompareItemSelect';
 
@@ -34,13 +35,19 @@ function DeviceCompareItemSelector() {
     }
   }, [dispatch, dSimpleList]);
 
-  useEffect(() => {}, [device]);
-
   const handleCSelectValue = (e) => {
     setCompany(e.target.value);
   };
   const handleDSelectValue = (e) => {
-    setDevice(e.target.value);
+    const deviceId = e.target.value;
+    getDeviceInfo(deviceId);
+  };
+
+  const getDeviceInfo = async (deviceId) => {
+    try {
+      const res = await getDeviceDetail(deviceId);
+      dispatch(devicesActions.updateComparison(res.data));
+    } catch (e) {}
   };
 
   const cRenderValue = (selected) => {

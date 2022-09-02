@@ -6,6 +6,7 @@ const ALL = 'all';
 const LAUNCH = 'launch';
 const PURCHASE = 'purchase';
 const PRICE = 'price';
+const ETC = 'etc';
 
 const initialState = {
   devices: null,
@@ -151,7 +152,11 @@ export const filteredDevices = (
     devices = devices.filter((device) => !device.colors.every((color) => color.stock === 0));
   }
   if (company && Array.isArray(company) && !!company.length && !company.includes('all')) {
-    devices = devices.filter((device) => company.includes(device.company));
+    let temp = devices.filter((device) => company.includes(device.company));
+    let etc = company.includes(ETC)
+      ? devices.filter((device) => !['삼성', '애플'].includes(device.company))
+      : [];
+    devices = [...temp, ...etc];
   }
   if (storage && Array.isArray(storage) && !!storage.length && !storage.includes('all')) {
     devices = devices.filter((device) => storage.includes(device.storage));
@@ -199,5 +204,8 @@ export const filteredDevices = (
 };
 
 export const filteredSimple = (state, company) =>
-  state.devices.simple?.filter((device) => device.company === company);
+  state.devices.simple?.filter((device) => {
+    if (company === ETC) return !['삼성', '애플'].includes(device.company);
+    return device.company === company;
+  });
 export default reducer;

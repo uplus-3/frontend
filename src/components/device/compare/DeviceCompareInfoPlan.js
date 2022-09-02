@@ -25,9 +25,9 @@ function DeviceCompareInfoPlan({ device, onChangePriceFilter }) {
   const rendered = useRef(false);
   const planIdMenuList = useSelector((state) => state.plan[`${device?.networkType}g`]);
   const [planId, setPlanId] = useState(
-    planIdMenuList?.find((menu) => menu.name === device?.planName)?.id,
+    planIdMenuList?.find((menu) => menu.name === device?.planName)?.id || device?.recommendedPlanId,
   );
-  const [discountType, setDiscountType] = useState(device?.discountType);
+  const [discountType, setDiscountType] = useState(device?.discountType || 0);
   const [installmentPeriod, setInstallmentPeriod] = useState(24);
   const [registType, setRegistType] = useState(0);
 

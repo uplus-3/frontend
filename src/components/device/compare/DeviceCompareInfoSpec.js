@@ -38,7 +38,6 @@ function DeviceCompareInfoSpec({ device }) {
           value: res.data?.display,
         },
       ];
-      console.log(info);
       setSpecInfo(info);
     } catch (e) {}
   }, []);
@@ -50,15 +49,19 @@ function DeviceCompareInfoSpec({ device }) {
   }, [device, getDeviceSepc]);
 
   return (
-    <DeviceCompareInfoSpecBlock>
-      {specInfo &&
-        specInfo.map((info) => (
-          <dl>
-            <dt>{info.name}</dt>
-            <dd>{info.value}</dd>
-          </dl>
-        ))}
-    </DeviceCompareInfoSpecBlock>
+    <>
+      {device && (
+        <DeviceCompareInfoSpecBlock>
+          {specInfo &&
+            specInfo.map((info) => (
+              <dl>
+                <dt>{info.name}</dt>
+                <dd>{info.value}</dd>
+              </dl>
+            ))}
+        </DeviceCompareInfoSpecBlock>
+      )}
+    </>
   );
 }
 

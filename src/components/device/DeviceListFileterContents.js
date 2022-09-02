@@ -51,7 +51,7 @@ export const FILTER_DATA = {
       },
       {
         name: '기타',
-        value: '기타',
+        value: 'etc',
       },
     ],
   },
