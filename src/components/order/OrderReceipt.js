@@ -110,7 +110,6 @@ function OrderReceipt({
         kakao.init('64ca1622b62f15240ae2889c61165009');
       }
       kakao.Share.sendCustom({
-        requestUrl: window.location.host,
         templateId: 82187,
         templateArgs: {
           image: deviceInfo.selectedColor.images[0].imageUrl,
@@ -125,15 +124,15 @@ function OrderReceipt({
   const order = async () => {
     try {
       if (checkUserInfo()) {
-        const res = postOrder({ ...orderForm, ...getUserInfo() });
-        const number = 2020202020;
+        const res = await postOrder({ ...orderForm, ...getUserInfo() });
+        const number = await res.data.number;
         Calert.fire({
           title: '주문이 완료되었습니다',
           html: (
             <ShareDiv>
               <div>{`주문번호: ${number}`}</div>
               <Tooltip title="주문내역 공유하기">
-                <IconButton onClick={() => shareInfoByKakao(20202020)}>
+                <IconButton onClick={() => shareInfoByKakao(number)}>
                   <img src={KakaoIcon} alt="공유하기" />
                 </IconButton>
               </Tooltip>
@@ -146,6 +145,7 @@ function OrderReceipt({
         });
       }
     } catch (e) {
+      console.log(e.response);
       if (e.response.status === 403) {
         // 실패했을 경우
         Calert.fire({
@@ -166,7 +166,7 @@ function OrderReceipt({
       deviceId: deviceInfo.id,
       installmentPeriod: orderForm.installmentPeriod,
       discountType: orderForm.discountType,
-      plan: orderForm.planId,
+      planId: orderForm.planId,
     });
     setDevicePriceInfo({ ...res.data });
   };

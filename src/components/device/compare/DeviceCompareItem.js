@@ -19,7 +19,7 @@ const DeviceCompareItemBlock = styled('div')(({ theme, data }) => ({
   borderRadius: 10,
 }));
 
-const DeviceImgWapper = styled('div')(({ isLink }) => ({
+const DeviceImgWrapper = styled('div')(({ isLink }) => ({
   height: '100%',
   cursor: isLink && 'pointer',
 
@@ -29,7 +29,7 @@ const DeviceImgWapper = styled('div')(({ isLink }) => ({
   },
 }));
 
-const CloseIconWapper = styled('div')({
+const CloseIconWrapper = styled('div')({
   position: 'absolute',
   right: 10,
   top: 10,
@@ -40,7 +40,7 @@ const CloseIconWapper = styled('div')({
   },
 });
 
-const InfoWapper = styled('div')({
+const InfoWrapper = styled('div')({
   '& p:first-of-type': {
     fontWeight: 600,
     fontSize: 14,
@@ -59,26 +59,25 @@ function DeviceCompareItem({ device, isLink, onClickRemove }) {
 
   const handleGoDetail = () => {
     if (isLink) {
-      navigate(`/${device?.serialNumber}`);
+      navigate(`./${device?.serialNumber}`);
     }
   };
-
   return (
     <DeviceCompareItemBlock data={!!device}>
       {device && (
-        <CloseIconWapper onClick={() => onClickRemove(device.id)}>
+        <CloseIconWrapper onClick={() => onClickRemove(device.id)}>
           <Close />
-        </CloseIconWapper>
+        </CloseIconWrapper>
       )}
-      <DeviceImgWapper isLink onClick={handleGoDetail}>
-        <img src={device ? device.colors[0]?.images[0]?.imageUrl : noDeviceImg} alt="단말기 사진" />
-      </DeviceImgWapper>
+      <DeviceImgWrapper isLink={isLink} onClick={handleGoDetail}>
+        <img src={device ? device.colors[0]?.imageUrl : noDeviceImg} alt="단말기 사진" />
+      </DeviceImgWrapper>
       {device ? (
         <>
-          <InfoWapper>
+          <InfoWrapper>
             <p>{device.name}</p>
-            <p>월 {PriceFormatter(device.dprice + device.plan.dprice)}원</p>
-          </InfoWapper>
+            <p>월 {PriceFormatter(device.ddevicePrice + device.dplanPrice)}원</p>
+          </InfoWrapper>
         </>
       ) : (
         <div>기기 미선택</div>

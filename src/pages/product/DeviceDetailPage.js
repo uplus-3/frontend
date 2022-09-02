@@ -6,6 +6,8 @@ import axios from 'axios';
 import DeviceItemImage from '../../components/device/DeviceItemImage';
 import DeviceItemInfo from '../../components/device/DeviceItemInfo';
 import { useLocation, useSearchParams } from 'react-router-dom';
+import { getPlanInfo } from '../../modules/actions/planSlice';
+import { useSelector } from 'react-redux';
 
 const DeviceDetailPageWrapper = styled('div')({
   display: 'flex',
@@ -20,10 +22,19 @@ function DeviceDetailPage() {
   const [devicePriceInfo, setDevicePriceInfo] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
 
+  const planInfo = useSelector(({ plan }) => {
+    return getPlanInfo(
+      plan,
+      searchParams.get('plan') === '-1'
+        ? deviceDetailInfo?.recommendedPlanId || 1
+        : parseInt(searchParams.get('plan')),
+    );
+  });
   // 서버와 통신해 디바이스 정보를 가져옴
   const getDeviceDetailInfo = async () => {
     try {
       const res = await getDeviceDetail(searchParams.get('id'));
+
       setDeviceDetailInfo({ ...res.data });
       setSelectedColor(res.data?.colors[0]);
     } catch (e) {
@@ -59,7 +70,7 @@ function DeviceDetailPage() {
           <DeviceItemImage colors={deviceDetailInfo.colors} selectedColor={selectedColor} />
           <DeviceItemInfo
             devicePriceInfo={devicePriceInfo}
-            deviceInfo={deviceDetailInfo}
+            deviceInfo={{ ...deviceDetailInfo, plan: planInfo }}
             selectedColor={selectedColor}
             setSelectedColor={setSelectedColor}
           />

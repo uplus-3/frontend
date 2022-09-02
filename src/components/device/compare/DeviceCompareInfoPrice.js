@@ -16,7 +16,7 @@ function DeviceCompareInfoPrice({ data }) {
     },
     {
       label: '공시지원금',
-      value: data?.psupport,
+      value: data?.mdevicePrice,
     },
     {
       label: '15% 추가지원금',
@@ -24,7 +24,7 @@ function DeviceCompareInfoPrice({ data }) {
     },
     {
       label: '실구매가',
-      value: data?.price, // 바꿀것
+      // value: data?., // 바꿀것
     },
   ];
 
@@ -41,7 +41,7 @@ function DeviceCompareInfoPrice({ data }) {
 
   return (
     <DeviceCompareInfoPriceBlock>
-      <DeviceCompareInfoPriceItem />
+      <DeviceCompareInfoPriceItem data={data} hdata="휴대폰 가격" />
       <DeviceCompareInfoPriceItem />
     </DeviceCompareInfoPriceBlock>
   );

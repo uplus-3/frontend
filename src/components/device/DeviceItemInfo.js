@@ -8,6 +8,10 @@ import { PriceFormatter } from '../../lib/utils';
 import useCart from '../../lib/hooks/useCart';
 import PropTypes from 'prop-types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+
+import { useSelector } from 'react-redux';
+import { getPlanInfo } from '../../modules/actions/planSlice';
+
 const DeviceItemInfoBlock = styled('div')({
   width: 600,
   marginTop: 150,
@@ -119,7 +123,7 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
   const { addCart } = useCart();
 
   const [compareModalOpen, setCompareModalOpen] = useState(false);
-
+  console.log(deviceInfo);
   const handleOrderClick = () => {
     console.log(deviceInfo);
     navigate('/order/mobile', {
@@ -167,8 +171,8 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
           월 {PriceFormatter(devicePriceInfo?.mdevicePrice + devicePriceInfo?.mplanPrice)}원
         </DeviceSelectResultTitle>
         {/* TODO price에 pian 이름 받기 */}
-        {deviceInfo?.plan?.name || '5G 라이트 +'},
-        {deviceInfo?.discountType === 0 ? '공시지원금' : '선택약정 (24개월)'} 기준
+        {deviceInfo?.plan?.name},
+        {deviceInfo?.discountType === 0 ? ' 공시지원금' : ' 선택약정 (24개월)'} 기준
         <DevicePriceTable>
           <tbody>
             <tr>
@@ -193,7 +197,7 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
               colorId: selectedColor?.colorId || 1,
               discountType: deviceInfo.discountType,
               installmentPeriod: searchParams.get('installment-period') || 24,
-              planId: deviceInfo.plan.id,
+              planId: deviceInfo?.plan.id || 1,
               registrationType: 0,
             })
           }

@@ -6,6 +6,8 @@ import { PhoneFormatter, PriceFormatter } from '../../lib/utils';
 import useInput from '../../lib/hooks/useInput';
 import SquareBtn from '../common/SquareBtn';
 import DaumPostCodeModal from '../modal/DaumPostCodeModal';
+import { useSelector } from 'react-redux';
+import { getRecommendedPlan } from '../../modules/actions/planSlice';
 
 const OrderFormBlock = styled('div')({
   marginTop: 20,
@@ -119,7 +121,7 @@ const installmentPeriodList = [
   { id: 36, content: '36개월' },
 ];
 
-function OrderForm({ orderForm, setOrderForm, devicePriceInfo }, ref) {
+function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
   const phonenumberValidator = (num) => num.indexOf('-') === -1;
   const theme = useTheme();
   const [name, onNameChange, setName] = useInput('');
@@ -127,7 +129,6 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo }, ref) {
   const [detailAddress, onChangeDetailAddress] = useInput('');
   const [address, setAddress] = useState('');
   const [openPostcode, setOpenPostCode] = useState(false);
-  const [planList, setPlanList] = useState([]);
 
   const [phoneMessage, setPhoneMessage] = useState('');
   const [nameMessage, setNameMessage] = useState('');
@@ -144,6 +145,11 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo }, ref) {
   const getPrice = () => {
     // 백엔드로 api 요청
   };
+
+  const planList =
+    useSelector(({ plan }) => {
+      return getRecommendedPlan(plan, planId);
+    }) || [];
 
   const checkUserInfo = () => {
     if (!!!name) {
@@ -170,7 +176,7 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo }, ref) {
   };
 
   const getPlanList = () => {
-    setPlanList([
+    return [
       {
         id: 1,
         name: '5G 라이트',
@@ -186,12 +192,11 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo }, ref) {
         name: '5G 슬림+',
         price: 47000,
       },
-    ]);
+    ];
   };
 
   useEffect(() => {
     getPrice();
-    getPlanList();
   }, []);
 
   useEffect(() => {
@@ -233,7 +238,7 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo }, ref) {
               required
               placehoder="휴대폰번호를 입력해주세요"
               width={255}
-              value={PhoneFormatter(phonenumber)}
+              value={phonenumber}
               onChange={onChangePhonenumber}
               variant="standard"
               helperText={phoneMessage}

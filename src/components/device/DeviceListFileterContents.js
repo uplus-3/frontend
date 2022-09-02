@@ -43,15 +43,15 @@ export const FILTER_DATA = {
       },
       {
         name: '삼성',
-        value: 'samsung',
+        value: '삼성',
       },
       {
         name: '애플',
-        value: 'apple',
+        value: '애플',
       },
       {
         name: '기타',
-        value: 'others',
+        value: '기타',
       },
     ],
   },
@@ -64,15 +64,15 @@ export const FILTER_DATA = {
       },
       {
         name: '1TB',
-        value: '1tb',
+        value: '1TB',
       },
       {
         name: '512GB 이상',
-        value: '512gb',
+        value: '512GB',
       },
       {
         name: '256GB',
-        value: '256gb',
+        value: '256GB',
       },
     ],
   },

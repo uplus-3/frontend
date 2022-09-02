@@ -210,7 +210,7 @@ function SearchBar() {
   const getRelatedSearchTerm = async (term) => {
     try {
       const res = await getSearchRelatedKeyword({
-        query: term,
+        query: term === '' ? ' ' : term,
         networkType: searchNetworkType || 0,
       });
       setRelatedSearchTerm(res.data.searchKeywordList || []);
@@ -287,10 +287,18 @@ function SearchBar() {
   };
 
   useEffect(() => {
-    if ((!!!anchorEl || !!relatedSearchTerm.length) && !!anchorEl && !!!searchResult) return;
+    if (!!!anchorEl && !!!relatedSearchTerm.length) return;
+    console.log(anchorEl, relatedSearchTerm);
+    console.log('get by search network type anchorEl');
     getRelatedSearchTerm(searchResult);
-  }, [searchResult, searchNetworkType, anchorEl]);
+  }, [searchNetworkType, anchorEl]);
 
+  useEffect(() => {
+    if (!!anchorEl && !!searchResult) {
+      getRelatedSearchTerm(searchResult);
+      console.log('get by searchResult');
+    }
+  }, [searchResult]);
   return (
     <SearchBarBlock>
       <ClickAwayListener onClickAway={() => setAnchorEl(null)}>

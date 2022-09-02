@@ -16,7 +16,7 @@ const DeviceCompareInfoPriceItemBlock = styled('div')({
   },
 });
 
-const HeaderWapper = styled('div')(({ theme }) => ({
+const HeaderWrapper = styled('div')(({ theme }) => ({
   '& dl': {
     paddingBottom: 10,
     fontWeight: 'bold',
@@ -29,7 +29,7 @@ const HeaderWapper = styled('div')(({ theme }) => ({
     fontSize: 28,
   },
 }));
-const BodyWapper = styled('div')({
+const BodyWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   gap: 10,
@@ -42,20 +42,23 @@ function priceFormat(value) {
 function DeviceCompareInfoPriceItem({ data, hdata, bdata }) {
   return (
     <DeviceCompareInfoPriceItemBlock>
-      <HeaderWapper>
+      <HeaderWrapper>
         <dl>
-          <dt>hdata</dt>
-          <dd>월 {data?.dprie + data?.mprice}원</dd>
+          <dt>{hdata}</dt>
+          {/* <dd>월 {data?.ddevicePrice + data?.}원</dd> */}
         </dl>
-      </HeaderWapper>
-      <BodyWapper>
-        <dl>
-          <dt>출고가</dt>
-          <dd>{priceFormat(data?.price)}</dd>
-        </dl>
-        <dl>
+      </HeaderWrapper>
+      <BodyWrapper>
+        {bdata &&
+          bdata.map((data) => (
+            <dl>
+              <dt>{data.label}</dt>
+              <dd>{priceFormat(data?.value)}</dd>
+            </dl>
+          ))}
+        {/* <dl>
           <dt>공시지원금</dt>
-          <dd>월 {data?.dprie + data?.mprice}원</dd>
+          <dd>월 {priceFormat(data?.price)}원</dd>
         </dl>
         <dl>
           <dt>휴대폰 금액</dt>
@@ -64,8 +67,8 @@ function DeviceCompareInfoPriceItem({ data, hdata, bdata }) {
         <dl>
           <dt>휴대폰 금액</dt>
           <dd>월 {data?.dprie + data?.mprice}원</dd>
-        </dl>
-      </BodyWapper>
+        </dl> */}
+      </BodyWrapper>
     </DeviceCompareInfoPriceItemBlock>
   );
 }

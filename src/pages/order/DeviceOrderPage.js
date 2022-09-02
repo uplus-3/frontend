@@ -52,6 +52,7 @@ function DeviceOrderPage() {
             deviceInfo={deviceInfo}
             setOrderForm={setOrderForm}
             devicePriceInfo={devicePriceInfo}
+            planId={deviceInfo?.plan?.id}
             ref={formRef}
           />
           <OrderReceipt
