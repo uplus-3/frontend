@@ -2,10 +2,12 @@ import React, { useCallback, useState } from 'react';
 import DeviceCompareItem from './DeviceCompareItem';
 import RoundBtn from '../../common/RoundBtn';
 import classnames from 'classnames';
+import { devicesActions } from '../../../modules/actions/devicesSlice';
 
 import { styled } from '@mui/system';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
 import DeviceCompareModal from '../../modal/DeviceCompareModal';
+import { useDispatch } from 'react-redux';
 
 const DeviceCompareTabBlock = styled('div')(({ theme }) => ({
   position: 'fixed',
@@ -76,28 +78,35 @@ const ResetButton = styled('div')({
   cursor: 'pointer',
 });
 
-function DeviceCompareTab() {
+function DeviceCompareTab({ devices }) {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const handleClickOpen = useCallback(() => setOpen((prev) => !prev), []);
+  const handleClickRemove = useCallback(
+    (id) => {
+      dispatch(devicesActions.removeComparison(id));
+    },
+    [dispatch],
+  );
+
+  const handleClickRemoveAll = useCallback(() => {
+    dispatch(devicesActions.removeComparisonAll());
+  }, [dispatch]);
 
   return (
     <DeviceCompareTabBlock className={classnames({ active: open })}>
       <HeaderWapper>
-        <span>비교하기(1)</span>
+        <span>비교하기({devices.length})</span>
         <OpenIcon onClick={handleClickOpen}>{open ? <ExpandMore /> : <ExpandLess />}</OpenIcon>
       </HeaderWapper>
       <BodyWapper>
         <DeviceWapper>
-          <li>
-            <DeviceCompareItem data={true} />
-          </li>
-          <li>
-            <DeviceCompareItem />
-          </li>
-          <li>
-            <DeviceCompareItem />
-          </li>
+          {[...devices, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
+            <li key={`${index}-${data?.id}`}>
+              <DeviceCompareItem device={data} onClickRemove={handleClickRemove} />
+            </li>
+          ))}
         </DeviceWapper>
         <CompareButtonWapper>
           <RoundBtn
@@ -107,7 +116,7 @@ function DeviceCompareTab() {
             padding="5px 0"
             onClick={() => setModalOpen(true)}
           />
-          <ResetButton>전체삭제</ResetButton>
+          <ResetButton onClick={handleClickRemoveAll}>전체삭제</ResetButton>
         </CompareButtonWapper>
       </BodyWapper>
       <DeviceCompareModal open={modalOpen} setOpen={setModalOpen} />
