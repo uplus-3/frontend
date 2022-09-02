@@ -96,7 +96,6 @@ function PriceCompareModal({ open, setOpen, imgUrl, deviceId, name }) {
       const res = await getDevicePriceCompare({ deviceId });
       const sortedPlans = res.data.plans.sort(getComparator('asc', orderBy));
       setPlans(sortedPlans);
-      console.log(res);
     } catch (e) {
       console.log(e);
     }

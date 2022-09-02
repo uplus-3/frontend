@@ -6,6 +6,8 @@ import { PhoneFormatter, PriceFormatter } from '../../lib/utils';
 import useInput from '../../lib/hooks/useInput';
 import SquareBtn from '../common/SquareBtn';
 import DaumPostCodeModal from '../modal/DaumPostCodeModal';
+import { useSelector } from 'react-redux';
+import { getRecommendedPlan } from '../../modules/actions/planSlice';
 
 const OrderFormBlock = styled('div')({
   marginTop: 20,
@@ -119,15 +121,14 @@ const installmentPeriodList = [
   { id: 36, content: '36개월' },
 ];
 
-function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
+function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
   const phonenumberValidator = (num) => num.indexOf('-') === -1;
   const theme = useTheme();
   const [name, onNameChange, setName] = useInput('');
-  const [phonenumber, onChangePhonenumber, setPhonenumber] = useInput('');
+  const [phonenumber, setPhonenumber] = useState('');
   const [detailAddress, onChangeDetailAddress] = useInput('');
   const [address, setAddress] = useState('');
   const [openPostcode, setOpenPostCode] = useState(false);
-  const [planList, setPlanList] = useState([]);
 
   const [phoneMessage, setPhoneMessage] = useState('');
   const [nameMessage, setNameMessage] = useState('');
@@ -144,6 +145,11 @@ function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
   const getPrice = () => {
     // 백엔드로 api 요청
   };
+
+  const planList =
+    useSelector(({ plan }) => {
+      return getRecommendedPlan(plan, planId);
+    }) || [];
 
   const checkUserInfo = () => {
     if (!!!name) {
@@ -165,33 +171,19 @@ function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
     return {
       name,
       address: `${address} ${detailAddress}`,
-      phoneNumber: phonenumber,
+      phoneNumber: phonenumber.replace(/-/g, ''),
     };
   };
 
-  const getPlanList = () => {
-    setPlanList([
-      {
-        id: 1,
-        name: '5G 라이트',
-        price: 55000,
-      },
-      {
-        id: 2,
-        name: '5G 프리미어 에센셜',
-        price: 85000,
-      },
-      {
-        id: 3,
-        name: '5G 슬림+',
-        price: 47000,
-      },
-    ]);
+  const onChangePhonenumber = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPhonenumber(PhoneFormatter(value));
   };
 
   useEffect(() => {
     getPrice();
-    getPlanList();
   }, []);
 
   useEffect(() => {
@@ -203,7 +195,7 @@ function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
   }, [name]);
 
   useEffect(() => {
-    if (!phonenumber || phoneValidator.test(PhoneFormatter(phonenumber))) {
+    if (!phonenumber || phoneValidator.test(phonenumber)) {
       setPhoneMessage('');
     } else {
       setPhoneMessage('유효하지 않은 휴대폰번호입니다.');
@@ -233,7 +225,7 @@ function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
               required
               placehoder="휴대폰번호를 입력해주세요"
               width={255}
-              value={PhoneFormatter(phonenumber)}
+              value={phonenumber}
               onChange={onChangePhonenumber}
               variant="standard"
               helperText={phoneMessage}
@@ -351,7 +343,7 @@ function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
                   <div className="discount-sub-description">휴대폰가격 1회 할인</div>
                 </div>
                 <div className="discount-price">
-                  -{PriceFormatter(deviceInfo.psupport + deviceInfo.asupport)}원
+                  -{PriceFormatter(devicePriceInfo.psupport + devicePriceInfo.asupport)}원
                 </div>
               </DiscountContent>
             </SquareBtn>
@@ -366,7 +358,7 @@ function OrderForm({ orderForm, setOrderForm, deviceInfo }, ref) {
                   <div>선택약정 (24개월)</div>
                   <div className="discount-sub-description">통신요금 25% 할인</div>
                 </div>
-                <div className="discount-price">-{PriceFormatter(deviceInfo.plan.sdiscount)}원</div>
+                <div className="discount-price">-{PriceFormatter(devicePriceInfo.sdiscount)}원</div>
               </DiscountContent>
             </SquareBtn>
           </ButtonWrapper>

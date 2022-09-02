@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import { styled } from '@mui/material';
-import { getDeviceDetail, getDeviceList } from '../../lib/api/device';
+import { getDeviceDetail, getDevicePrice } from '../../lib/api/device';
 import axios from 'axios';
 import DeviceItemImage from '../../components/device/DeviceItemImage';
 import DeviceItemInfo from '../../components/device/DeviceItemInfo';
 import { useLocation, useSearchParams } from 'react-router-dom';
+import { getPlanInfo } from '../../modules/actions/planSlice';
+import { useSelector } from 'react-redux';
 
 const DeviceDetailPageWrapper = styled('div')({
   display: 'flex',
@@ -16,24 +18,23 @@ function DeviceDetailPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
 
-  useEffect(() => {
-    getDeviceDetailInfo();
-    console.log(location);
-  }, [location.key]);
-
   const [deviceDetailInfo, setDeviceDetailInfo] = useState(null);
+  const [devicePriceInfo, setDevicePriceInfo] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
 
+  const planInfo = useSelector(({ plan }) => {
+    return getPlanInfo(
+      plan,
+      searchParams.get('plan') === '-1'
+        ? deviceDetailInfo?.recommendedPlanId || 1
+        : parseInt(searchParams.get('plan')),
+    );
+  });
   // 서버와 통신해 디바이스 정보를 가져옴
   const getDeviceDetailInfo = async () => {
     try {
-      const req = {
-        deviceId: searchParams.get('id'),
-        discountType: searchParams.get('discountType') || -1,
-        installmentPeriod: searchParams.get('installmentPeriod') || 24,
-        plan: -1,
-      };
-      const res = await getDeviceDetail(req);
+      const res = await getDeviceDetail(searchParams.get('id'));
+
       setDeviceDetailInfo({ ...res.data });
       setSelectedColor(res.data?.colors[0]);
     } catch (e) {
@@ -41,13 +42,35 @@ function DeviceDetailPage() {
     }
   };
 
+  // 디바이스 가격정보를 가져옴
+  const getDevicePriceInfo = async () => {
+    try {
+      const req = {
+        deviceId: searchParams.get('id'),
+        discountType: searchParams.get('discountType') || -1,
+        installmentPeriod: searchParams.get('installmentPeriod') || 24,
+        planId: searchParams.get('plan') || -1,
+      };
+      const res = await getDevicePrice(req);
+      setDevicePriceInfo(res.data);
+    } catch (e) {
+      console.log(e.response);
+    }
+  };
+
+  useEffect(() => {
+    getDeviceDetailInfo();
+    getDevicePriceInfo();
+  }, [location.key]);
+
   return (
     <div>
       {deviceDetailInfo && (
         <DeviceDetailPageWrapper>
           <DeviceItemImage colors={deviceDetailInfo.colors} selectedColor={selectedColor} />
           <DeviceItemInfo
-            deviceInfo={deviceDetailInfo}
+            devicePriceInfo={devicePriceInfo}
+            deviceInfo={{ ...deviceDetailInfo, plan: planInfo }}
             selectedColor={selectedColor}
             setSelectedColor={setSelectedColor}
           />
