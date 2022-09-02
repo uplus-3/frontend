@@ -8,7 +8,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { ExpandMore } from '@mui/icons-material';
 
 import DeviceCompareInfoPrice from './DeviceCompareInfoPrice';
 import DeviceCompareInfoPlan from './DeviceCompareInfoPlan';
@@ -38,15 +38,12 @@ const DetailWrapper = styled('div')({
   width: '100%',
 });
 
-// TODO - expanded 다 되도록 수정
 function DeviceCompareInfo({ devices }) {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState([0]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? [...expanded, panel] : expanded.filter((e) => e === panel));
-
-    // setExpanded(isExpanded ? panel : false);
   };
 
   const handleChangePriceFilter = useCallback(

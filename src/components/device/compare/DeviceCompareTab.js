@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { devicesActions } from '../../../modules/actions/devicesSlice';
 import DeviceCompareItem from './DeviceCompareItem';
 import RoundBtn from '../../common/RoundBtn';
+import useAlert from '../../../lib/hooks/useAlert';
 import classnames from 'classnames';
-import { devicesActions } from '../../../modules/actions/devicesSlice';
 
 import { styled } from '@mui/system';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
 import DeviceCompareModal from '../../modal/DeviceCompareModal';
-import { useDispatch } from 'react-redux';
 
 const DeviceCompareTabBlock = styled('div')(({ theme }) => ({
   position: 'fixed',
@@ -80,6 +81,7 @@ const ResetButton = styled('div')({
 
 function DeviceCompareTab({ devices }) {
   const dispatch = useDispatch();
+  const Calert = useAlert();
   const [open, setOpen] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const handleClickOpen = useCallback(() => setOpen((prev) => !prev), []);
@@ -93,6 +95,16 @@ function DeviceCompareTab({ devices }) {
   const handleClickRemoveAll = useCallback(() => {
     dispatch(devicesActions.removeComparisonAll());
   }, [dispatch]);
+
+  const handleClickModalOpen = () => {
+    if (devices.length < 2) {
+      Calert.fire({
+        title: '2개 이상의 상품을 선택 하셔야<br/>비교하기가 가능합니다.',
+      });
+      return;
+    }
+    setModalOpen(true);
+  };
 
   return (
     <DeviceCompareTabBlock className={classnames({ active: open })}>
@@ -114,7 +126,7 @@ function DeviceCompareTab({ devices }) {
             width="120px"
             height="fit-content"
             padding="5px 0"
-            onClick={() => setModalOpen(true)}
+            onClick={handleClickModalOpen}
           />
           <ResetButton onClick={handleClickRemoveAll}>전체삭제</ResetButton>
         </CompareButtonWrapper>
