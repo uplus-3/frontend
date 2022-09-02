@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import classnames from 'classnames';
 
 import { styled } from '@mui/system';
@@ -20,7 +21,7 @@ const DeviceCompareModalBlock = styled(Dialog)({
   },
 });
 
-const HeaderWapper = styled('div')(({ theme }) => ({
+const HeaderWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   padding: '15px 20px',
@@ -40,7 +41,7 @@ const HeaderCloseIcon = styled('span')({
   },
 });
 
-const BodyWapper = styled(DialogContent)({
+const BodyWrapper = styled(DialogContent)({
   height: 900,
 });
 
@@ -64,6 +65,7 @@ const DeviceListWrapper = styled('ul')({
 
 function DeviceCompareModal({ open, setOpen }) {
   const [shadow, setShadow] = useState(false);
+  const comparison = useSelector((state) => state.devices.comparison);
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -80,15 +82,20 @@ function DeviceCompareModal({ open, setOpen }) {
 
   return (
     <DeviceCompareModalBlock open={open} onClose={handleClose} z>
-      <HeaderWapper>
+      <HeaderWrapper>
         <HeaderTitle>비교결과</HeaderTitle>
         <HeaderCloseIcon onClick={handleClose}>
           <Close />
         </HeaderCloseIcon>
-      </HeaderWapper>
-      <BodyWapper onScroll={onScroll} dividers={true}>
+      </HeaderWrapper>
+      <BodyWrapper onScroll={onScroll} dividers={true}>
         <DeviceListWrapper className={classnames({ shadow })}>
-          <li>
+          {[...comparison, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
+            <li key={`${index}-${data?.id}`}>
+              <DeviceCompareItem device={data} isLink={!!data} />
+            </li>
+          ))}
+          {/* <li>
             <DeviceCompareItem data={true} isLink={true} />
           </li>
           <li>
@@ -96,10 +103,10 @@ function DeviceCompareModal({ open, setOpen }) {
           </li>
           <li>
             <DeviceCompareItemSelector />
-          </li>
+          </li> */}
         </DeviceListWrapper>
-        <DeviceCompareInfo></DeviceCompareInfo>
-      </BodyWapper>
+        <DeviceCompareInfo devices={comparison}></DeviceCompareInfo>
+      </BodyWrapper>
     </DeviceCompareModalBlock>
   );
 }

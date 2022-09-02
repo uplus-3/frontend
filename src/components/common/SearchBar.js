@@ -208,6 +208,10 @@ function SearchBar() {
 
   // axios 요청을 통해 관련 검색어를 받아옴.
   const getRelatedSearchTerm = async (term) => {
+    if (!!!term) {
+      setRecentSearchTerm([]);
+      return;
+    }
     try {
       const res = await getSearchRelatedKeyword({
         query: term,
@@ -287,10 +291,20 @@ function SearchBar() {
   };
 
   useEffect(() => {
-    if ((!!!anchorEl || !!relatedSearchTerm.length) && !!anchorEl && !!!searchResult) return;
+    if (!!!anchorEl && !!!relatedSearchTerm.length) return;
+    console.log(anchorEl, relatedSearchTerm);
+    console.log('get by search network type anchorEl');
     getRelatedSearchTerm(searchResult);
-  }, [searchResult, searchNetworkType, anchorEl]);
+  }, [searchNetworkType, anchorEl]);
 
+  useEffect(() => {
+    if (!!anchorEl && !!searchResult) {
+      getRelatedSearchTerm(searchResult);
+      console.log('get by searchResult');
+    } else if (!!anchorEl && !!!searchResult) {
+      setRecentSearchTerm([]);
+    }
+  }, [searchResult]);
   return (
     <SearchBarBlock>
       <ClickAwayListener onClickAway={() => setAnchorEl(null)}>

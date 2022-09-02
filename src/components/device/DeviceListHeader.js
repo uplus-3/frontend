@@ -62,7 +62,7 @@ const StyledCheckbox = styled(Checkbox)(({ theme }) => ({
   },
 }));
 
-const StyledSortWapper = styled('div')(({ theme }) => ({
+const StyledSortWrapper = styled('div')(({ theme }) => ({
   '& .MuiButtonBase-root.MuiListItem-root:hover': {
     background: 'none',
     color: theme.palette.prime,
@@ -169,7 +169,7 @@ function DeviceListHeader({
             label="정상가 보기"
           />
         </Stack>
-        <StyledSortWapper>
+        <StyledSortWrapper>
           <List component="nav" aria-label="Device sort settings">
             <ListItem
               button
@@ -202,7 +202,7 @@ function DeviceListHeader({
               </StyledMenuItem>
             ))}
           </Menu>
-        </StyledSortWapper>
+        </StyledSortWrapper>
       </Stack>
     </DeviceListHeaderBlock>
   );

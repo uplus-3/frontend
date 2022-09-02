@@ -1,4 +1,4 @@
-import { call, put, delay, takeLatest } from 'redux-saga/effects';
+import { call, put, delay, takeEvery } from 'redux-saga/effects';
 import { planActions } from '../actions/planSlice';
 import { loadingActions } from '../actions/loadingSlice';
 import { getPlans } from '../../lib/api/plan';
@@ -34,5 +34,5 @@ export function* getPlanSaga(action) {
 export function* planSaga() {
   const { getPlanList } = planActions;
 
-  yield takeLatest(getPlanList, getPlanSaga);
+  yield takeEvery(getPlanList, getPlanSaga);
 }

@@ -30,11 +30,11 @@ const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   boxShadow: 'inset 0px 3px 5px 0px #bbbbbb',
 }));
 
-const DetailWapper = styled('div')({
+const DetailWrapper = styled('div')({
   width: '100%',
 });
 
-function DeviceCompareInfo() {
+function DeviceCompareInfo({ devices }) {
   const [expanded, setExpanded] = useState(0);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -48,15 +48,15 @@ function DeviceCompareInfo() {
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>월 납부금액</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWapper>
+          <DetailWrapper>
             <DeviceCompareInfoPrice />
-          </DetailWapper>
-          <DetailWapper>
+          </DetailWrapper>
+          <DetailWrapper>
             <DeviceCompareInfoPrice />
-          </DetailWapper>
-          <DetailWapper>
+          </DetailWrapper>
+          <DetailWrapper>
             <DeviceCompareInfoPrice />
-          </DetailWapper>
+          </DetailWrapper>
         </StyledAccordionDetails>
       </Accordion>
       <Accordion expanded={expanded === 1} onChange={handleChange(1)}>
@@ -64,15 +64,15 @@ function DeviceCompareInfo() {
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>할인유형, 요금제</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWapper>
+          <DetailWrapper>
             <DeviceCompareInfoPlan />
-          </DetailWapper>
-          <DetailWapper>
+          </DetailWrapper>
+          <DetailWrapper>
             <DeviceCompareInfoPlan />
-          </DetailWapper>
-          <DetailWapper>
+          </DetailWrapper>
+          <DetailWrapper>
             <DeviceCompareInfoPlan />
-          </DetailWapper>
+          </DetailWrapper>
         </StyledAccordionDetails>
       </Accordion>
       <Accordion expanded={expanded === 2} onChange={handleChange(2)}>
@@ -80,15 +80,15 @@ function DeviceCompareInfo() {
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>기기 성능</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWapper>
+          <DetailWrapper>
             <DeviceCompareInfoSpec />
-          </DetailWapper>
-          <DetailWapper>
+          </DetailWrapper>
+          <DetailWrapper>
             <DeviceCompareInfoSpec />
-          </DetailWapper>
-          <DetailWapper>
+          </DetailWrapper>
+          <DetailWrapper>
             <DeviceCompareInfoSpec />
-          </DetailWapper>
+          </DetailWrapper>
         </StyledAccordionDetails>
       </Accordion>
     </DeviceCompareInfoBlock>

@@ -13,6 +13,7 @@ function DeviceOrderPage() {
   const navigate = useNavigate();
   const formRef = useRef();
   const [deviceInfo, setDeviceInfo] = useState(null);
+  const [devicePriceInfo, setDevicePriceInfo] = useState(null);
   const [orderForm, setOrderForm] = useState({
     colorId: 1,
     discountType: 0,
@@ -34,7 +35,17 @@ function DeviceOrderPage() {
   useEffect(() => {
     const { state } = location;
     if (!!!state) navigate(-1);
-    setDeviceInfo(state);
+    console.log(state);
+    setDeviceInfo({ ...state.deviceInfo, selectedColor: { ...state.selectedColor } });
+    setDevicePriceInfo(state.devicePriceInfo);
+    //TODO 기본값으로 plan Id 넣어주기
+    setOrderForm((prev) => {
+      return {
+        ...prev,
+        planId: state?.deviceInfo?.plan?.id || 1,
+        colorId: state?.selectedColor?.id,
+      };
+    });
   }, []);
 
   return (
@@ -45,12 +56,16 @@ function DeviceOrderPage() {
             orderForm={orderForm}
             deviceInfo={deviceInfo}
             setOrderForm={setOrderForm}
+            devicePriceInfo={devicePriceInfo}
+            planId={deviceInfo?.plan?.id}
             ref={formRef}
           />
           <OrderReceipt
             setDeviceInfo={setDeviceInfo}
             deviceInfo={deviceInfo}
             orderForm={orderForm}
+            setDevicePriceInfo={setDevicePriceInfo}
+            devicePriceInfo={devicePriceInfo}
             checkUserInfo={checkUserInfo}
             getUserInfo={getUserInfo}
           />
