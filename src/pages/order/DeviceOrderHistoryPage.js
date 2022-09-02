@@ -14,7 +14,6 @@ const OrderSearchResultBlock = styled('div')({
   display: 'flex',
   marginTop: 70,
   flexDirection: 'column',
-
   alignItems: 'center',
   gap: 10,
 });
