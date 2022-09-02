@@ -13,7 +13,7 @@ const CartListEmptyBlock = styled('div')({
   padding: '100px 0',
 });
 
-const EmptyIconWapper = styled('div')(({ theme }) => ({
+const EmptyIconWrapper = styled('div')(({ theme }) => ({
   '& svg': {
     fontSize: 64,
     color: theme.palette.gray3,
@@ -24,20 +24,20 @@ const EmptyPharse = styled('div')({
   fontSize: 24,
 });
 
-const ButtonWapper = styled('div')({
+const ButtonWrapper = styled('div')({
   marginTop: 20,
 });
 
 function CartListEmpty() {
   return (
     <CartListEmptyBlock>
-      <EmptyIconWapper>
+      <EmptyIconWrapper>
         <ErrorOutline />
-      </EmptyIconWapper>
+      </EmptyIconWrapper>
       <EmptyPharse>장바구니에 담은 상품이 없습니다.</EmptyPharse>
-      <ButtonWapper>
+      <ButtonWrapper>
         <RoundBtn content="상품 둘러보기" padding="10px 35px" />
-      </ButtonWapper>
+      </ButtonWrapper>
     </CartListEmptyBlock>
   );
 }
