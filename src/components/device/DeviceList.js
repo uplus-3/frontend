@@ -53,9 +53,12 @@ function DeviceList({
         onChangeSearch={onChangeSearch}
       />
       <DeviceListWrapper>
-        {devices?.map((data) => (
-          <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
-        ))}
+        {loading && 'Loading..'}
+        {!loading &&
+          devices &&
+          devices.map((data) => (
+            <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
+          ))}
       </DeviceListWrapper>
     </DeviceListBlock>
   );

@@ -145,23 +145,29 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
           <DeviceTag tag={tag?.content} key={`${tag}-${idx}`} />
         ))}
       </div>
-      <DeviceName>{deviceInfo?.name}</DeviceName>
       <div>
-        <DeviceInfoFormat>
-          색상 <span>{selectedColor?.name}</span>
-        </DeviceInfoFormat>
-        <DeviceColorChip>
-          {deviceInfo?.colors.map((color, idx) => (
-            <ColorChip
-              key={`color-chip-${idx}`}
-              colorCode={color.rgb}
-              onClick={() => setSelectedColor(color)}
-              className={[selectedColor.name === color.name && 'selected-color-chip'].join(' ')}>
-              {color.stock <= 0 && <div></div>}
-            </ColorChip>
-          ))}
-        </DeviceColorChip>
+        <DeviceName>{deviceInfo?.name}</DeviceName>
+        <DeviceInfoFormat>{deviceInfo?.serialNumber}</DeviceInfoFormat>
       </div>
+      {selectedColor && (
+        <div>
+          <DeviceInfoFormat>
+            색상 <span>{selectedColor?.name}</span>
+          </DeviceInfoFormat>
+
+          <DeviceColorChip>
+            {deviceInfo?.colors.map((color, idx) => (
+              <ColorChip
+                key={`color-chip-${idx}`}
+                colorCode={color.rgb}
+                onClick={() => setSelectedColor(color)}
+                className={[selectedColor.name === color.name && 'selected-color-chip'].join(' ')}>
+                {color?.stock <= 0 && <div></div>}
+              </ColorChip>
+            ))}
+          </DeviceColorChip>
+        </div>
+      )}
       <DeviceInfoFormat>
         저장공간 <span>{deviceInfo?.storage}</span>
       </DeviceInfoFormat>
@@ -202,9 +208,9 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
           height={40}
           width={300}
           onClick={handleOrderClick}
-          disabled={selectedColor.stock === 0}
-          backgroundColor={selectedColor.stock === 0 ? theme.palette.prime + '20' : ''}>
-          {selectedColor.stock > 0 ? '주문하기' : '품절'}
+          disabled={!!!selectedColor?.stock}
+          backgroundColor={!!!selectedColor?.stock ? theme.palette.prime + '20' : ''}>
+          {!!selectedColor?.stock ? '주문하기' : '품절'}
         </RoundBtn>
       </AlignCenterDiv>
       <PriceCompareModal

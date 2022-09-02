@@ -2,7 +2,11 @@ import React from 'react';
 import axios from 'axios';
 
 const client = axios.create({
+<<<<<<< HEAD
   baseURL: `${process.env.REACT_APP_SERVER_URL}/api`,
+=======
+  baseURL: `${process.env.REACT_APP_SERVER_URL}/api`
+>>>>>>> 501b2fe8d605d099d90ee8f50f3af4ce7aedceb8
 });
 
 // 요청 성공시 실행할 함수
