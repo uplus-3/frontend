@@ -36,16 +36,16 @@ const BodyWrapper = styled('div')({
 });
 
 function priceFormat(value) {
-  return `${PriceFormatter(parseInt(value))}원`;
+  return `${PriceFormatter(parseInt(value || 0))}원`;
 }
 
-function DeviceCompareInfoPriceItem({ data, hdata, bdata }) {
+function DeviceCompareInfoPriceItem({ mPrice, hdata, bdata }) {
   return (
     <DeviceCompareInfoPriceItemBlock>
       <HeaderWrapper>
         <dl>
           <dt>{hdata}</dt>
-          {/* <dd>월 {data?.ddevicePrice + data?.}원</dd> */}
+          <dd>월 {priceFormat(mPrice)}</dd>
         </dl>
       </HeaderWrapper>
       <BodyWrapper>
@@ -56,18 +56,6 @@ function DeviceCompareInfoPriceItem({ data, hdata, bdata }) {
               <dd>{priceFormat(data?.value)}</dd>
             </dl>
           ))}
-        {/* <dl>
-          <dt>공시지원금</dt>
-          <dd>월 {priceFormat(data?.price)}원</dd>
-        </dl>
-        <dl>
-          <dt>휴대폰 금액</dt>
-          <dd>월 {data?.dprie + data?.mprice}원</dd>
-        </dl>
-        <dl>
-          <dt>휴대폰 금액</dt>
-          <dd>월 {data?.dprie + data?.mprice}원</dd>
-        </dl> */}
       </BodyWrapper>
     </DeviceCompareInfoPriceItemBlock>
   );

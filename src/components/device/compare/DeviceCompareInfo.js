@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from '@mui/system';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -9,6 +9,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import DeviceCompareInfoPrice from './DeviceCompareInfoPrice';
 import DeviceCompareInfoPlan from './DeviceCompareInfoPlan';
 import DeviceCompareInfoSpec from './DeviceCompareInfoSpec';
+import { COMPARE_LIST } from './DeviceCompareInfoContent';
 
 const DeviceCompareInfoBlock = styled('div')({});
 
@@ -42,6 +43,12 @@ function DeviceCompareInfo({ devices }) {
     setExpanded(isExpanded ? panel : false);
   };
 
+  const handleChangePriceFilter = (index) => {
+    // 요금제, 할인유형이 바뀐것을 감지
+    // 요금제, 할인유형, 할부개월에 따른 가격 정보를 가져온다
+    // redux에서 index의 정보에 덮어쓴다.
+  };
+
   return (
     <DeviceCompareInfoBlock>
       <Accordion expanded={expanded === 0} onChange={handleChange(0)}>
@@ -49,15 +56,11 @@ function DeviceCompareInfo({ devices }) {
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>월 납부금액</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWrapper>
-            <DeviceCompareInfoPrice />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoPrice />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoPrice />
-          </DetailWrapper>
+          {[...devices, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
+            <DetailWrapper key={`${index}-${data?.id}`}>
+              <DeviceCompareInfoPrice device={data} />
+            </DetailWrapper>
+          ))}
         </StyledAccordionDetails>
       </Accordion>
       <Accordion expanded={expanded === 1} onChange={handleChange(1)}>
@@ -65,7 +68,12 @@ function DeviceCompareInfo({ devices }) {
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>할인유형, 요금제</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWrapper>
+          {[...devices, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
+            <DetailWrapper key={`${index}-${data?.id}`}>
+              <DeviceCompareInfoPlan index={index} device={data} />
+            </DetailWrapper>
+          ))}
+          {/* <DetailWrapper>
             <DeviceCompareInfoPlan />
           </DetailWrapper>
           <DetailWrapper>
@@ -73,7 +81,7 @@ function DeviceCompareInfo({ devices }) {
           </DetailWrapper>
           <DetailWrapper>
             <DeviceCompareInfoPlan />
-          </DetailWrapper>
+          </DetailWrapper> */}
         </StyledAccordionDetails>
       </Accordion>
       <Accordion expanded={expanded === 2} onChange={handleChange(2)}>

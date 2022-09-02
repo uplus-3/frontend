@@ -48,6 +48,7 @@ function DeviceListPage({ networkType }) {
     loading: loading['plan'],
     error: error['plan'],
   }));
+
   const devicesInfo = useSelector(({ devices: rDvices, loading, error }) => ({
     devices: filteredDevices(
       rDvices,

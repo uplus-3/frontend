@@ -39,9 +39,14 @@ const devicesSlice = createSlice({
       console.log('get devices!', action.payload);
     },
     getDevicesSuccess: (state, action) => {
-      const { payload } = action.payload;
+      const { payload, networkType } = action.payload;
       console.log('get devices success!', payload?.devices);
       state.devices = payload?.devices;
+      if (payload?.devices && networkType)
+        state.devices = state.devices.map((device) => ({
+          ...device,
+          networkType: parseInt(networkType),
+        }));
     },
     getDevicePrice: (state, action) => {},
     getDevicePriceSuccess: (state, action) => {
@@ -56,6 +61,9 @@ const devicesSlice = createSlice({
       } else {
         state.comparison.push(action.payload);
       }
+    },
+    updateComparisonDevicePrice: (state, action) => {
+      // const
     },
     removeComparison: (state, action) => {
       state.comparison = state.comparison.filter((d) => d.id !== action.payload);

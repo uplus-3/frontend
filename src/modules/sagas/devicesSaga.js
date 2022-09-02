@@ -4,7 +4,7 @@ import { getDeviceList } from '../../lib/api/device';
 import { loadingActions } from '../actions/loadingSlice';
 import { errorActions } from '../actions/errorSlice';
 
-import { getPrice } from '../../lib/api/test';
+import { getDevicePriceList } from '../../lib/api/device';
 
 // Devices 데이터를 가져오는 Saga (api 호출)
 export function* getDevicesSaga(action) {
@@ -23,6 +23,7 @@ export function* getDevicesSaga(action) {
     yield put(
       getDevicesSuccess({
         payload: res.data,
+        networkType,
       }),
     );
   } catch (e) {
@@ -41,7 +42,7 @@ export function* getDevicePricesSaga(action) {
   yield put(startLoading('price'));
   yield put(initError('price'));
   try {
-    const res = yield call(getPrice, {
+    const res = yield call(getDevicePriceList, {
       discountType,
       installmentPeriod,
       networkType,
@@ -53,7 +54,6 @@ export function* getDevicePricesSaga(action) {
       }),
     );
   } catch (e) {
-    console.log(e);
     yield put(setError('price'));
   } finally {
     yield put(finishLoading('price'));
