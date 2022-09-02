@@ -180,8 +180,8 @@ function DeviceOrderHistoryPage(props) {
       showCancelButton: true,
     }).then(async(res) => {
       if (res.isConfirmed) {
-        const response = await deleteOrder(number);
-
+        const response = await deleteOrder(id);
+        navigate('/');
       }
     });
 

@@ -10,17 +10,17 @@ import { useNavigate } from 'react-router-dom';
 import { getOrderInfoByNameAndNumber } from '../../lib/api/order';
 
 const OrderFormBlock = styled('div')({
-  marginTop: 20,
+  marginTop: 150,
+  marginLeft: 200,
   width: 1000,
-  paddingRight: 130,
   display: 'inline-block',
+  textAlign: 'center',
 });
 
 const InputWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   marginLeft: 20,
   alignItems: 'center',
-  marginTop: 10,
   span: {
     fontSize: '0.8rem',
     color: '#00000090',
@@ -29,6 +29,7 @@ const InputWrapper = styled('div')(({ theme }) => ({
 }));
 
 const NameNumberInputWrapper = styled('div')({
+  margintop:100,
   display: 'flex',
   justifyContent: 'space-between',
 });
@@ -47,19 +48,20 @@ const CustomInput = styled(TextField)(({ theme, width }) => ({
   },
 }));
 
-const OrderTitle = styled('div')({
-  fontWeight: 600,
-  fontSize: '1.3rem',
+const OrderTitle = styled('div')(({ theme }) => ({
+  marginBottom : 150,
+  fontSize: '1.875rem',
+  fontWeight: 'bold',
+}));
+
+
+const OrderFormWrapper = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+
+  alignItems: 'center',
 });
 
-const OrderFormWrapper = styled('div')(({ theme }) => ({
-  padding: '25px 40px',
-  '.form-title': {
-    fontWeight: 600,
-    fontSize: '1.1rem',
-    marginBottom: 20,
-  },
-}));
 
 
 function OrderSearchForm({ orderForm, setOrderForm }, ref) {
@@ -149,9 +151,8 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
 
   return (
     <OrderFormBlock>
-      <OrderTitle>주문 조회</OrderTitle>
       <OrderFormWrapper>
-        <div className="form-title">주문 정보</div>
+        <OrderTitle>주문 조회</OrderTitle>
         <NameNumberInputWrapper>
           <InputWrapper>
             <span>이름</span>
@@ -176,7 +177,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
               helperText={numberMessage}
             />
           </InputWrapper>
-          <RoundBtn width={180} height={100} onClick={orderSearch}>
+          <RoundBtn onClick={orderSearch}>
             조회하기
           </RoundBtn>
         </NameNumberInputWrapper>
