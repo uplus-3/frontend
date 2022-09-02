@@ -71,13 +71,13 @@ function DeviceCompareItem({ device, isLink, onClickRemove }) {
         </CloseIconWapper>
       )}
       <DeviceImgWapper isLink onClick={handleGoDetail}>
-        <img src={device ? device.colors[0]?.images[0]?.imageUrl : noDeviceImg} alt="단말기 사진" />
+        <img src={device ? device.colors[0]?.imageUrl : noDeviceImg} alt="단말기 사진" />
       </DeviceImgWapper>
       {device ? (
         <>
           <InfoWapper>
             <p>{device.name}</p>
-            <p>월 {PriceFormatter(device.dprice + device.plan.dprice)}원</p>
+            <p>월 {PriceFormatter(device.ddevicePrice + device.dplanPrice)}원</p>
           </InfoWapper>
         </>
       ) : (

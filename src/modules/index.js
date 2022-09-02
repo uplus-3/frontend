@@ -3,6 +3,7 @@ import { all } from 'redux-saga/effects';
 import devicesSlice from './actions/devicesSlice';
 import planSlice from './actions/planSlice';
 import loadingSlice from './actions/loadingSlice';
+import errorSlice from './actions/errorSlice';
 import { devicesSaga } from './sagas/devicesSaga';
 import { planSaga } from './sagas/planSaga';
 
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   devices: devicesSlice,
   plan: planSlice,
   loading: loadingSlice,
+  error: errorSlice,
 });
 
 export function* rootSaga() {
