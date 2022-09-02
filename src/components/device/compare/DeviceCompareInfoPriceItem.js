@@ -45,17 +45,17 @@ function DeviceCompareInfoPriceItem({ data, hdata, bdata }) {
       <HeaderWrapper>
         <dl>
           <dt>{hdata}</dt>
-          <dd>월 {data?.ddevicePrice + data?.}원</dd>
+          {/* <dd>월 {data?.ddevicePrice + data?.}원</dd> */}
         </dl>
       </HeaderWrapper>
       <BodyWrapper>
-        {bdata && bdata.map(data => (
-        <dl>
-          <dt>{data.label}</dt>
-          <dd>{priceFormat(data?.value)}</dd>
-        </dl>
-
-        ))}
+        {bdata &&
+          bdata.map((data) => (
+            <dl>
+              <dt>{data.label}</dt>
+              <dd>{priceFormat(data?.value)}</dd>
+            </dl>
+          ))}
         {/* <dl>
           <dt>공시지원금</dt>
           <dd>월 {priceFormat(data?.price)}원</dd>
