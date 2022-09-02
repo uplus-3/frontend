@@ -17,6 +17,7 @@ import { NavbarContent } from './NavbarContent';
 import RoundBtn from './RoundBtn';
 import SearchBar from './SearchBar';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const CustomAppbar = styled(AppBar)(({ theme }) => ({
   height: 60,
@@ -113,6 +114,7 @@ const SubItemBtn = styled(ButtonBase)({
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [cookie, setCookie] = useCookies(['cartCount']);
   const theme = useTheme();
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [beforeSelectedMenu, setBeforeSelectedMenu] = useState(null);
@@ -170,7 +172,9 @@ function Navbar() {
           })}
           <SearchBar />
           <CartBtnWrapper onClick={handleCartClick}>
-            <Badge badgeContent={4}>
+            <Badge
+              badgeContent={cookie.cartCount || 0}
+              invisible={!!!cookie.cartCount || cookie.cartCount === '0'}>
               <ShoppingCartOutlined />
             </Badge>
           </CartBtnWrapper>
