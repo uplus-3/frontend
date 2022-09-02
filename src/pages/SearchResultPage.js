@@ -21,6 +21,25 @@ const CountTab = styled('div')({
   color: 'gray',
 });
 
+const EmptyResultWrapper = styled('div')({
+  textAlign: 'center',
+});
+
+const EmptyResultTop = styled('div')({
+  padding: 40,
+  fontSize: 40,
+});
+
+const Highlight = styled('span')(({ theme }) => ({
+  color: theme.palette.prime,
+  fontWeight: 600,
+}));
+
+const EmptyResultBottom = styled('div')({
+  fontSize: 24,
+  color: '#8A8A8A',
+});
+
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.gray3}`,
 
@@ -56,16 +75,33 @@ function SearchResultPage(props) {
 
   return (
     <div>
-      <Title>
-        <Query>"{searchParam}"</Query> 검색결과
-      </Title>
+      {results.length > 0 ? (
+        <Title>
+          <Query>
+            "<Highlight>{searchParam}</Highlight>"
+          </Query>{' '}
+          검색결과
+        </Title>
+      ) : null}
       <Box sx={{ padding: '20px 0' }}>
         <StyledTabs value="mobile">
           <Tab value="mobile" label={networkType === null ? '전체' : networkType + 'G'} />
         </StyledTabs>
       </Box>
-      <CountTab>전체 3개</CountTab>
-      <DeviceSearchList results={results} />
+      {results.length > 0 ? (
+        <CountTab>전체 {results.length}개</CountTab>
+      ) : (
+        <EmptyResultWrapper>
+          <EmptyResultTop>
+            "<Highlight>{searchParam}</Highlight>"검색 결과가 없습니다.
+          </EmptyResultTop>
+          <EmptyResultBottom>
+            <div>단어의 철자 및 띄어쓰기가 정확한지 확인해 보세요.</div>
+            <div>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</div>
+          </EmptyResultBottom>
+        </EmptyResultWrapper>
+      )}
+      {results.length > 0 ? <DeviceSearchList results={results} /> : null}
     </div>
   );
 }
