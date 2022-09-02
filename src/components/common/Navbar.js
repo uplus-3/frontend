@@ -135,6 +135,11 @@ function Navbar() {
     navigate('/cart');
   };
 
+  // 구매 조회 아이콘 클릭시 구매 조회 입력 폼으로 이동
+  const handleOrderClick = () => {
+    navigate('/order/search');
+  };
+
   const compareLocation = (title) => {
     return NavbarContent[title].some((subTitle) => location.pathname.indexOf(subTitle.url) !== -1);
   };
@@ -178,7 +183,7 @@ function Navbar() {
               <ShoppingCartOutlined />
             </Badge>
           </CartBtnWrapper>
-          <BuyBtnWrapper>
+          <BuyBtnWrapper onClick={handleOrderClick}>
             <RoundBtn>구매조회</RoundBtn>
           </BuyBtnWrapper>
         </CustomToolbar>

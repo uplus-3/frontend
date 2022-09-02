@@ -218,13 +218,13 @@ function OrderReceipt({
           <div>정상가</div>
           <div>{PriceFormatter(devicePriceInfo.devicePrice)}원</div>
         </OrderReceiptPrice>
-        {deviceInfo.discountType === 0 && (
+        {devicePriceInfo.discountType === 0 && (
           <OrderReceiptPrice>
             <div>공시 지원금</div>
             <div>-{PriceFormatter(devicePriceInfo.psupport)}원</div>
           </OrderReceiptPrice>
         )}
-        {deviceInfo.discountType === 0 && (
+        {devicePriceInfo.discountType === 0 && (
           <OrderReceiptPrice>
             <div>추가 지원금</div>
             <div>-{PriceFormatter(devicePriceInfo.asupport)}원</div>

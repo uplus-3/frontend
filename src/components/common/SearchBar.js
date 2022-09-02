@@ -208,9 +208,13 @@ function SearchBar() {
 
   // axios 요청을 통해 관련 검색어를 받아옴.
   const getRelatedSearchTerm = async (term) => {
+    if (!!!term) {
+      setRecentSearchTerm([]);
+      return;
+    }
     try {
       const res = await getSearchRelatedKeyword({
-        query: term === '' ? ' ' : term,
+        query: term,
         networkType: searchNetworkType || 0,
       });
       setRelatedSearchTerm(res.data.searchKeywordList || []);
@@ -297,6 +301,8 @@ function SearchBar() {
     if (!!anchorEl && !!searchResult) {
       getRelatedSearchTerm(searchResult);
       console.log('get by searchResult');
+    } else if (!!anchorEl && !!!searchResult) {
+      setRecentSearchTerm([]);
     }
   }, [searchResult]);
   return (

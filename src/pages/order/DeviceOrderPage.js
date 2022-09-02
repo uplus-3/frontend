@@ -35,11 +35,16 @@ function DeviceOrderPage() {
   useEffect(() => {
     const { state } = location;
     if (!!!state) navigate(-1);
+    console.log(state);
     setDeviceInfo({ ...state.deviceInfo, selectedColor: { ...state.selectedColor } });
     setDevicePriceInfo(state.devicePriceInfo);
     //TODO 기본값으로 plan Id 넣어주기
     setOrderForm((prev) => {
-      return { ...prev, colorId: state?.selectedColor?.id };
+      return {
+        ...prev,
+        planId: state?.deviceInfo?.plan?.id || 1,
+        colorId: state?.selectedColor?.id,
+      };
     });
   }, []);
 

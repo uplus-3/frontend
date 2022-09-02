@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import { Button, useTheme } from '@mui/material';
-import SquareBtn from '../common/SquareBtn';
 import RoundBtn from '../common/RoundBtn';
 import PriceCompareModal from '../modal/PriceCompareModal';
 import { PriceFormatter } from '../../lib/utils';
 import useCart from '../../lib/hooks/useCart';
 import PropTypes from 'prop-types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-
-import { useSelector } from 'react-redux';
-import { getPlanInfo } from '../../modules/actions/planSlice';
 
 const DeviceItemInfoBlock = styled('div')({
   width: 600,
@@ -123,9 +119,7 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
   const { addCart } = useCart();
 
   const [compareModalOpen, setCompareModalOpen] = useState(false);
-  console.log(deviceInfo);
   const handleOrderClick = () => {
-    console.log(deviceInfo);
     navigate('/order/mobile', {
       state: { deviceInfo: deviceInfo, selectedColor: selectedColor, devicePriceInfo },
     });
@@ -150,15 +144,20 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
           </DeviceInfoFormat>
 
           <DeviceColorChip>
-            {deviceInfo?.colors.map((color, idx) => (
-              <ColorChip
-                key={`color-chip-${idx}`}
-                colorCode={color.rgb}
-                onClick={() => setSelectedColor(color)}
-                className={[selectedColor.name === color.name && 'selected-color-chip'].join(' ')}>
-                {color?.stock <= 0 && <div></div>}
-              </ColorChip>
-            ))}
+            {deviceInfo?.colors.map((color, idx) => {
+              if (idx % 4) return <></>;
+              return (
+                <ColorChip
+                  key={`color-chip-${idx}`}
+                  colorCode={color.rgb}
+                  onClick={() => setSelectedColor(color)}
+                  className={[selectedColor.name === color.name && 'selected-color-chip'].join(
+                    ' ',
+                  )}>
+                  {color?.stock <= 0 && <div></div>}
+                </ColorChip>
+              );
+            })}
           </DeviceColorChip>
         </div>
       )}

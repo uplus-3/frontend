@@ -125,7 +125,7 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
   const phonenumberValidator = (num) => num.indexOf('-') === -1;
   const theme = useTheme();
   const [name, onNameChange, setName] = useInput('');
-  const [phonenumber, onChangePhonenumber, setPhonenumber] = useInput('');
+  const [phonenumber, setPhonenumber] = useState('');
   const [detailAddress, onChangeDetailAddress] = useInput('');
   const [address, setAddress] = useState('');
   const [openPostcode, setOpenPostCode] = useState(false);
@@ -171,28 +171,15 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
     return {
       name,
       address: `${address} ${detailAddress}`,
-      phoneNumber: phonenumber,
+      phoneNumber: phonenumber.replace(/-/g, ''),
     };
   };
 
-  const getPlanList = () => {
-    return [
-      {
-        id: 1,
-        name: '5G 라이트',
-        price: 55000,
-      },
-      {
-        id: 2,
-        name: '5G 프리미어 에센셜',
-        price: 85000,
-      },
-      {
-        id: 3,
-        name: '5G 슬림+',
-        price: 47000,
-      },
-    ];
+  const onChangePhonenumber = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPhonenumber(PhoneFormatter(value));
   };
 
   useEffect(() => {
@@ -208,7 +195,7 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
   }, [name]);
 
   useEffect(() => {
-    if (!phonenumber || phoneValidator.test(PhoneFormatter(phonenumber))) {
+    if (!phonenumber || phoneValidator.test(phonenumber)) {
       setPhoneMessage('');
     } else {
       setPhoneMessage('유효하지 않은 휴대폰번호입니다.');

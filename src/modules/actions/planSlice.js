@@ -26,25 +26,27 @@ const { actions, reducer } = planSlice;
 
 export const planActions = actions;
 export const getRecommendedPlan = (state, planId) => {
-  let planIdx = planId - 1;
   let networkType = '5g';
   if (state['4g']?.some((plan) => plan.id === planId)) {
     networkType = '4g';
-    planIdx -= state['5g']?.length;
+    planId -= state['5g']?.length;
   }
-  let st = planIdx - 1;
-  let ed = planIdx + 1;
+
+  let st = planId - 1;
+  let ed = planId + 1;
 
   // planId 처음과 끝 예외처리
-  if (planIdx === 0) {
+  if (planId === 1) {
     st = 0;
     ed = 2;
-  } else if (planIdx === state[networkType]?.length - 1) {
-    st = state[networkType]?.length - 3;
-    ed = state[networkType]?.length - 1;
+  } else if (planId === state[networkType]?.length) {
+    st = state[networkType]?.length - 2;
+    ed = state[networkType]?.length;
   }
 
-  return state[networkType]?.slice(st, ed + 1);
+  return state[networkType]
+    ?.filter((plan) => plan.id >= st && plan.id < ed + 1)
+    .sort((a, b) => b.price - a.price);
 };
 
 export const getPlanInfo = (state, planId) => {
