@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import DeviceListHeader from './DeviceListHeader';
 import DeviceListItem from './DeviceListItem';
@@ -18,16 +17,44 @@ const DeviceListWrapper = styled(Box)({
   marginTop: 15,
 });
 
-function DeviceList() {
-  const devices = useSelector((state) => state.devices.devices);
-  const datas = Array.from({ length: 32 }).fill(devices[0]);
+function DeviceList({
+  devices,
+  loading,
+  error,
+  count,
+  searchParams,
+  onChangeFilter,
+  excludeSoldout,
+  setExcludeSoldout,
+  showPrice,
+  setShowPrice,
+  sortbyDir,
+  setSortbyDir,
+  search,
+  onChangeSearch,
+}) {
+  if (error) {
+    return 'error!';
+  }
 
   return (
     <DeviceListBlock>
-      <DeviceListHeader />
+      <DeviceListHeader
+        count={count}
+        searchParams={searchParams}
+        onChangeFilter={onChangeFilter}
+        excludeSoldout={excludeSoldout}
+        setExcludeSoldout={setExcludeSoldout}
+        showPrice={showPrice}
+        setShowPrice={setShowPrice}
+        sortbyDir={sortbyDir}
+        setSortbyDir={setSortbyDir}
+        search={search}
+        onChangeSearch={onChangeSearch}
+      />
       <DeviceListWrapper>
-        {datas.map((data) => (
-          <DeviceListItem data={data} />
+        {devices?.map((data) => (
+          <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
         ))}
       </DeviceListWrapper>
     </DeviceListBlock>

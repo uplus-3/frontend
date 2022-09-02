@@ -23,6 +23,8 @@ import {
   Search,
   CheckCircle,
   CheckCircleOutline,
+  TrendingUp,
+  TrendingDown,
 } from '@mui/icons-material';
 
 const DeviceListHeaderBlock = styled('div')({
@@ -85,18 +87,26 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 }));
 
 // TODO - options 적용
-function DeviceListHeader() {
-  // const sort = useSelector((state) => state.devices.options.sort);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = Object.fromEntries([...searchParams]);
-  const [sortDreiction, setSortDirection] = useState(true); // 정렬 기준 (true : 내림차순, false : 오름차순)
+function DeviceListHeader({
+  count,
+  searchParams,
+  onChangeFilter,
+  excludeSoldout,
+  setExcludeSoldout,
+  showPrice,
+  setShowPrice,
+  sortbyDir,
+  setSortbyDir,
+  search,
+  onChangeSearch,
+}) {
+  // const [sortDreiction, setSortDirection] = useState(true); // 정렬 기준 (true : 내림차순, false : 오름차순)
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(
     (searchParams.get('sortby') &&
       SORT_TYPE.findIndex((type) => type.value === searchParams.get('sortby'))) ||
       0,
   );
-  const [search, handleChangeSearch, setSearch] = useInput('', null);
   const open = Boolean(anchorEl);
 
   const handleClickListItem = (event) => {
@@ -107,10 +117,9 @@ function DeviceListHeader() {
     const data = SORT_TYPE[index].value;
     setSelectedIndex(index);
     setAnchorEl(null);
-    setSortDirection(true);
+    setSortbyDir(true);
 
-    searchParams.set('sortby', data);
-    setSearchParams(searchParams, { replace: true });
+    onChangeFilter('sortby', data);
   };
 
   const handleClose = () => {
@@ -118,16 +127,16 @@ function DeviceListHeader() {
   };
 
   const handleChangeSortDirection = useCallback(() => {
-    setSortDirection((prev) => !prev);
+    setSortbyDir((prev) => !prev);
   }, []);
 
   return (
     <DeviceListHeaderBlock>
-      <div>전체 32건</div>
+      <div>전체 {count}건</div>
       <Stack direction="row" alignItems="center" spacing={3.5}>
         <StyledDeviceSearchInput
           value={search}
-          onChange={handleChangeSearch}
+          onChange={onChangeSearch}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -138,11 +147,25 @@ function DeviceListHeader() {
         />
         <Stack direction="row" spacing={1}>
           <FormControlLabel
-            control={<StyledCheckbox icon={<CheckCircleOutline />} checkedIcon={<CheckCircle />} />}
+            control={
+              <StyledCheckbox
+                icon={<CheckCircleOutline />}
+                checkedIcon={<CheckCircle />}
+                checked={excludeSoldout}
+                onChange={() => setExcludeSoldout((prev) => !prev)}
+              />
+            }
             label="품절 제외"
           />
           <FormControlLabel
-            control={<StyledCheckbox icon={<CheckCircleOutline />} checkedIcon={<CheckCircle />} />}
+            control={
+              <StyledCheckbox
+                icon={<CheckCircleOutline />}
+                checkedIcon={<CheckCircle />}
+                checked={showPrice}
+                onChange={() => setShowPrice((prev) => !prev)}
+              />
+            }
             label="정상가 보기"
           />
         </Stack>
@@ -157,7 +180,7 @@ function DeviceListHeader() {
               aria-expanded={open ? 'true' : undefined}>
               <ListItemText primary={SORT_TYPE[selectedIndex].name} onClick={handleClickListItem} />
               <ListItemIcon onClick={handleChangeSortDirection}>
-                {sortDreiction ? <ExpandMore /> : <ExpandLess />}
+                {sortbyDir ? <TrendingUp /> : <TrendingDown />}
               </ListItemIcon>
             </ListItem>
           </List>
@@ -180,10 +203,6 @@ function DeviceListHeader() {
             ))}
           </Menu>
         </StyledSortWapper>
-        {/* <Stack direction="row" alignItems="center" onClick={handleChangeSortDirection}>
-          <label>출시순</label>
-          {sort ? <ExpandMore /> : <ExpandLess />}
-        </Stack> */}
       </Stack>
     </DeviceListHeaderBlock>
   );
