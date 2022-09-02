@@ -1,4 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getDevicePrice } from '../../../lib/api/device';
+import { devicesActions } from '../../../modules/actions/devicesSlice';
+
 import { styled } from '@mui/system';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -9,7 +13,6 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import DeviceCompareInfoPrice from './DeviceCompareInfoPrice';
 import DeviceCompareInfoPlan from './DeviceCompareInfoPlan';
 import DeviceCompareInfoSpec from './DeviceCompareInfoSpec';
-import { COMPARE_LIST } from './DeviceCompareInfoContent';
 
 const DeviceCompareInfoBlock = styled('div')({});
 
@@ -37,16 +40,33 @@ const DetailWrapper = styled('div')({
 
 // TODO - expanded 다 되도록 수정
 function DeviceCompareInfo({ devices }) {
+  const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(0);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const handleChangePriceFilter = (index) => {
+  const handleChangePriceFilter = async (deviceId, planId, discountType, installmentPeriod) => {
     // 요금제, 할인유형이 바뀐것을 감지
     // 요금제, 할인유형, 할부개월에 따른 가격 정보를 가져온다
     // redux에서 index의 정보에 덮어쓴다.
+
+    try {
+      const res = await getDevicePrice({
+        deviceId,
+        discountType,
+        installmentPeriod,
+        planId,
+      });
+      console.log(res.data);
+      dispatch(
+        devicesActions.updateComparisonDevicePrice({
+          deviceId,
+          price: res.data,
+        }),
+      );
+    } catch (e) {}
   };
 
   return (
@@ -70,18 +90,13 @@ function DeviceCompareInfo({ devices }) {
         <StyledAccordionDetails>
           {[...devices, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
             <DetailWrapper key={`${index}-${data?.id}`}>
-              <DeviceCompareInfoPlan index={index} device={data} />
+              <DeviceCompareInfoPlan
+                index={index}
+                device={data}
+                onChangePriceFilter={handleChangePriceFilter}
+              />
             </DetailWrapper>
           ))}
-          {/* <DetailWrapper>
-            <DeviceCompareInfoPlan />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoPlan />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoPlan />
-          </DetailWrapper> */}
         </StyledAccordionDetails>
       </Accordion>
       <Accordion expanded={expanded === 2} onChange={handleChange(2)}>

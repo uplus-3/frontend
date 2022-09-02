@@ -22,7 +22,7 @@ function DeviceCompareInfoPlanItem({
   discountTypeMenuList,
   planIdMenuList,
   registType,
-  onChangeR,
+  onChangeRT,
   installmentPeriod,
   onChangeIP,
   discountType,
@@ -32,25 +32,34 @@ function DeviceCompareInfoPlanItem({
 }) {
   return (
     <DeviceCompareInfoPlanItemBlock>
-      <DeviceCompareItemSelect value={registType} onChange={onChangeR}>
-        <MenuItem value="기기변경">기기변경</MenuItem>
-        <MenuItem value="번호이동">번호이동</MenuItem>
-        <MenuItem value="신규가입">신규가입</MenuItem>
+      <DeviceCompareItemSelect value={registType} onChange={onChangeRT}>
+        <MenuItem value={0}>기기변경</MenuItem>
+        <MenuItem value={1}>번호이동</MenuItem>
+        <MenuItem value={2}>신규가입</MenuItem>
       </DeviceCompareItemSelect>
       <DeviceCompareItemSelect value={installmentPeriod} onChange={onChangeIP}>
         {installmentPeriodMenuList &&
-          installmentPeriodMenuList.map((menu) => <MenuItem value={menu.value}>일시불</MenuItem>)}
-        {/* <MenuItem value={12}>12개월</MenuItem>
-        <MenuItem value={24}>24개월</MenuItem>
-        <MenuItem value={36}>36개월</MenuItem> */}
+          installmentPeriodMenuList.map((menu) => (
+            <MenuItem key={menu.value} value={menu.value}>
+              {menu.name}
+            </MenuItem>
+          ))}
       </DeviceCompareItemSelect>
       <DeviceCompareItemSelect value={discountType} onChange={onChangeDT}>
         {discountTypeMenuList &&
-          discountTypeMenuList.map((menu) => <MenuItem value={menu.value}>24개월</MenuItem>)}
+          discountTypeMenuList.map((menu) => (
+            <MenuItem key={menu.value} value={menu.value}>
+              {menu.name}
+            </MenuItem>
+          ))}
       </DeviceCompareItemSelect>
       <DeviceCompareItemSelect value={planId} onChange={onChangePI}>
         {planIdMenuList &&
-          planIdMenuList.map((menu) => <MenuItem value={menu.id}>{menu.name}</MenuItem>)}
+          planIdMenuList.map((menu) => (
+            <MenuItem key={menu.id} value={menu.id}>
+              {menu.name}
+            </MenuItem>
+          ))}
       </DeviceCompareItemSelect>
     </DeviceCompareInfoPlanItemBlock>
   );

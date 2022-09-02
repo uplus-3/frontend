@@ -63,7 +63,14 @@ const devicesSlice = createSlice({
       }
     },
     updateComparisonDevicePrice: (state, action) => {
-      // const
+      const { deviceId, price } = action.payload;
+      const idx = state.comparison.findIndex((d) => d.id === deviceId);
+      if (idx) {
+        state.comparison[idx] = {
+          ...state.comparison[idx],
+          ...price,
+        };
+      }
     },
     removeComparison: (state, action) => {
       state.comparison = state.comparison.filter((d) => d.id !== action.payload);

@@ -1,18 +1,4 @@
 export const COMPARE_LIST = {
-  registType: [
-    {
-      name: '기기변동',
-      value: '기기변동',
-    },
-    {
-      name: '번호이동',
-      value: '번호이동',
-    },
-    {
-      name: '신규가입',
-      value: '신규가입',
-    },
-  ],
   installmentPeriod: [
     {
       name: '일시불',
@@ -29,6 +15,16 @@ export const COMPARE_LIST = {
     {
       name: '36개월',
       value: 36,
+    },
+  ],
+  discount: [
+    {
+      name: '공시지원금',
+      value: 0,
+    },
+    {
+      name: '선택약정24개월',
+      value: 1,
     },
   ],
 };
