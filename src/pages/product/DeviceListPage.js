@@ -66,7 +66,7 @@ function DeviceListPage({ networkType }) {
 
   useEffect(() => {
     // 요금제 정보 불러오기
-    dispatch(planActions.getPlanList(networkType));
+    // dispatch(planActions.getPlanList(networkType));
     // 네트워크별 단말기 리스트 불러오기
     dispatch(
       devicesActions.getDevice({
