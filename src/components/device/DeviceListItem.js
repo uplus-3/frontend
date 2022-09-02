@@ -20,7 +20,7 @@ const DeviceListItemBlock = styled('div')(({ theme }) => ({
   borderRadius: '0.875rem',
 }));
 
-const ItemTagWapper = styled(Box)({
+const ItemTagWrapper = styled(Box)({
   position: 'absolute',
   top: 5,
   left: 10,
@@ -35,7 +35,7 @@ const ItemTagWapper = styled(Box)({
   },
 });
 
-const ItemImageWapper = styled(Box)({
+const ItemImageWrapper = styled(Box)({
   width: '100%',
   height: 280,
   borderRadius: '0.875rem',
@@ -45,7 +45,7 @@ const ItemImageWapper = styled(Box)({
   cursor: 'pointer',
 });
 
-const ItemColorWapper = styled(Box)(({ theme }) => ({
+const ItemColorWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -69,7 +69,7 @@ const ItemColorWapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ItemInfoWapper = styled(Box)({
+const ItemInfoWrapper = styled(Box)({
   padding: '1.5rem',
   '& .p-name': {
     fontSize: '1.25rem',
@@ -93,7 +93,7 @@ const ItemInfoWapper = styled(Box)({
   },
 });
 
-const ItemCompareWapper = styled(Box)(({ theme }) => ({
+const ItemCompareWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'flex-end',
   gap: 10,
@@ -121,7 +121,7 @@ const ItemCompareWapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-const AddCartIconWapper = styled('div')(({ theme }) => ({
+const AddCartIconWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: '0 5px',
@@ -163,18 +163,18 @@ function DeviceListItem({ data, showPrice, searchParams }) {
 
   return (
     <DeviceListItemBlock>
-      <ItemTagWapper>
+      <ItemTagWrapper>
         {data?.tags.map((tag) => (
           <span key={tag.content} style={{ background: tag.rgb }}>
             {tag.content}
           </span>
         ))}
-      </ItemTagWapper>
-      <ItemImageWapper
+      </ItemTagWrapper>
+      <ItemImageWrapper
         onClick={handleGoDetailPage}
         style={{ backgroundImage: `url(${data?.colors[cIdx]?.imageUrl})` }}
       />
-      <ItemColorWapper>
+      <ItemColorWrapper>
         <ul className="colors">
           {data?.colors.map((color, index) => (
             <li
@@ -184,8 +184,8 @@ function DeviceListItem({ data, showPrice, searchParams }) {
               onClick={() => handleClickColor(index)}></li>
           ))}
         </ul>
-      </ItemColorWapper>
-      <ItemInfoWapper>
+      </ItemColorWrapper>
+      <ItemInfoWrapper>
         <div onClick={handleGoDetailPage} className="p-name">
           {data?.name}
         </div>
@@ -201,12 +201,12 @@ function DeviceListItem({ data, showPrice, searchParams }) {
             월 {PriceFormatter((data?.ddevicePrice || 0) + (data?.dplanPrice || 0))}원
           </div>
         </div>
-      </ItemInfoWapper>
+      </ItemInfoWrapper>
       <Divider />
-      <ItemCompareWapper>
-        <AddCartIconWapper className="add-btn">
+      <ItemCompareWrapper>
+        <AddCartIconWrapper className="add-btn">
           <ShoppingCartOutlined />
-        </AddCartIconWapper>
+        </AddCartIconWrapper>
         <div
           className={classnames('add-btn', 'compare-add-btn', {
             selected: isSelected,
@@ -214,7 +214,7 @@ function DeviceListItem({ data, showPrice, searchParams }) {
           onClick={handleClickCompareBtn}>
           비교하기
         </div>
-      </ItemCompareWapper>
+      </ItemCompareWrapper>
     </DeviceListItemBlock>
   );
 }

@@ -26,7 +26,7 @@ const DeviceCompareTabBlock = styled('div')(({ theme }) => ({
   },
 }));
 
-const HeaderWapper = styled('div')(({ theme }) => ({
+const HeaderWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -47,7 +47,7 @@ const OpenIcon = styled('span')({
   },
 });
 
-const BodyWapper = styled('div')({
+const BodyWrapper = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -55,7 +55,7 @@ const BodyWapper = styled('div')({
   padding: '17px 30px 17px 30px',
 });
 
-const DeviceWapper = styled('ul')({
+const DeviceWrapper = styled('ul')({
   display: 'flex',
   justifyContent: 'space-between',
   gap: 20,
@@ -67,7 +67,7 @@ const DeviceWapper = styled('ul')({
   },
 });
 
-const CompareButtonWapper = styled('div')({
+const CompareButtonWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -96,19 +96,19 @@ function DeviceCompareTab({ devices }) {
 
   return (
     <DeviceCompareTabBlock className={classnames({ active: open })}>
-      <HeaderWapper>
+      <HeaderWrapper>
         <span>비교하기({devices.length})</span>
         <OpenIcon onClick={handleClickOpen}>{open ? <ExpandMore /> : <ExpandLess />}</OpenIcon>
-      </HeaderWapper>
-      <BodyWapper>
-        <DeviceWapper>
+      </HeaderWrapper>
+      <BodyWrapper>
+        <DeviceWrapper>
           {[...devices, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
             <li key={`${index}-${data?.id}`}>
               <DeviceCompareItem device={data} onClickRemove={handleClickRemove} />
             </li>
           ))}
-        </DeviceWapper>
-        <CompareButtonWapper>
+        </DeviceWrapper>
+        <CompareButtonWrapper>
           <RoundBtn
             content="비교하기"
             width="120px"
@@ -117,8 +117,8 @@ function DeviceCompareTab({ devices }) {
             onClick={() => setModalOpen(true)}
           />
           <ResetButton onClick={handleClickRemoveAll}>전체삭제</ResetButton>
-        </CompareButtonWapper>
-      </BodyWapper>
+        </CompareButtonWrapper>
+      </BodyWrapper>
       <DeviceCompareModal open={modalOpen} setOpen={setModalOpen} />
     </DeviceCompareTabBlock>
   );

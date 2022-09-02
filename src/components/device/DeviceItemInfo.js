@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import { Button, useTheme } from '@mui/material';
-import SquareBtn from '../common/SquareBtn';
 import RoundBtn from '../common/RoundBtn';
 import PriceCompareModal from '../modal/PriceCompareModal';
 import { PriceFormatter } from '../../lib/utils';
-
+import useCart from '../../lib/hooks/useCart';
 import PropTypes from 'prop-types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+
 const DeviceItemInfoBlock = styled('div')({
   width: 600,
   marginTop: 150,
@@ -104,45 +104,33 @@ const CompareBtn = styled(Button)(({ theme }) => ({
   },
 }));
 
-const DeviceTag = ({ tag }) => {
-  const color = {
-    인기: '#D44602',
-    예약가입: '#5257A1',
-    최신: '#7C37D5',
-    'U+단독': '#522EA7',
-    가격인하: '#287DA0',
-    일시품절: '#000000',
-    지원금확대: '#D62663',
-  };
+const DeviceTag = styled('span')(({ color }) => ({
+  fontSize: '0.8rem',
+  padding: 4,
+  margin: 3,
+  backgroundColor: color,
+  color: '#FFFFFF',
+}));
 
-  return (
-    <span
-      style={{
-        fontSize: '0.8rem',
-        padding: 3,
-        backgroundColor: color[tag] || '#000000',
-        color: '#FFFFFF',
-      }}>
-      {tag}
-    </span>
-  );
-};
-
-function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
+function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePriceInfo }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { addCart } = useCart();
 
   const [compareModalOpen, setCompareModalOpen] = useState(false);
-
   const handleOrderClick = () => {
-    navigate('/order/mobile', { state: { ...deviceInfo, selectedColor: selectedColor } });
+    navigate('/order/mobile', {
+      state: { deviceInfo: deviceInfo, selectedColor: selectedColor, devicePriceInfo },
+    });
   };
   return (
     <DeviceItemInfoBlock>
       <div>
         {deviceInfo?.tags?.map((tag, idx) => (
-          <DeviceTag tag={tag?.content} key={`${tag}-${idx}`} />
+          <DeviceTag key={`${tag}-${idx}`} color={tag.rgb}>
+            {tag.content}
+          </DeviceTag>
         ))}
       </div>
       <div>
@@ -156,15 +144,20 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
           </DeviceInfoFormat>
 
           <DeviceColorChip>
-            {deviceInfo?.colors.map((color, idx) => (
-              <ColorChip
-                key={`color-chip-${idx}`}
-                colorCode={color.rgb}
-                onClick={() => setSelectedColor(color)}
-                className={[selectedColor.name === color.name && 'selected-color-chip'].join(' ')}>
-                {color?.stock <= 0 && <div></div>}
-              </ColorChip>
-            ))}
+            {deviceInfo?.colors.map((color, idx) => {
+              if (idx % 4) return <></>;
+              return (
+                <ColorChip
+                  key={`color-chip-${idx}`}
+                  colorCode={color.rgb}
+                  onClick={() => setSelectedColor(color)}
+                  className={[selectedColor.name === color.name && 'selected-color-chip'].join(
+                    ' ',
+                  )}>
+                  {color?.stock <= 0 && <div></div>}
+                </ColorChip>
+              );
+            })}
           </DeviceColorChip>
         </div>
       )}
@@ -174,29 +167,39 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor }) {
       <DeviceSelectResult>
         <CompareBtn onClick={() => setCompareModalOpen(true)}>비교하기</CompareBtn>
         <DeviceSelectResultTitle>
-          월 {PriceFormatter(deviceInfo?.plan?.dprice + deviceInfo?.dprice)}원
+          월 {PriceFormatter(devicePriceInfo?.mdevicePrice + devicePriceInfo?.mplanPrice)}원
         </DeviceSelectResultTitle>
-        {deviceInfo?.plan?.name}, {deviceInfo?.psupport > 0 ? '공시지원금' : '선택약정 (24개월)'}{' '}
-        기준
+        {/* TODO price에 pian 이름 받기 */}
+        {deviceInfo?.plan?.name},
+        {deviceInfo?.discountType === 0 ? ' 공시지원금' : ' 선택약정 (24개월)'} 기준
         <DevicePriceTable>
           <tbody>
             <tr>
               <td>휴대폰</td>
-              <td>{PriceFormatter(deviceInfo?.dprice)}원</td>
+              <td>{PriceFormatter(devicePriceInfo?.ddevicePrice)}원</td>
             </tr>
             <tr>
               <td>통신료</td>
-              <td>{PriceFormatter(deviceInfo?.plan?.dprice)}원</td>
+              <td>{PriceFormatter(devicePriceInfo?.dplanPrice)}원</td>
             </tr>
             <tr>
               <td>정상가</td>
-              <td>{PriceFormatter(deviceInfo?.price)}원</td>
+              <td>{PriceFormatter(devicePriceInfo?.devicePrice)}원</td>
             </tr>
           </tbody>
         </DevicePriceTable>
       </DeviceSelectResult>
       <AlignCenterDiv>
         <RoundBtn
+          onClick={() =>
+            addCart({
+              colorId: selectedColor?.colorId || 1,
+              discountType: deviceInfo.discountType,
+              installmentPeriod: searchParams.get('installment-period') || 24,
+              planId: deviceInfo?.plan.id || 1,
+              registrationType: 0,
+            })
+          }
           height={40}
           width={100}
           backgroundColor="#FFFFFF"

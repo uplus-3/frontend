@@ -1,18 +1,24 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import CartListEmpty from './CartListEmpty';
 import CartLIstItem from './CartLIstItem';
 
 const CartListBlock = styled('div')({});
 
-function CartList() {
+function CartList({ cartList, setCartList }) {
   return (
-    <CartListBlock>
-      <CartLIstItem />
-      <CartLIstItem />
-      <CartLIstItem />
-      {/* <CartListEmpty /> */}
-    </CartListBlock>
+    <>
+      {cartList && (
+        <CartListBlock>
+          {cartList.map((cartItem) => (
+            <CartLIstItem
+              key={`cart-${cartItem.id}`}
+              setCartList={setCartList}
+              cartItem={cartItem}
+            />
+          ))}
+        </CartListBlock>
+      )}
+    </>
   );
 }
 
