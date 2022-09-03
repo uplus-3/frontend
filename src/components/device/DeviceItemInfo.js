@@ -60,7 +60,7 @@ const ColorChip = styled('div')(({ colorCode }) => ({
   boxShadow: '0px 0px 6px 1px rgb(0 0 0 / 20%)',
   div: {
     position: 'absolute',
-    top: 15,
+    top: 14,
     left: -10,
     width: 50,
     height: 3,
@@ -145,7 +145,6 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
 
           <DeviceColorChip>
             {deviceInfo?.colors.map((color, idx) => {
-              if (idx % 4) return <></>;
               return (
                 <ColorChip
                   key={`color-chip-${idx}`}
@@ -169,7 +168,6 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
         <DeviceSelectResultTitle>
           월 {PriceFormatter(devicePriceInfo?.mdevicePrice + devicePriceInfo?.mplanPrice)}원
         </DeviceSelectResultTitle>
-        {/* TODO price에 pian 이름 받기 */}
         {deviceInfo?.plan?.name},
         {deviceInfo?.discountType === 0 ? ' 공시지원금' : ' 선택약정 (24개월)'} 기준
         <DevicePriceTable>

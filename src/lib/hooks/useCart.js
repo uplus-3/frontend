@@ -25,7 +25,7 @@ function useCart() {
         planId,
         registrationType,
       });
-
+      console.log(res);
       let date = new Date();
       date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
       setCookie('cartCount', res.data.carts.length, {
@@ -49,6 +49,7 @@ function useCart() {
           }
         });
     } catch (e) {
+      console.log(e.response);
       cAlert.fire({
         title: '장바구니에 담을 수 없습니다.',
       });

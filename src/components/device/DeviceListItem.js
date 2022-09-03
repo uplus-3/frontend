@@ -12,6 +12,7 @@ import classnames from 'classnames';
 import { PriceFormatter } from '../../lib/utils';
 import { devicesActions } from '../../modules/actions/devicesSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import useCart from '../../lib/hooks/useCart';
 
 const DeviceListItemBlock = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -131,6 +132,7 @@ function DeviceListItem({ data, showPrice, searchParams }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const Calert = useAlert();
+  const { addCart } = useCart();
   const comparison = useSelector((state) => state.devices.comparison);
   const [cIdx, setCIdx] = useState(0);
   const isSelected = !!comparison.find((d) => d.id === data.id);
@@ -148,6 +150,16 @@ function DeviceListItem({ data, showPrice, searchParams }) {
     navigate({
       pathname: `./${data.serialNumber}`,
       search: `?id=${data.id}&${queryString}`,
+    });
+  };
+
+  const handleAddCart = () => {
+    addCart({
+      colorId: data.colors[cIdx].id,
+      discountType: data.discountType,
+      installmentPeriod: 24,
+      planId: searchParams.get('plan') || -1,
+      registrationType: 0,
     });
   };
 
@@ -204,7 +216,7 @@ function DeviceListItem({ data, showPrice, searchParams }) {
       </ItemInfoWrapper>
       <Divider />
       <ItemCompareWrapper>
-        <AddCartIconWrapper className="add-btn">
+        <AddCartIconWrapper onClick={handleAddCart} className="add-btn">
           <ShoppingCartOutlined />
         </AddCartIconWrapper>
         <div
