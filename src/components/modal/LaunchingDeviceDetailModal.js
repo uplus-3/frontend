@@ -5,6 +5,7 @@ import { PriceFormatter } from '../../lib/utils';
 
 const LaunchingDeviceDetailModalBlock = styled(Dialog)({
   '.MuiDialog-paper': {
+    width: 500,
     padding: 20,
   },
 });
@@ -43,7 +44,7 @@ function LaunchingDeviceDetailModal({ open, setOpen, imgUrl, data }) {
       <SpecBlock>
         <dl>
           <dt>출시가</dt>
-          <dd>{PriceFormatter(data?.price)}</dd>
+          <dd>{PriceFormatter(data?.price)}원</dd>
         </dl>
         <dl>
           <dt>출시일</dt>
@@ -55,15 +56,15 @@ function LaunchingDeviceDetailModal({ open, setOpen, imgUrl, data }) {
         </dl>
         <dl>
           <dt>용량</dt>
-          <dd></dd>
+          <dd>{data?.storage}</dd>
         </dl>
         <dl>
           <dt>CPU</dt>
-          <dd></dd>
+          <dd>{data?.cpu}</dd>
         </dl>
         <dl>
           <dt>디스플레이</dt>
-          <dd></dd>
+          <dd>{data?.display}</dd>
         </dl>
       </SpecBlock>
     </LaunchingDeviceDetailModalBlock>

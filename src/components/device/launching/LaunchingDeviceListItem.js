@@ -157,7 +157,7 @@ function LaunchingDeviceListItem({ data, onClickDetail }) {
             <div>준비중</div>
             <div>준비중</div>
           </div>
-          <div className="p-price">출시가 {PriceFormatter(data?.price)}원</div>
+          <div className="p-price">준비중</div>
         </div>
       </ItemInfoWrapper>
       <Divider />

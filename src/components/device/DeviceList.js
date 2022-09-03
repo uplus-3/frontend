@@ -33,6 +33,7 @@ function DeviceList({
   setExcludeSoldout,
   showPrice,
   setShowPrice,
+  sortby,
   sortbyDir,
   setSortbyDir,
   search,
@@ -69,13 +70,21 @@ function DeviceList({
         {loading && 'Loading..'}
         {!loading &&
           devices &&
-          devices.map((data) => (
+          devices.map((data, index) => (
             <>
-              {launchingDevices &&
-              !!launchingDevices.find((d) => d.serialNumber === data.serialNumber) ? (
-                <LaunchingDeviceListItem data={data} onClickDetail={handleClickDetail} />
+              {!!data?.isLaunching ? (
+                <LaunchingDeviceListItem
+                  key={`${index}-${data.serialNumber}`}
+                  data={data}
+                  onClickDetail={handleClickDetail}
+                />
               ) : (
-                <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
+                <DeviceListItem
+                  key={`${index}-${data.serialNumber}`}
+                  data={data}
+                  showPrice={showPrice}
+                  searchParams={searchParams}
+                />
               )}
             </>
           ))}
