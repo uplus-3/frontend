@@ -3,6 +3,7 @@ import { styled } from '@mui/system';
 import { ErrorOutline } from '@mui/icons-material';
 
 import RoundBtn from '../common/RoundBtn';
+import { useNavigate } from 'react-router-dom';
 
 const CartListEmptyBlock = styled('div')({
   display: 'flex',
@@ -29,6 +30,7 @@ const ButtonWrapper = styled('div')({
 });
 
 function CartListEmpty() {
+  const navigate = useNavigate();
   return (
     <CartListEmptyBlock>
       <EmptyIconWrapper>
@@ -36,7 +38,11 @@ function CartListEmpty() {
       </EmptyIconWrapper>
       <EmptyPharse>장바구니에 담은 상품이 없습니다.</EmptyPharse>
       <ButtonWrapper>
-        <RoundBtn content="상품 둘러보기" padding="10px 35px" />
+        <RoundBtn
+          onClick={() => navigate('/5g-phone')}
+          content="상품 둘러보기"
+          padding="10px 35px"
+        />
       </ButtonWrapper>
     </CartListEmptyBlock>
   );

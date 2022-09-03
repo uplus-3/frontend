@@ -319,7 +319,9 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
                 color={plan.id === orderForm.planId && theme.palette.prime}
                 key={`${plan.id}-${plan.name}`}
                 width={660}
-                onClick={() => setOrderForm((prev) => ({ ...prev, planId: plan.id }))}>
+                onClick={() =>
+                  setOrderForm((prev) => ({ ...prev, planId: plan.id, planName: plan.name }))
+                }>
                 <PlanContent>
                   <div>{plan.name}</div>
                   <div className="plan-price">{PriceFormatter(plan.price)}원</div>

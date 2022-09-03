@@ -5,9 +5,9 @@ export const NavbarContent = {
       url: '5g-phone',
       children: [
         { name: '전체', url: '' },
-        { name: '삼성', url: '/?company=samsung' },
-        { name: '애플', url: '/?company=apple' },
-        { name: '기타', url: '/?company=etc' },
+        { name: '삼성', url: '/?company=삼성' },
+        { name: '애플', url: '/?company=애플' },
+        { name: '기타', url: '/?company=기타' },
       ],
     },
     {
@@ -15,9 +15,9 @@ export const NavbarContent = {
       url: '4g-phone',
       children: [
         { name: '전체', url: '' },
-        { name: '삼성', url: '/?company=samsung' },
-        { name: '애플', url: '/?company=apple' },
-        { name: '기타', url: '/?company=etc' },
+        { name: '삼성', url: '/?company=삼성' },
+        { name: '애플', url: '/?company=애플' },
+        { name: '기타', url: '/?company=기타' },
       ],
     },
   ],

@@ -30,6 +30,7 @@ function DeviceDetailPage() {
         : parseInt(searchParams.get('plan')),
     );
   });
+
   // 서버와 통신해 디바이스 정보를 가져옴
   const getDeviceDetailInfo = async () => {
     try {
