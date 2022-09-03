@@ -1,4 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getDevicePrice } from '../../../lib/api/device';
+import { devicesActions } from '../../../modules/actions/devicesSlice';
+
 import { styled } from '@mui/system';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -34,61 +38,77 @@ const DetailWrapper = styled('div')({
   width: '100%',
 });
 
+// TODO - expanded 다 되도록 수정
 function DeviceCompareInfo({ devices }) {
-  const [expanded, setExpanded] = useState(0);
+  const dispatch = useDispatch();
+  const [expanded, setExpanded] = useState([0]);
 
   const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
+    setExpanded(isExpanded ? [...expanded, panel] : expanded.filter((e) => e === panel));
+
+    // setExpanded(isExpanded ? panel : false);
   };
+
+  const handleChangePriceFilter = useCallback(
+    async (deviceId, planId, discountType, installmentPeriod) => {
+      try {
+        const res = await getDevicePrice({
+          deviceId,
+          discountType,
+          installmentPeriod,
+          planId,
+        });
+        dispatch(
+          devicesActions.updateComparisonDevicePrice({
+            deviceId,
+            price: res.data,
+          }),
+        );
+      } catch (e) {}
+    },
+    [dispatch],
+  );
 
   return (
     <DeviceCompareInfoBlock>
-      <Accordion expanded={expanded === 0} onChange={handleChange(0)}>
+      <Accordion expanded={expanded.includes[0]} onChange={handleChange(0)}>
         <StyledAccordionSummary expandIcon={<ExpandMore />}>
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>월 납부금액</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWrapper>
-            <DeviceCompareInfoPrice />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoPrice />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoPrice />
-          </DetailWrapper>
+          {[...devices, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
+            <DetailWrapper key={`${index}-${data?.id}`}>
+              <DeviceCompareInfoPrice device={data} />
+            </DetailWrapper>
+          ))}
         </StyledAccordionDetails>
       </Accordion>
-      <Accordion expanded={expanded === 1} onChange={handleChange(1)}>
+      <Accordion expanded={expanded.includes[1]} onChange={handleChange(1)}>
         <StyledAccordionSummary expandIcon={<ExpandMore />}>
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>할인유형, 요금제</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWrapper>
-            <DeviceCompareInfoPlan />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoPlan />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoPlan />
-          </DetailWrapper>
+          {[...devices, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
+            <DetailWrapper key={`${index}-${data?.id}`}>
+              <DeviceCompareInfoPlan
+                index={index}
+                device={data}
+                onChangePriceFilter={handleChangePriceFilter}
+              />
+            </DetailWrapper>
+          ))}
         </StyledAccordionDetails>
       </Accordion>
-      <Accordion expanded={expanded === 2} onChange={handleChange(2)}>
+      <Accordion expanded={expanded.includes[2]} onChange={handleChange(2)}>
         <StyledAccordionSummary expandIcon={<ExpandMore />}>
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>기기 성능</Typography>
         </StyledAccordionSummary>
         <StyledAccordionDetails>
-          <DetailWrapper>
-            <DeviceCompareInfoSpec />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoSpec />
-          </DetailWrapper>
-          <DetailWrapper>
-            <DeviceCompareInfoSpec />
-          </DetailWrapper>
+          {[...devices, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
+            <DetailWrapper key={`${index}-${data?.id}`}>
+              <DeviceCompareInfoSpec device={data} />
+            </DetailWrapper>
+          ))}
         </StyledAccordionDetails>
       </Accordion>
     </DeviceCompareInfoBlock>

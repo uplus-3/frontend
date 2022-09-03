@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import classnames from 'classnames';
 
 import { styled } from '@mui/system';
@@ -9,6 +9,7 @@ import { Close } from '@mui/icons-material';
 import DeviceCompareItem from '../device/compare/DeviceCompareItem';
 import DeviceCompareInfo from '../device/compare/DeviceCompareInfo';
 import DeviceCompareItemSelector from '../device/compare/DeviceCompareItemSelector';
+import { devicesActions } from '../../modules/actions/devicesSlice';
 
 const DeviceCompareModalBlock = styled(Dialog)({
   '& .MuiDialogContent-root': {
@@ -64,6 +65,7 @@ const DeviceListWrapper = styled('ul')({
 });
 
 function DeviceCompareModal({ open, setOpen }) {
+  const dispatch = useDispatch();
   const [shadow, setShadow] = useState(false);
   const comparison = useSelector((state) => state.devices.comparison);
 
@@ -80,6 +82,10 @@ function DeviceCompareModal({ open, setOpen }) {
     }
   };
 
+  const handleClickRemove = useCallback((id) => {
+    dispatch(devicesActions.removeComparison(id));
+  }, []);
+
   return (
     <DeviceCompareModalBlock open={open} onClose={handleClose} z>
       <HeaderWrapper>
@@ -91,19 +97,21 @@ function DeviceCompareModal({ open, setOpen }) {
       <BodyWrapper onScroll={onScroll} dividers={true}>
         <DeviceListWrapper className={classnames({ shadow })}>
           {[...comparison, ...Array(3).fill(null)].slice(0, 3).map((data, index) => (
-            <li key={`${index}-${data?.id}`}>
-              <DeviceCompareItem device={data} isLink={!!data} />
-            </li>
+            <>
+              {!!data ? (
+                <li key={`${index}-${data?.id}`}>
+                  <DeviceCompareItem
+                    device={data}
+                    isLink={!!data}
+                    onClickRemove={handleClickRemove}
+                    isModal={true}
+                  />
+                </li>
+              ) : (
+                <DeviceCompareItemSelector />
+              )}
+            </>
           ))}
-          {/* <li>
-            <DeviceCompareItem data={true} isLink={true} />
-          </li>
-          <li>
-            <DeviceCompareItem data={true} />
-          </li>
-          <li>
-            <DeviceCompareItemSelector />
-          </li> */}
         </DeviceListWrapper>
         <DeviceCompareInfo devices={comparison}></DeviceCompareInfo>
       </BodyWrapper>

@@ -4,7 +4,7 @@ import { getDeviceList } from '../../lib/api/device';
 import { loadingActions } from '../actions/loadingSlice';
 import { errorActions } from '../actions/errorSlice';
 
-import { getPrice } from '../../lib/api/test';
+import { getDevicePriceList, getDeviceSimple } from '../../lib/api/device';
 
 // Devices 데이터를 가져오는 Saga (api 호출)
 export function* getDevicesSaga(action) {
@@ -23,6 +23,7 @@ export function* getDevicesSaga(action) {
     yield put(
       getDevicesSuccess({
         payload: res.data,
+        networkType,
       }),
     );
   } catch (e) {
@@ -41,7 +42,7 @@ export function* getDevicePricesSaga(action) {
   yield put(startLoading('price'));
   yield put(initError('price'));
   try {
-    const res = yield call(getPrice, {
+    const res = yield call(getDevicePriceList, {
       discountType,
       installmentPeriod,
       networkType,
@@ -53,19 +54,35 @@ export function* getDevicePricesSaga(action) {
       }),
     );
   } catch (e) {
-    console.log(e);
     yield put(setError('price'));
   } finally {
     yield put(finishLoading('price'));
   }
 }
 
+export function* getDeviceSimpleSaga(action) {
+  const { getDeviceSimpleSuccess } = devicesActions;
+  const { startLoading, finishLoading } = loadingActions;
+  const { initError, setError } = errorActions;
+  yield put(startLoading('simple'));
+  yield put(initError('simple'));
+  try {
+    const res = yield call(getDeviceSimple);
+    yield put(getDeviceSimpleSuccess(res.data));
+  } catch (e) {
+    yield put(setError('simple'));
+  } finally {
+    yield put(finishLoading('simple'));
+  }
+}
+
 // Main Saga
 export function* devicesSaga() {
-  const { getDevice, getDevicePrice } = devicesActions;
+  const { getDevice, getDevicePrice, getDeviceSimple } = devicesActions;
 
   // getDevices action이 실행되면, 마지막으로 호출된 요청만 실행되며 실행내용은 getDeviceSaga 함수이다.
   yield takeLatest(getDevice, getDevicesSaga);
   yield takeLatest(getDevicePrice, getDevicePricesSaga);
+  yield takeLatest(getDeviceSimple, getDeviceSimpleSaga);
   // yield takeLatest(setFilterValue, getDevicesSaga);
 }

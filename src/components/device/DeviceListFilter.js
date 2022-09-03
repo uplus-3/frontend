@@ -147,7 +147,6 @@ function DeviceListFilter({ searchParams, plan: plan_datas, loading, error, onCh
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={isChecked(searchParams.get(plan_type.name), type.id, -1)}
-                    //checked={searchParams.get(plan_type.name) === type.id.toString()}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />
@@ -174,7 +173,6 @@ function DeviceListFilter({ searchParams, plan: plan_datas, loading, error, onCh
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={isChecked(searchParams.get(discount_type.name), type.value, -1)}
-                    //    checked={sFilter?.discount === type.value}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />
@@ -226,7 +224,6 @@ function DeviceListFilter({ searchParams, plan: plan_datas, loading, error, onCh
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={isCheckedArr(searchParams.getAll(company_type.name), type.value, ALL)}
-                    //   checked={sFilter?.company?.includes(type.value)}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />
@@ -253,7 +250,6 @@ function DeviceListFilter({ searchParams, plan: plan_datas, loading, error, onCh
                 <ListItemIcon>
                   <StyledCheckbox
                     checked={isCheckedArr(searchParams.getAll(storage_type.name), type.value, ALL)}
-                    //  checked={sFilter?.storage?.includes(type.value)}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<RadioButtonChecked />}
                   />

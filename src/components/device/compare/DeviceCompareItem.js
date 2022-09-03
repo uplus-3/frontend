@@ -54,7 +54,7 @@ const InfoWrapper = styled('div')({
 
 const noDeviceImg = 'https://image.lguplus.com/static/pc-static/indv/images/icon/unselected.png';
 
-function DeviceCompareItem({ device, isLink, onClickRemove }) {
+function DeviceCompareItem({ device, isLink, onClickRemove, isModal }) {
   const navigate = useNavigate();
 
   const handleGoDetail = () => {
@@ -70,7 +70,14 @@ function DeviceCompareItem({ device, isLink, onClickRemove }) {
         </CloseIconWrapper>
       )}
       <DeviceImgWrapper isLink={isLink} onClick={handleGoDetail}>
-        <img src={device ? device.colors[0]?.imageUrl : noDeviceImg} alt="단말기 사진" />
+        <img
+          src={
+            device
+              ? device.colors[0]?.imageUrl || device.colors[0]?.images[0]?.imageUrl
+              : noDeviceImg
+          }
+          alt="단말기 사진"
+        />
       </DeviceImgWrapper>
       {device ? (
         <>
@@ -80,7 +87,7 @@ function DeviceCompareItem({ device, isLink, onClickRemove }) {
           </InfoWrapper>
         </>
       ) : (
-        <div>기기 미선택</div>
+        <>{isModal ? <div>기기 미선택</div> : <div></div>}</>
       )}
     </DeviceCompareItemBlock>
   );

@@ -6,11 +6,13 @@ const ALL = 'all';
 const LAUNCH = 'launch';
 const PURCHASE = 'purchase';
 const PRICE = 'price';
+const ETC = 'etc';
 
 const initialState = {
   devices: null,
   price: null,
   comparison: [],
+  simple: null,
 
   // TODO - 삭제
   filter: {
@@ -39,9 +41,14 @@ const devicesSlice = createSlice({
       console.log('get devices!', action.payload);
     },
     getDevicesSuccess: (state, action) => {
-      const { payload } = action.payload;
+      const { payload, networkType } = action.payload;
       console.log('get devices success!', payload?.devices);
       state.devices = payload?.devices;
+      if (payload?.devices && networkType)
+        state.devices = state.devices.map((device) => ({
+          ...device,
+          networkType: parseInt(networkType),
+        }));
     },
     getDevicePrice: (state, action) => {},
     getDevicePriceSuccess: (state, action) => {
@@ -57,11 +64,25 @@ const devicesSlice = createSlice({
         state.comparison.push(action.payload);
       }
     },
+    updateComparisonDevicePrice: (state, action) => {
+      const { deviceId, price } = action.payload;
+      const idx = state.comparison.findIndex((d) => d.id === deviceId);
+      if (typeof idx === 'number') {
+        state.comparison[idx] = {
+          ...state.comparison[idx],
+          ...price,
+        };
+      }
+    },
     removeComparison: (state, action) => {
       state.comparison = state.comparison.filter((d) => d.id !== action.payload);
     },
     removeComparisonAll: (state, action) => {
       state.comparison = [];
+    },
+    getDeviceSimple: (state, action) => {},
+    getDeviceSimpleSuccess: (state, action) => {
+      state.simple = action.payload?.devices;
     },
     initFilterValue: (state, action) => {
       state.filter = action.payload;
@@ -131,7 +152,11 @@ export const filteredDevices = (
     devices = devices.filter((device) => !device.colors.every((color) => color.stock === 0));
   }
   if (company && Array.isArray(company) && !!company.length && !company.includes('all')) {
-    devices = devices.filter((device) => company.includes(device.company));
+    let temp = devices.filter((device) => company.includes(device.company));
+    let etc = company.includes(ETC)
+      ? devices.filter((device) => !['삼성', '애플'].includes(device.company))
+      : [];
+    devices = [...temp, ...etc];
   }
   if (storage && Array.isArray(storage) && !!storage.length && !storage.includes('all')) {
     devices = devices.filter((device) => storage.includes(device.storage));
@@ -177,4 +202,10 @@ export const filteredDevices = (
   }
   return devicesWithPrice;
 };
+
+export const filteredSimple = (state, company) =>
+  state.devices.simple?.filter((device) => {
+    if (company === ETC) return !['삼성', '애플'].includes(device.company);
+    return device.company === company;
+  });
 export default reducer;
