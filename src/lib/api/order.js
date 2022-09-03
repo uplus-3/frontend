@@ -36,8 +36,8 @@ export const getOrderInfoByNameAndNumber = ({ name, number }) => {
   });
 };
 
-export const updateOrderInfo = ({ orderId, address }) => {
-  return client.patch(`/orders/${orderId}`, address);
+export const updateOrderInfo = (orderId, address) => {
+  return client.put(`/orders/${orderId}`, { address });
 };
 
 export const deleteOrder = (orderId) => {

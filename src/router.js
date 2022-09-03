@@ -8,6 +8,7 @@ import DeviceOrderSearchInputPage from './pages/order/DeviceOrderSearchInputPage
 import DeviceOrderPage from './pages/order/DeviceOrderPage';
 import DeviceDetailPage from './pages/product/DeviceDetailPage';
 import DeviceListPage from './pages/product/DeviceListPage';
+import DeviceOrderAddressUpdatePage from './pages/order/DeviceOrderAddressUpdatePage';
 import SearchResultPage from './pages/SearchResultPage';
 import CartListPage from './pages/cart/CartListPage';
 
@@ -65,6 +66,10 @@ function Router() {
             {
               path: 'search',
               element: <DeviceOrderSearchInputPage />,
+            },
+            {
+              path: 'update-address',
+              element: <DeviceOrderAddressUpdatePage />,
             },
           ],
         },
