@@ -6,7 +6,9 @@ const ALL = 'all';
 const LAUNCH = 'launch';
 const PURCHASE = 'purchase';
 const PRICE = 'price';
-const ETC = 'etc';
+const ETC = '기타';
+const SAMSUNG = '삼성';
+const APPLE = '애플';
 
 const initialState = {
   devices: null,
@@ -163,16 +165,18 @@ export const filteredDevices = (
   if (!devices) return null;
   if (launchingDevices) devices = [...devices, ...launchingDevices];
   if (excludeSoldout) {
-    devices = devices.filter((device) => !device.colors.every((color) => color?.stock === 0));
+    devices = devices.filter(
+      (device) => device?.colors && !device.colors.every((color) => color?.stock === 0),
+    );
   }
-  if (company && Array.isArray(company) && !!company.length && !company.includes('all')) {
+  if (company && Array.isArray(company) && !!company.length && !company.includes(ALL)) {
     let temp = devices.filter((device) => company.includes(device?.company));
     let etc = company.includes(ETC)
-      ? devices.filter((device) => !['삼성', '애플'].includes(device?.company))
+      ? devices.filter((device) => ![SAMSUNG, APPLE].includes(device?.company))
       : [];
     devices = [...temp, ...etc];
   }
-  if (storage && Array.isArray(storage) && !!storage.length && !storage.includes('all')) {
+  if (storage && Array.isArray(storage) && !!storage.length && !storage.includes(ALL)) {
     devices = devices.filter((device) => storage.includes(device?.storage));
   }
 
@@ -194,7 +198,6 @@ export const filteredDevices = (
     );
   }
 
-  console.log(devicesWithPrice);
   if (!f_sortby || f_sortby === LAUNCH) {
     // 출시일 순
     devicesWithPrice = devicesWithPrice.sort((a, b) =>
@@ -223,7 +226,7 @@ export const filteredDevices = (
 
 export const filteredSimple = (state, company) =>
   state.devices.simple?.filter((device) => {
-    if (company === ETC) return !['삼성', '애플'].includes(device.company);
+    if (company === ETC) return ![SAMSUNG, APPLE].includes(device.company);
     return device.company === company;
   });
 export default reducer;

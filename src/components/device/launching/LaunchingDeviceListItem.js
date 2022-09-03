@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
 
 import { styled } from '@mui/system';
 import { Box, Divider } from '@mui/material';
 
-import qs from 'qs';
-
 import { PriceFormatter } from '../../../lib/utils';
-import { devicesActions } from '../../../modules/actions/devicesSlice';
-import classnames from 'classnames';
-import useAlert from '../../../lib/hooks/useAlert';
 
 const LaunchingDeviceListItemBlock = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -126,24 +119,11 @@ const ItemCompareWrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-function LaunchingDeviceListItem({ data, searchParams }) {
-  const navigate = useNavigate();
+function LaunchingDeviceListItem({ data, onClickDetail }) {
   const [cIdx, setCIdx] = useState(0);
-
-  const queryString = qs.stringify({
-    plan: searchParams.get('plan') || -1,
-    discount: searchParams.get('discount') || -1,
-  });
 
   const handleClickColor = (idx) => {
     setCIdx(idx);
-  };
-
-  const handleGoDetailPage = () => {
-    navigate({
-      pathname: `./${data.serialNumber}`,
-      search: `?id=${data.id}&${queryString}`,
-    });
   };
 
   return (
@@ -152,7 +132,7 @@ function LaunchingDeviceListItem({ data, searchParams }) {
         <span>출시예정</span>
       </ItemTagWrapper>
       <ItemImageWrapper
-        onClick={handleGoDetailPage}
+        onClick={() => onClickDetail(data)}
         style={{
           backgroundImage: `url(${data?.launchingColors[cIdx]?.launchingImages[0]?.imageUrl})`,
         }}
@@ -169,7 +149,7 @@ function LaunchingDeviceListItem({ data, searchParams }) {
         </ul>
       </ItemColorWrapper>
       <ItemInfoWrapper>
-        <div onClick={handleGoDetailPage} className="p-name">
+        <div onClick={() => onClickDetail(data)} className="p-name">
           {data?.name}
         </div>
         <div>
@@ -182,7 +162,7 @@ function LaunchingDeviceListItem({ data, searchParams }) {
       </ItemInfoWrapper>
       <Divider />
       <ItemCompareWrapper>
-        <div onClick={handleGoDetailPage}>자세히 보기</div>
+        <div onClick={() => onClickDetail(data)}>자세히 보기</div>
       </ItemCompareWrapper>
     </LaunchingDeviceListItemBlock>
   );
