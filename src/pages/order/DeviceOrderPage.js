@@ -44,6 +44,7 @@ function DeviceOrderPage() {
         ...prev,
         planId: state?.deviceInfo?.plan?.id || 1,
         colorId: state?.selectedColor?.id,
+        planName: state?.deviceInfo?.plan?.name || '5G 라이트',
       };
     });
   }, []);

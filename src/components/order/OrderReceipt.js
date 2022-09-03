@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import useAlert from '../../lib/hooks/useAlert';
 import { PriceFormatter } from '../../lib/utils';
 import { postOrder } from '../../lib/api/order';
+import useCart from '../../lib/hooks/useCart';
 
 import KakaoIcon from '../../assets/images/icon-kakao.png';
 import { getDeviceDetail, getDevicePrice } from '../../lib/api/device';
@@ -86,6 +87,7 @@ function OrderReceipt({
   getUserInfo,
   devicePriceInfo,
 }) {
+  const { addCart } = useCart();
   const Calert = useAlert();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -139,9 +141,7 @@ function OrderReceipt({
             </ShareDiv>
           ),
         }).then((res) => {
-          if (res.isConfirmed) {
-            navigate(-1);
-          }
+          navigate(-1);
         });
       }
     } catch (e) {
@@ -219,13 +219,13 @@ function OrderReceipt({
           <div>{PriceFormatter(devicePriceInfo.devicePrice)}원</div>
         </OrderReceiptPrice>
         {devicePriceInfo.discountType === 0 && (
-          <OrderReceiptPrice>
+          <OrderReceiptPrice color={theme.palette.prime}>
             <div>공시 지원금</div>
             <div>-{PriceFormatter(devicePriceInfo.psupport)}원</div>
           </OrderReceiptPrice>
         )}
         {devicePriceInfo.discountType === 0 && (
-          <OrderReceiptPrice>
+          <OrderReceiptPrice color={theme.palette.prime}>
             <div>추가 지원금</div>
             <div>-{PriceFormatter(devicePriceInfo.asupport)}원</div>
           </OrderReceiptPrice>
@@ -247,7 +247,7 @@ function OrderReceipt({
           <div>{PriceFormatter(devicePriceInfo.dplanPrice)}</div>
         </OrderReceiptPrice>
         <OrderReceiptPrice>
-          <div>{devicePriceInfo?.planName || '5G+ 라이트'}</div>
+          <div>{orderForm?.planName || '5G+ 라이트'}</div>
           <div>{PriceFormatter(devicePriceInfo.mplanPrice)}</div>
         </OrderReceiptPrice>
         {devicePriceInfo.discountType === 1 && (
@@ -266,6 +266,9 @@ function OrderReceipt({
         </OrderFinalPrice>
         <AlignCenter>
           <RoundBtn
+            onClick={() => {
+              addCart(orderForm);
+            }}
             width={90}
             backgroundColor="#FFFFFF"
             border={`1px solid ${theme.palette.prime}`}

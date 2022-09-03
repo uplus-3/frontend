@@ -46,13 +46,22 @@ const MenuDiv = styled('div')(({ theme }) => ({
   background: '#fff',
   display: 'flex',
   minHeight: 170,
+  minWidth: 1440,
   paddingTop: 20,
+  margin: '0 auto',
   paddingBottom: 10,
-  paddingLeft: 350,
   gap: 50,
   boxShadow:
     '0px 2px 4px -1px rgb(0 0 0 / 2%), 0px 4px 5px 0px rgb(0 0 0 / 4%), 0px 1px 10px 0px rgb(0 0 0 / 3%)',
 }));
+
+const MenuWrapper = styled('div')({
+  minWidth: 1440,
+  margin: '0 auto',
+  display: 'flex',
+  gap: 30,
+  paddingLeft: 100,
+});
 
 const SubMenuWrapper = styled('div')({
   display: 'flex',
@@ -195,25 +204,27 @@ function Navbar() {
           setSelectedMenu(null);
         }}>
         <MenuDiv>
-          {!!selectedMenu &&
-            NavbarContent[selectedMenu].map((subTitle, idx) => {
-              return (
-                <SubMenuWrapper key={`${idx}-${selectedMenu}-${subTitle.name}`}>
-                  <SubTitleBtn onClick={() => handleMenuClick(subTitle.url)}>
-                    {subTitle.name}
-                  </SubTitleBtn>
-                  {subTitle.children.map((subItem, idx) => {
-                    return (
-                      <SubItemBtn
-                        key={`${idx}-${selectedMenu}-${subTitle.name}=${subItem.name}`}
-                        onClick={() => handleMenuClick(`${subTitle.url}${subItem.url}`)}>
-                        {subItem.name}
-                      </SubItemBtn>
-                    );
-                  })}
-                </SubMenuWrapper>
-              );
-            })}
+          <MenuWrapper>
+            {!!selectedMenu &&
+              NavbarContent[selectedMenu]?.map((subTitle, idx) => {
+                return (
+                  <SubMenuWrapper key={`${idx}-${selectedMenu}-${subTitle.name}`}>
+                    <SubTitleBtn onClick={() => handleMenuClick(subTitle.url)}>
+                      {subTitle.name}
+                    </SubTitleBtn>
+                    {subTitle.children.map((subItem, idx) => {
+                      return (
+                        <SubItemBtn
+                          key={`${idx}-${selectedMenu}-${subTitle.name}=${subItem.name}`}
+                          onClick={() => handleMenuClick(`${subTitle.url}${subItem.url}`)}>
+                          {subItem.name}
+                        </SubItemBtn>
+                      );
+                    })}
+                  </SubMenuWrapper>
+                );
+              })}
+          </MenuWrapper>
         </MenuDiv>
       </MenuCollpase>
     </>

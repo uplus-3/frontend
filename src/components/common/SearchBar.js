@@ -208,10 +208,6 @@ function SearchBar() {
 
   // axios 요청을 통해 관련 검색어를 받아옴.
   const getRelatedSearchTerm = async (term) => {
-    if (!!!term) {
-      setRecentSearchTerm([]);
-      return;
-    }
     try {
       const res = await getSearchRelatedKeyword({
         query: term,
@@ -292,17 +288,14 @@ function SearchBar() {
 
   useEffect(() => {
     if (!!!anchorEl && !!!relatedSearchTerm.length) return;
-    console.log(anchorEl, relatedSearchTerm);
-    console.log('get by search network type anchorEl');
     getRelatedSearchTerm(searchResult);
   }, [searchNetworkType, anchorEl]);
 
   useEffect(() => {
     if (!!anchorEl && !!searchResult) {
       getRelatedSearchTerm(searchResult);
-      console.log('get by searchResult');
     } else if (!!anchorEl && !!!searchResult) {
-      setRecentSearchTerm([]);
+      setRelatedSearchTerm([]);
     }
   }, [searchResult]);
   return (
@@ -360,9 +353,7 @@ function SearchBar() {
                   )}
                 </SearchSubMenuWrapper>
                 <SearchSubMenuWrapper>
-                  <Divider>
-                    {searchResult === '' && !!relatedSearchTerm ? '추천검색어' : '연관검색어'}
-                  </Divider>
+                  <Divider>연관검색어</Divider>
                   <RelatedSearchTermWrapper>
                     <div>
                       {relatedSearchTerm?.map((result, idx) => {
@@ -380,9 +371,7 @@ function SearchBar() {
                   </RelatedSearchTermWrapper>
                 </SearchSubMenuWrapper>
               </SearchMenuWrapper>
-              <Divider>
-                {searchResult === '' && !!relatedSearchTerm ? '추천상품' : '연관상품'}
-              </Divider>
+              <Divider>연관상품</Divider>
               <RelatedSearchImageWrapper>
                 {relatedSearchTerm.slice(0, 3).map((result, idx) => (
                   <RelatecSearchImage
