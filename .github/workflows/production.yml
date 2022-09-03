@@ -1,0 +1,80 @@
+name: Build React Artifact and Deploy Image to ECR
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    types:
+      - closed
+  workflow_dispatch:
+    branches: [ "main" ]
+
+env:
+  AWS_REGION : ap-northeast-2
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  ifmerged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - run: echo The PR was merged
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+
+    - name: Create .env file
+      run: |
+        touch .env
+        echo "${{ secrets.PROD_ENV }}" > .env
+
+    - run: yarn install
+    - run: CI=false yarn build
+    # Configure the GitHub Actions environment with a role using GitHub's OIDC provider and your desired region
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    # Login to Amazon ECR Private, then build and push a Docker image
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push docker image to Amazon ECR
+      id: build-image
+      env:
+        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        REPOSITORY: uplus3nginx
+        IMAGE_TAG: latest # Github commit ID (sha)
+      run: |
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$REGISTRY/$REPOSITORY:$IMAGE_TAG"
+    
+    - name: Install Kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.22.12-eks-6d3986b' # default is latest stable
+      id: install
+    
+    - name: 
+
+
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
