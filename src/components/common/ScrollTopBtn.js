@@ -11,11 +11,11 @@ const ScrollTopBtnBlock = styled('div')({
 const StyledFab = styled(Fab)(({ theme }) => ({
   width: 40,
   height: 40,
-  background: theme.palette.prime + '50',
+  background: '#ffa4d6',
   color: theme.palette.prime,
 
   '&:hover': {
-    background: theme.palette.prime + '70',
+    background: '#ff89ca',
   },
 }));
 

@@ -77,6 +77,7 @@ const ItemColorWrapper = styled(Box)(({ theme }) => ({
 }));
 
 const ItemInfoWrapper = styled(Box)({
+  flex: 1,
   padding: '1.5rem',
   '& .p-name': {
     fontSize: '1.25rem',
@@ -119,7 +120,7 @@ const ItemCompareWrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-function LaunchingDeviceListItem({ data, onClickDetail }) {
+function LaunchingDeviceListItem({ data, showPrice, onClickDetail }) {
   const [cIdx, setCIdx] = useState(0);
 
   const handleClickColor = (idx) => {
@@ -154,10 +155,11 @@ function LaunchingDeviceListItem({ data, onClickDetail }) {
         </div>
         <div>
           <div className="p-price-sub">
-            <div>준비중</div>
-            <div>준비중</div>
+            {showPrice && (
+              <div className="origin-price">정상가 {PriceFormatter(data?.price || 0)}원</div>
+            )}
           </div>
-          <div className="p-price">준비중</div>
+          <div className="p-price">출시예정</div>
         </div>
       </ItemInfoWrapper>
       <Divider />
