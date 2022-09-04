@@ -68,8 +68,8 @@ const OrderFormWrapper = styled('div')({
 
 function OrderSearchForm({ orderForm, setOrderForm }, ref) {
   const Calert = useAlert();
-  const [name, onNameChange, setName] = useInput('윤유플');
-  const [number, onNumberChange, setNumber] = useInput('2208313678');
+  const [name, onNameChange, setName] = useInput('');
+  const [number, onNumberChange, setNumber] = useInput('');
   const navigate = useNavigate();
   const [numberMessage, setNumberMessage] = useState('');
   const [nameMessage, setNameMessage] = useState('');
@@ -161,6 +161,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
             <span>이름</span>
             <CustomInput
               required
+              autoComplete="on"
               width={255}
               value={name}
               onKeyPress={handleOnKeyPress}
@@ -173,6 +174,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
             <span>주문번호</span>
             <CustomInput
               required
+              autoComplete="on"
               placehoder="주문번호를 입력해주세요"
               width={255}
               value={number}
