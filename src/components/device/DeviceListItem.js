@@ -29,10 +29,21 @@ const ItemTagWrapper = styled(Box)({
   display: 'flex',
   gap: 5,
 
+  '@keyframes move': {
+    from: {
+      opacity: 0.5,
+      transform: 'translateY(4px)',
+    },
+    to: {
+      opacity: 1,
+      transform: 'translateY(0px)',
+    },
+  },
   span: {
     padding: '0 5px',
     fontSize: '0.75rem',
     color: '#fff',
+    animation: 'move 1.5s infinite ease-in alternate',
   },
 });
 
