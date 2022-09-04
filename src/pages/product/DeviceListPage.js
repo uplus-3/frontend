@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { devicesActions, filteredDevices } from '../../modules/actions/devicesSlice';
+import { Helmet } from 'react-helmet-async';
 
 import DeviceList from '../../components/device/DeviceList';
 import DeviceListFilter from '../../components/device/DeviceListFilter';
@@ -163,6 +164,9 @@ function DeviceListPage({ networkType }) {
 
   return (
     <div>
+      <Helmet>
+        <title>유플러스 {networkType}G 휴대폰 &lt; 모바일기기 | LG U+</title>
+      </Helmet>
       <Title>{networkType}G 휴대폰</Title>
       <DeviceListWrapper>
         <DeviceListFilter

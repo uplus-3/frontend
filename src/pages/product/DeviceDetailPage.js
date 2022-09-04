@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 import { styled } from '@mui/material';
 import { getDeviceDetail, getDevicePrice } from '../../lib/api/device';
@@ -67,15 +68,20 @@ function DeviceDetailPage() {
   return (
     <div>
       {deviceDetailInfo && (
-        <DeviceDetailPageWrapper>
-          <DeviceItemImage colors={deviceDetailInfo.colors} selectedColor={selectedColor} />
-          <DeviceItemInfo
-            devicePriceInfo={devicePriceInfo}
-            deviceInfo={{ ...deviceDetailInfo, plan: planInfo }}
-            selectedColor={selectedColor}
-            setSelectedColor={setSelectedColor}
-          />
-        </DeviceDetailPageWrapper>
+        <>
+          <Helmet>
+            <title> 유플러스 {deviceDetailInfo.name} | 엘지유플 최강 3조</title>
+          </Helmet>
+          <DeviceDetailPageWrapper>
+            <DeviceItemImage colors={deviceDetailInfo.colors} selectedColor={selectedColor} />
+            <DeviceItemInfo
+              devicePriceInfo={devicePriceInfo}
+              deviceInfo={{ ...deviceDetailInfo, plan: planInfo }}
+              selectedColor={selectedColor}
+              setSelectedColor={setSelectedColor}
+            />
+          </DeviceDetailPageWrapper>
+        </>
       )}
     </div>
   );

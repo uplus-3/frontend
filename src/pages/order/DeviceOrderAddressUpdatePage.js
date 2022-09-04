@@ -1,6 +1,7 @@
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Box, Divider } from '@mui/material';
 import Stack from '@mui/material/Stack';
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { styled } from '@mui/system';
 import { TextField, InputAdornment, useTheme } from '@mui/material';
 import { IconButton, Tooltip } from '@mui/material';
@@ -8,7 +9,7 @@ import useInput from '../../lib/hooks/useInput';
 import SquareBtn from '../../components/common/SquareBtn';
 import DaumPostCodeModal from '../../components/modal/DaumPostCodeModal';
 
-import RoundBtn from "../../components/common/RoundBtn";
+import RoundBtn from '../../components/common/RoundBtn';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAlert from '../../lib/hooks/useAlert';
 import { PriceFormatter } from '../../lib/utils';
@@ -122,19 +123,17 @@ const DiscountContent = styled('div')({
   },
 });
 
-
 function OrderAddressUpdatePage(ref) {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const orderId = location.state
+  const orderId = location.state;
   const Calert = useAlert();
   const [detailAddress, onChangeDetailAddress] = useInput('');
   const [address, setAddress] = useState('');
   const [openPostcode, setOpenPostCode] = useState(false);
   const [addressMessage, setAddressMessage] = useState('');
   const [detailAddressMessage, setDetailAddressMessage] = useState('');
-
 
   const checkUserInfo = () => {
     if (!!!address) {
@@ -147,21 +146,18 @@ function OrderAddressUpdatePage(ref) {
   };
 
   const getAddress = () => {
-    return `${address} ${detailAddress}`
+    return `${address} ${detailAddress}`;
   };
 
   const handleGoSearchPage = () => {
-    navigate(
-      '/order/search'
-    );
+    navigate('/order/search');
   };
 
-  const handleOnKeyPress = e => {
+  const handleOnKeyPress = (e) => {
     if (e.key === 'Enter') {
       updateAddress();
     }
   };
-
 
   const updateAddress = async () => {
     try {
@@ -169,13 +165,11 @@ function OrderAddressUpdatePage(ref) {
         const res = await updateOrderInfo(orderId, getAddress());
         Calert.fire({
           title: '주소 수정이 완료되었습니다',
-          icon: 'success'
+          icon: 'success',
         }).then((res) => {
           if (res.isConfirmed) {
             //주문 조회 페이지로 이동
-            navigate(
-              '/order/search'
-            );
+            navigate('/order/search');
           }
         });
       }
@@ -187,19 +181,19 @@ function OrderAddressUpdatePage(ref) {
           confirmButtonText: '확인',
         }).then((res) => {
           if (res.isConfirmed) {
-            navigate(
-              '/order/search'
-            );
+            navigate('/order/search');
           }
         });
       }
     }
   };
 
-
   return (
     <>
       <DeviceOrderAddressUpdatePageBlock>
+        <Helmet>
+          <title> 배송지 수정 | 엘지유플 최강 3조</title>
+        </Helmet>
         <OrderTitle>배송지 수정</OrderTitle>
         <OrderFormWrapper>
           <InputWrapper>
@@ -242,21 +236,24 @@ function OrderAddressUpdatePage(ref) {
           </InputWrapper>
 
           <Stack marginTop={2} direction="row" spacing={2}>
-            <RoundBtn
-              onClick={updateAddress}
-              border={`1px solid ${theme.palette.prime}`}
-            >주소 수정</RoundBtn>
+            <RoundBtn onClick={updateAddress} border={`1px solid ${theme.palette.prime}`}>
+              주소 수정
+            </RoundBtn>
             <RoundBtn
               onClick={handleGoSearchPage}
               backgroundColor="#FFFFFF"
               border={`1px solid ${theme.palette.prime}`}
               color={theme.palette.prime}>
-              수정 취소</RoundBtn>
+              수정 취소
+            </RoundBtn>
           </Stack>
         </OrderFormWrapper>
         <OrderFormWrapper>
-
-          <DaumPostCodeModal open={openPostcode} setOpen={setOpenPostCode} setAddress={setAddress} />
+          <DaumPostCodeModal
+            open={openPostcode}
+            setOpen={setOpenPostCode}
+            setAddress={setAddress}
+          />
         </OrderFormWrapper>
       </DeviceOrderAddressUpdatePageBlock>
     </>
