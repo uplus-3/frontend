@@ -22,12 +22,9 @@ const devicesSlice = createSlice({
   name: 'devices',
   initialState,
   reducers: {
-    getDevice: (state, action) => {
-      console.log('get devices!', action.payload);
-    },
+    getDevice: (state, action) => {},
     getDevicesSuccess: (state, action) => {
       const { payload, networkType } = action.payload;
-      console.log('get devices success!', payload?.devices);
       state.devices = payload?.devices;
       if (payload?.devices && networkType)
         state.devices = state.devices.map((device) => ({

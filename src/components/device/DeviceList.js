@@ -7,19 +7,28 @@ import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 import LaunchingDeviceListItem from './launching/LaunchingDeviceListItem';
 import LaunchingDeviceDetailModal from '../modal/LaunchingDeviceDetailModal';
+import Loading from '../common/Loading';
+import Error from '../common/Error';
 
 const DeviceListBlock = styled('div')({
   width: '100%',
 });
 
 const DeviceListWrapper = styled(Box)({
+  position: 'relative',
   display: 'flex',
   flexWrap: 'wrap',
   gap: 16,
   marginTop: 15,
+
+  '.loading': {
+    margin: '0 auto',
+  },
 });
 
-const LaunchingDeviceListWrapper = styled(Box)({});
+const ErrorWarpper = styled('div')({
+  marginTop: 30,
+});
 
 function DeviceList({
   devices,
@@ -47,10 +56,6 @@ function DeviceList({
     setModalOpen(true);
   };
 
-  if (error) {
-    return 'error!';
-  }
-
   return (
     <DeviceListBlock>
       <DeviceListHeader
@@ -66,29 +71,41 @@ function DeviceList({
         search={search}
         onChangeSearch={onChangeSearch}
       />
-      <DeviceListWrapper>
-        {loading && 'Loading..'}
-        {!loading &&
-          devices &&
-          devices.map((data, index) => (
-            <>
-              {!!data?.isLaunching ? (
-                <LaunchingDeviceListItem
-                  key={`${index}-${data.serialNumber}`}
-                  data={data}
-                  onClickDetail={handleClickDetail}
-                />
-              ) : (
-                <DeviceListItem
-                  key={`${index}-${data.serialNumber}`}
-                  data={data}
-                  showPrice={showPrice}
-                  searchParams={searchParams}
-                />
-              )}
-            </>
-          ))}
-      </DeviceListWrapper>
+
+      {error ? (
+        <ErrorWarpper>
+          <Error message="상품을 불러올 수 없습니다." />
+        </ErrorWarpper>
+      ) : (
+        <DeviceListWrapper>
+          {(loading || !devices) && (
+            <div className="loading">
+              <Loading />
+            </div>
+          )}
+          {!loading &&
+            devices &&
+            devices.map((data, index) => (
+              <>
+                {!!data?.isLaunching ? (
+                  <LaunchingDeviceListItem
+                    key={`${index}-${data.serialNumber}`}
+                    data={data}
+                    onClickDetail={handleClickDetail}
+                  />
+                ) : (
+                  <DeviceListItem
+                    key={`${index}-${data.serialNumber}`}
+                    data={data}
+                    showPrice={showPrice}
+                    searchParams={searchParams}
+                  />
+                )}
+              </>
+            ))}
+        </DeviceListWrapper>
+      )}
+
       {modalOpen && device && (
         <LaunchingDeviceDetailModal
           open={modalOpen}
