@@ -19,6 +19,7 @@ function useCart() {
   }) => {
     try {
       const res = await createCartItem({
+        cartId: cookie.cartId || -1,
         colorId,
         discountType,
         installmentPeriod,
@@ -28,6 +29,11 @@ function useCart() {
       console.log(res);
       let date = new Date();
       date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
+      setCookie('cartId', res.data.carts[0].cartId, {
+        path: '/',
+        expires: date,
+        secure: true,
+      });
       setCookie('cartCount', res.data.carts.length, {
         path: '/',
         expires: date,

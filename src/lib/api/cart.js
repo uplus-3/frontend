@@ -5,13 +5,14 @@ export const getCartList = (cartId) => {
 };
 
 export const createCartItem = ({
+  cartId,
   colorId,
   discountType,
   installmentPeriod,
   planId,
   registrationType,
 }) => {
-  return client.post('/carts', {
+  return client.post(`/carts/${cartId}`, {
     colorId,
     discountType,
     installmentPeriod,
