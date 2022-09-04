@@ -13,6 +13,13 @@
   }
 }
 
+.swal2-popup {
+  font-family: LGSmart;
+}
+.swal2-styled {
+  font-family: LGSmart;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

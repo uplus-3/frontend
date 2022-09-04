@@ -1,17 +1,25 @@
-import "./App.css";
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import './App.css';
+import Router from './router';
+
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { theme } from './theme/theme';
+import { planActions } from './modules/actions/planSlice';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(planActions.getPlanList(5));
+    dispatch(planActions.getPlanList(4));
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router />
+    </ThemeProvider>
   );
 }
 
