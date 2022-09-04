@@ -4,6 +4,16 @@ import DeviceSearchList from '../components/device/search/DeviceSearchList';
 import { useSearchParams } from 'react-router-dom';
 import { getSearchResult } from '../lib/api/search';
 import { Box, Tab, Tabs } from '@mui/material';
+import Loading from '../components/common/Loading';
+import Error from '../components/common/Error';
+import { SignalCellularNullRounded } from '@mui/icons-material';
+
+const SearchResultPageWrapper = styled('div')({
+});
+
+const StatusWrapper = styled('div')({
+  textAlign: 'center'
+});
 
 const Title = styled('h1')({
   paddingTop: 30,
@@ -57,7 +67,9 @@ function SearchResultPage(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParam = searchParams.get('searchResult');
   const networkType = searchParams.get('network-type');
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     getResults(searchParam);
@@ -65,42 +77,54 @@ function SearchResultPage(props) {
 
   const getResults = async (searchParam) => {
     try {
+      setLoading(true);
+      setError(false);
       const res = await getSearchResult({ query: searchParam, networkType: networkType});
       setResults(res.data.searchList);
     } catch (e) {
-      console.log('error');
+      setError(true);
+    } finally {
+      setLoading(false);
     }
+    console.log(loading);
   };
 
   console.log(props);
 
   return (
-    <div>
-      {results.length > 0 && 
+    <SearchResultPageWrapper>
       <Title>
         <Query>"<Highlight>{searchParam}</Highlight>"</Query>{' '}검색결과
-      </Title>}
+      </Title>
       <Box sx={{ padding: '20px 0' }}>
         <StyledTabs value="mobile">
           <Tab value="mobile" label={networkType === null ? '전체' : networkType + 'G'} />
         </StyledTabs>
       </Box>
-      {results.length > 0 ? (
-        <CountTab>전체 {results.length}개</CountTab>
-      ) : (
-        <EmptyResultWrapper>
-          <EmptyResultTop>
-            "<Highlight>{searchParam}</Highlight>"검색 결과가 없습니다.
-          </EmptyResultTop>
-          <EmptyResultBottom>
-            <div>단어의 철자 및 띄어쓰기가 정확한지 확인해 보세요.</div>
-            <div>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</div>
-          </EmptyResultBottom>
-        </EmptyResultWrapper>
-      )}
-      {results.length > 0 &&
-      <DeviceSearchList results={results} />}
-    </div>
+      {error ? <StatusWrapper><Error message="상품을 불러올 수 없습니다."/></StatusWrapper> :
+      loading ? <StatusWrapper><Loading className="loading"/></StatusWrapper> :
+      <div>
+        {results && results.length > 0 ? 
+          <CountTab>전체 {results.length}개</CountTab> :
+          <EmptyResultWrapper>
+            {results &&
+            <div>
+            <EmptyResultTop>
+              "<Highlight>{searchParam}</Highlight>"검색 결과가 없습니다.
+            </EmptyResultTop>
+            <EmptyResultBottom>
+              <div>단어의 철자 및 띄어쓰기가 정확한지 확인해 보세요.</div>
+              <div>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</div>
+            </EmptyResultBottom>
+            </div>
+        }
+          </EmptyResultWrapper>
+        }
+        {results !== null &&
+        <DeviceSearchList results={results}/>}
+      </div>
+    }
+    </SearchResultPageWrapper>
   );
 }
 
