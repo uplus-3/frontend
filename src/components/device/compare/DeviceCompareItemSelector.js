@@ -10,7 +10,6 @@ import { MenuItem } from '@mui/material';
 
 const COMPANY = FILTER_DATA.company_type.data.slice(1);
 
-// TODO - select되었을 때, background 지우기
 const DeviceCompareItemSelectorBlock = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',

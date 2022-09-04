@@ -193,6 +193,7 @@ const HightlightSearchTerm = (text, query) => {
     </>
   );
 };
+const DEFAULT_SEARCH_TERM = '갤럭시 Z Fold4';
 
 function SearchBar() {
   const navigate = useNavigate();
@@ -220,8 +221,10 @@ function SearchBar() {
   // 검색시 호출되는 함수
   const handleSearch = (event, searchTerm) => {
     // 클릭해서 검색한 경우 && 검색어를 입력해서 검색한 경우
-    if (!(!!searchTerm || !!searchResult)) return;
     let searchParams = { searchResult: searchTerm || searchResult };
+    if (!(!!searchTerm || !!searchResult)) {
+      searchParams = { searchResult: DEFAULT_SEARCH_TERM };
+    }
     if (!!searchNetworkType) {
       searchParams = { ...searchParams, 'network-type': searchNetworkType };
     }
