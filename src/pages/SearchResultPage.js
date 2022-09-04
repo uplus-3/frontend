@@ -116,7 +116,7 @@ function SearchResultPage(props) {
             {results &&
             <div>
             <EmptyResultTop>
-              "<Highlight>{searchParam}</Highlight>"검색 결과가 없습니다.
+              검색 결과가 없습니다.
             </EmptyResultTop>
             <EmptyResultBottom>
               <div>단어의 철자 및 띄어쓰기가 정확한지 확인해 보세요.</div>
