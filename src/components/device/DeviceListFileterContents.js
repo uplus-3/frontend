@@ -4,12 +4,16 @@ export const SORT_TYPE = [
     value: 'launch',
   },
   {
-    name: '실구매가순',
+    name: '실구매가 낮은순',
     value: 'purchase',
   },
   {
-    name: '정상가순',
-    value: 'price',
+    name: '정상가 낮은순',
+    value: 'priceasc',
+  },
+  {
+    name: '정상가 높은순',
+    value: 'pricedes',
   },
 ];
 

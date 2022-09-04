@@ -37,7 +37,6 @@ function DeviceListPage({ networkType }) {
   const f_storage = searchParams.getAll('storage');
   const f_sortby = searchParams.get('sortby');
 
-  const [sortbyDir, setSortbyDir] = useState(true);
   const [excludeSoldout, setExcludeSoldout] = useState(false);
   const [showPrice, setShowPrice] = useState(false);
   const [search, handleChangeSearch, setSearch] = useInput('');
@@ -57,7 +56,6 @@ function DeviceListPage({ networkType }) {
       f_company,
       f_storage,
       f_sortby,
-      sortbyDir,
       excludeSoldout,
       search,
     ),
@@ -69,8 +67,6 @@ function DeviceListPage({ networkType }) {
   const launchingDevices = useSelector((state) => state.devices.launchingDevices);
 
   useEffect(() => {
-    // 요금제 정보 불러오기
-    // dispatch(planActions.getPlanList(networkType));
     // 네트워크별 단말기 리스트 불러오기
     dispatch(
       devicesActions.getDevice({
@@ -185,8 +181,6 @@ function DeviceListPage({ networkType }) {
           showPrice={showPrice}
           setShowPrice={setShowPrice}
           sortby={f_sortby}
-          sortbyDir={sortbyDir}
-          setSortbyDir={setSortbyDir}
           search={search}
           onChangeSearch={handleChangeSearch}
         />

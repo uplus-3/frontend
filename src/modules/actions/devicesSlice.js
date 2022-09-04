@@ -5,7 +5,8 @@ import { FILTER_DATA } from '../../components/device/DeviceListFileterContents';
 const ALL = 'all';
 const LAUNCH = 'launch';
 const PURCHASE = 'purchase';
-const PRICE = 'price';
+const PRICEASC = 'priceasc';
+const PRICEDES = 'pricedes';
 const ETC = '기타';
 const SAMSUNG = '삼성';
 const APPLE = '애플';
@@ -86,7 +87,6 @@ export const filteredDevices = (
   company,
   storage,
   f_sortby,
-  f_sortbyDir,
   excludeSoldout,
   search,
 ) => {
@@ -127,20 +127,16 @@ export const filteredDevices = (
 
   if (!f_sortby || f_sortby === LAUNCH) {
     // 출시일 순
-    devicesWithPrice.sort((a, b) =>
-      f_sortbyDir
-        ? new Date(b.launchedDate) - new Date(a.launchedDate)
-        : new Date(a.launchedDate) - new Date(b.launchedDate),
-    );
+    devicesWithPrice.sort((a, b) => new Date(b.launchedDate) - new Date(a.launchedDate));
   } else if (f_sortby === PURCHASE) {
     // 실구매가 순
-    devicesWithPrice.sort((a, b) =>
-      f_sortbyDir
-        ? a.ddevicePrice + a.dplanPrice - (b.ddevicePrice + b.dplanPrice)
-        : b.ddevicePrice + b.dplanPrice - (a.ddevicePrice + a.dplanPrice),
+    devicesWithPrice.sort(
+      (a, b) => a.ddevicePrice + a.dplanPrice - (b.ddevicePrice + b.dplanPrice),
     );
-  } else if (f_sortby === PRICE) {
-    devicesWithPrice.sort((a, b) => (f_sortbyDir ? a.price - b.price : b.price - a.price));
+  } else if (f_sortby === PRICEASC) {
+    devicesWithPrice.sort((a, b) => a.price - b.price);
+  } else if (f_sortby === PRICEDES) {
+    devicesWithPrice.sort((a, b) => b.price - a.price);
   }
 
   // TODO - regex로 수정

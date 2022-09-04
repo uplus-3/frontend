@@ -32,7 +32,6 @@ const ErrorWarpper = styled('div')({
 
 function DeviceList({
   devices,
-  launchingDevices,
   loading,
   error,
   count,
@@ -42,9 +41,6 @@ function DeviceList({
   setExcludeSoldout,
   showPrice,
   setShowPrice,
-  sortby,
-  sortbyDir,
-  setSortbyDir,
   search,
   onChangeSearch,
 }) {
@@ -66,8 +62,6 @@ function DeviceList({
         setExcludeSoldout={setExcludeSoldout}
         showPrice={showPrice}
         setShowPrice={setShowPrice}
-        sortbyDir={sortbyDir}
-        setSortbyDir={setSortbyDir}
         search={search}
         onChangeSearch={onChangeSearch}
       />
@@ -91,6 +85,7 @@ function DeviceList({
                   <LaunchingDeviceListItem
                     key={`${index}-${data.serialNumber}`}
                     data={data}
+                    showPrice={showPrice}
                     onClickDetail={handleClickDetail}
                   />
                 ) : (

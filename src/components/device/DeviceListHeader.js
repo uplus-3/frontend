@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { SORT_TYPE } from './DeviceListFileterContents';
-import useInput from '../../lib/hooks/useInput';
 
 import { styled } from '@mui/system';
 import {
@@ -23,8 +21,6 @@ import {
   Search,
   CheckCircle,
   CheckCircleOutline,
-  TrendingUp,
-  TrendingDown,
 } from '@mui/icons-material';
 
 const DeviceListHeaderBlock = styled('div')({
@@ -66,13 +62,12 @@ const StyledSortWrapper = styled('div')(({ theme }) => ({
   '& .MuiButtonBase-root.MuiListItem-root:hover': {
     background: 'none',
     color: theme.palette.prime,
+    svg: {
+      color: theme.palette.prime,
+    },
   },
   '& .MuiListItemIcon-root': {
     marginLeft: 5,
-  },
-  '& .MuiListItemIcon-root:hover': {
-    background: theme.palette.gray2,
-    borderRadius: '100%',
   },
 }));
 
@@ -86,7 +81,6 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   },
 }));
 
-// TODO - options 적용
 function DeviceListHeader({
   count,
   searchParams,
@@ -95,12 +89,9 @@ function DeviceListHeader({
   setExcludeSoldout,
   showPrice,
   setShowPrice,
-  sortbyDir,
-  setSortbyDir,
   search,
   onChangeSearch,
 }) {
-  // const [sortDreiction, setSortDirection] = useState(true); // 정렬 기준 (true : 내림차순, false : 오름차순)
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(
     (searchParams.get('sortby') &&
@@ -117,18 +108,12 @@ function DeviceListHeader({
     const data = SORT_TYPE[index].value;
     setSelectedIndex(index);
     setAnchorEl(null);
-    setSortbyDir(true);
-
     onChangeFilter('sortby', data);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const handleChangeSortDirection = useCallback(() => {
-    setSortbyDir((prev) => !prev);
-  }, [setSortbyDir]);
 
   return (
     <DeviceListHeaderBlock>
@@ -177,11 +162,10 @@ function DeviceListHeader({
               id="lock-button"
               aria-haspopup="listbox"
               aria-controls="lock-menu"
-              aria-expanded={open ? 'true' : undefined}>
-              <ListItemText primary={SORT_TYPE[selectedIndex].name} onClick={handleClickListItem} />
-              <ListItemIcon onClick={handleChangeSortDirection}>
-                {sortbyDir ? <TrendingUp /> : <TrendingDown />}
-              </ListItemIcon>
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClickListItem}>
+              <ListItemText primary={SORT_TYPE[selectedIndex].name} />
+              <ListItemIcon>{anchorEl ? <ExpandLess /> : <ExpandMore />}</ListItemIcon>
             </ListItem>
           </List>
           <Menu
