@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import DeviceListHeader from './DeviceListHeader';
 import DeviceListItem from './DeviceListItem';
 
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
+import LaunchingDeviceListItem from './launching/LaunchingDeviceListItem';
+import LaunchingDeviceDetailModal from '../modal/LaunchingDeviceDetailModal';
 
 const DeviceListBlock = styled('div')({
   width: '100%',
@@ -17,8 +19,11 @@ const DeviceListWrapper = styled(Box)({
   marginTop: 15,
 });
 
+const LaunchingDeviceListWrapper = styled(Box)({});
+
 function DeviceList({
   devices,
+  launchingDevices,
   loading,
   error,
   count,
@@ -28,11 +33,20 @@ function DeviceList({
   setExcludeSoldout,
   showPrice,
   setShowPrice,
+  sortby,
   sortbyDir,
   setSortbyDir,
   search,
   onChangeSearch,
 }) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [device, setDevice] = useState(null);
+
+  const handleClickDetail = (data) => {
+    setDevice(data);
+    setModalOpen(true);
+  };
+
   if (error) {
     return 'error!';
   }
@@ -56,10 +70,33 @@ function DeviceList({
         {loading && 'Loading..'}
         {!loading &&
           devices &&
-          devices.map((data) => (
-            <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
+          devices.map((data, index) => (
+            <>
+              {!!data?.isLaunching ? (
+                <LaunchingDeviceListItem
+                  key={`${index}-${data.serialNumber}`}
+                  data={data}
+                  onClickDetail={handleClickDetail}
+                />
+              ) : (
+                <DeviceListItem
+                  key={`${index}-${data.serialNumber}`}
+                  data={data}
+                  showPrice={showPrice}
+                  searchParams={searchParams}
+                />
+              )}
+            </>
           ))}
       </DeviceListWrapper>
+      {modalOpen && device && (
+        <LaunchingDeviceDetailModal
+          open={modalOpen}
+          setOpen={setModalOpen}
+          imgUrl={device?.repImageUrl}
+          data={device}
+        />
+      )}
     </DeviceListBlock>
   );
 }

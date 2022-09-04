@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { devicesActions, filteredDevices } from '../../modules/actions/devicesSlice';
-import { planActions } from '../../modules/actions/planSlice';
 
 import DeviceList from '../../components/device/DeviceList';
 import DeviceListFilter from '../../components/device/DeviceListFilter';
@@ -49,9 +48,11 @@ function DeviceListPage({ networkType }) {
     error: error['plan'],
   }));
 
-  const devicesInfo = useSelector(({ devices: rDvices, loading, error }) => ({
+  const devicesInfo = useSelector(({ devices: rDevices, loading, error }) => ({
     devices: filteredDevices(
-      rDvices,
+      rDevices.devices,
+      rDevices.launchingDevices,
+      rDevices.price,
       f_price,
       f_company,
       f_storage,
@@ -63,7 +64,9 @@ function DeviceListPage({ networkType }) {
     loading: loading.devices,
     error: error.devices,
   }));
+
   const comparison = useSelector((state) => state.devices.comparison);
+  const launchingDevices = useSelector((state) => state.devices.launchingDevices);
 
   useEffect(() => {
     // 요금제 정보 불러오기
@@ -74,6 +77,8 @@ function DeviceListPage({ networkType }) {
         networkType,
       }),
     );
+    // 출시 예정 단말기 리스트 불러오기
+    dispatch(devicesActions.getLaunchingDevices(networkType));
   }, [dispatch, networkType]);
 
   useEffect(() => {
@@ -158,7 +163,7 @@ function DeviceListPage({ networkType }) {
 
   return (
     <div>
-      <Title>5G 휴대폰</Title>
+      <Title>{networkType}G 휴대폰</Title>
       <DeviceListWrapper>
         <DeviceListFilter
           searchParams={searchParams}
@@ -169,6 +174,7 @@ function DeviceListPage({ networkType }) {
         />
         <DeviceList
           devices={devicesInfo.devices}
+          launchingDevices={launchingDevices}
           loading={devicesInfo.loading}
           error={devicesInfo.error}
           count={devicesInfo.devices ? devicesInfo.devices.length : 0}
@@ -178,6 +184,7 @@ function DeviceListPage({ networkType }) {
           setExcludeSoldout={setExcludeSoldout}
           showPrice={showPrice}
           setShowPrice={setShowPrice}
+          sortby={f_sortby}
           sortbyDir={sortbyDir}
           setSortbyDir={setSortbyDir}
           search={search}
