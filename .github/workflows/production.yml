@@ -30,6 +30,12 @@ jobs:
 
     - run: echo The PR was merged
 
+    - name: Install Kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.22.0' # default is latest stable
+        id: install
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
