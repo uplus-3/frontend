@@ -5,16 +5,28 @@ import DeviceListItem from './DeviceListItem';
 
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
+import { ErrorOutline } from '@mui/icons-material';
+import Loading from '../common/Loading';
+import Error from '../common/Error';
 
 const DeviceListBlock = styled('div')({
   width: '100%',
 });
 
 const DeviceListWrapper = styled(Box)({
+  position: 'relative',
   display: 'flex',
   flexWrap: 'wrap',
   gap: 16,
   marginTop: 15,
+
+  '.loading': {
+    margin: '0 auto',
+  },
+});
+
+const ErrorWarpper = styled('div')({
+  marginTop: 30,
 });
 
 function DeviceList({
@@ -33,10 +45,6 @@ function DeviceList({
   search,
   onChangeSearch,
 }) {
-  if (error) {
-    return 'error!';
-  }
-
   return (
     <DeviceListBlock>
       <DeviceListHeader
@@ -52,14 +60,24 @@ function DeviceList({
         search={search}
         onChangeSearch={onChangeSearch}
       />
-      <DeviceListWrapper>
-        {loading && 'Loading..'}
-        {!loading &&
-          devices &&
-          devices.map((data) => (
-            <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
-          ))}
-      </DeviceListWrapper>
+      {error ? (
+        <ErrorWarpper>
+          <Error message="상품을 불러올 수 없습니다." />
+        </ErrorWarpper>
+      ) : (
+        <DeviceListWrapper>
+          {(loading || !devices) && (
+            <div className="loading">
+              <Loading />
+            </div>
+          )}
+          {!loading &&
+            devices &&
+            devices.map((data) => (
+              <DeviceListItem data={data} showPrice={showPrice} searchParams={searchParams} />
+            ))}
+        </DeviceListWrapper>
+      )}
     </DeviceListBlock>
   );
 }
