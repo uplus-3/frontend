@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import DeviceSearchList from '../components/device/search/DeviceSearchList';
 import { useSearchParams } from 'react-router-dom';
 import { getSearchResult } from '../lib/api/search';
 import { Box, Tab, Tabs } from '@mui/material';
 import Loading from '../components/common/Loading';
 import Error from '../components/common/Error';
-import { SignalCellularNullRounded } from '@mui/icons-material';
+import { loadingActions } from '../modules/actions/loadingSlice';
+import { errorActions } from '../modules/actions/errorSlice';
 
 const SearchResultPageWrapper = styled('div')({
 });
@@ -64,12 +66,16 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 }));
 
 function SearchResultPage(props) {
+  const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParam = searchParams.get('searchResult');
   const networkType = searchParams.get('network-type');
   const [results, setResults] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { loading, error } = useSelector(({loading, error}) => ({
+    loading : loading['searchresult'],
+    error : error['searchresult']
+}))
+
 
   useEffect(() => {
     getResults(searchParam);
@@ -77,14 +83,14 @@ function SearchResultPage(props) {
 
   const getResults = async (searchParam) => {
     try {
-      setLoading(true);
-      setError(false);
+      dispatch(loadingActions.startLoading('searchresult'));
+      dispatch(errorActions.initError('searchresult'));
       const res = await getSearchResult({ query: searchParam, networkType: networkType});
       setResults(res.data.searchList);
     } catch (e) {
-      setError(true);
+      dispatch(errorActions.setError('searchresult'));
     } finally {
-      setLoading(false);
+      dispatch(loadingActions.finishLoading('searchresult'));
     }
     console.log(loading);
   };
