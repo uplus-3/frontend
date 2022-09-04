@@ -35,8 +35,8 @@ function DeviceOrderPage() {
     shipmentType: 1,
   });
 
-  const isLoading = useSelector(({ Loading }) => Loading?.order);
-  const isError = useSelector(({ Error }) => Error?.order);
+  const isLoading = useSelector(({ loading }) => loading?.order);
+  const isError = useSelector(({ error }) => error?.order);
 
   const checkUserInfo = () => {
     return formRef.current.checkUserInfo();

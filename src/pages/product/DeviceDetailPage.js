@@ -25,8 +25,8 @@ function DeviceDetailPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const dispatch = useDispatch();
-  const isLoading = useSelector(({ Loading }) => Loading?.deviceDetail);
-  const isError = useSelector(({ Error }) => Error?.deviceDetail);
+  const isLoading = useSelector(({ loading }) => loading?.deviceDetail);
+  const isError = useSelector(({ error }) => error?.deviceDetail);
 
   const [deviceDetailInfo, setDeviceDetailInfo] = useState(null);
   const [devicePriceInfo, setDevicePriceInfo] = useState(null);
