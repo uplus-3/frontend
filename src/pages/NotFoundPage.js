@@ -1,4 +1,6 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
+
 import { styled } from '@mui/material';
 import { ErrorOutline } from '@mui/icons-material';
 import RoundBtn from '../components/common/RoundBtn';
@@ -34,6 +36,9 @@ function NotFoundPage() {
 
   return (
     <NotFoundBlock>
+      <Helmet>
+        <title> 페이지를 찾을 수 없습니다. | 엘지유플 최강 3조</title>
+      </Helmet>
       <EmptyIconWrapper>
         <ErrorOutline />
       </EmptyIconWrapper>

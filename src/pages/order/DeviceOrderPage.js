@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 import OrderForm from '../../components/order/OrderForm';
 import OrderReceipt from '../../components/order/OrderReceipt';
 import useAlert from '../../lib/hooks/useAlert';
@@ -71,6 +72,9 @@ function DeviceOrderPage() {
 
   return (
     <DeviceOrderPageWrapper>
+      <Helmet>
+        <title> 주문페이지 | 엘지유플 최강 3조</title>
+      </Helmet>
       {isError ? (
         <ErrorWrapper>
           <Error message="주문 정보를 불러올 수 없습니다." />

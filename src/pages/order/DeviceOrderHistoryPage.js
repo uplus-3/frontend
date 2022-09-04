@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -30,7 +31,6 @@ const ItemNameNumberWrapper = styled('div')({
   gap: 10,
 });
 
-
 const DeviceName = styled('div')(({ isLink }) => ({
   cursor: isLink && 'pointer',
   fontSize: '1.5rem',
@@ -47,7 +47,7 @@ const OrderItemInfoWrapper = styled('div')(({ theme, data }) => ({
   gap: 20,
   width: '70%',
   height: '70%',
-  marginTop: 20
+  marginTop: 20,
 }));
 
 const OrderDateformat = styled('div')(({ theme, data }) => ({
@@ -73,7 +73,7 @@ const flexWrapper = styled('div')({
   marginTop: 50,
   flexDirection: 'column',
   alignItems: 'center',
-  gap: 1
+  gap: 1,
 });
 
 const PriceWrapper = styled('b')(({ theme }) => ({
@@ -104,7 +104,6 @@ const OrderBottomInfoItem = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-
 const DeviceInfoFormat = styled('div')(({ theme }) => ({
   marginTop: 10,
   span: {
@@ -117,7 +116,6 @@ const OrderSubjectWrapper = styled('div')(({ theme }) => ({
   fontSize: '1.875rem',
   fontWeight: 'bold',
 }));
-
 
 const OrderNumberWrapper = styled('div')(({ theme }) => ({
   fontSize: '1.5rem',
@@ -132,20 +130,37 @@ const AddressInfoWrapper = styled('div')(({ theme }) => ({
 }));
 
 const TypeWrapper = styled('div')(({ theme }) => ({
-  fontSize: '0.9rem'
+  fontSize: '0.9rem',
 }));
-
 
 function DeviceOrderHistoryPage(props) {
   const location = useLocation();
   const navigate = useNavigate();
   const Calert = useAlert();
-  const { address, colorName, createdAt, deviceName, networkType, deviceId, serialNumber, discountType, id, imageUrl, installmentPeriod, name, number, planName, planId, price, storage } = location.state
+  const {
+    address,
+    colorName,
+    createdAt,
+    deviceName,
+    networkType,
+    deviceId,
+    serialNumber,
+    discountType,
+    id,
+    imageUrl,
+    installmentPeriod,
+    name,
+    number,
+    planName,
+    planId,
+    price,
+    storage,
+  } = location.state;
   const theme = useTheme();
 
   const queryString = qs.stringify({
     plan: { planId },
-    discount: { discountType }
+    discount: { discountType },
   });
   const handleGoDetailPage = () => {
     navigate({
@@ -155,11 +170,9 @@ function DeviceOrderHistoryPage(props) {
   };
   const handleGoUpdateAddressPage = () => {
     navigate('/order/update-address');
-    navigate(
-      '/order/update-address', {
+    navigate('/order/update-address', {
       state: id,
-    }
-    );
+    });
   };
 
   const popDeleteAlert = () => {
@@ -174,16 +187,19 @@ function DeviceOrderHistoryPage(props) {
         navigate('/');
       }
     });
-
-  }
-
+  };
 
   return (
     <OrderSearchResultBlock>
+      <Helmet>
+        <title> 구매조회결과 | 엘지유플 최강 3조</title>
+      </Helmet>
       <ItemNameNumberWrapper>
         <OrderSubjectWrapper>주문번호</OrderSubjectWrapper>
         <OrderNumberWrapper>{number}</OrderNumberWrapper>
-        <div><NameWrapper>{name}</NameWrapper>님의 주문정보입니다.</div>
+        <div>
+          <NameWrapper>{name}</NameWrapper>님의 주문정보입니다.
+        </div>
       </ItemNameNumberWrapper>
       <OrderItemInfoWrapper>
         <OrderItemImageWrapper isLink onClick={handleGoDetailPage}>
@@ -191,36 +207,53 @@ function DeviceOrderHistoryPage(props) {
         </OrderItemImageWrapper>
         <flexWrapper>
           <OrderDateformat>{createdAt}</OrderDateformat>
-          <DeviceName isLink onClick={handleGoDetailPage} >{deviceName}</DeviceName>
-          <DeviceInfoFormat><b>색상</b> {colorName}</DeviceInfoFormat>
-          <DeviceInfoFormat><b>저장공간</b> {storage}</DeviceInfoFormat>
+          <DeviceName isLink onClick={handleGoDetailPage}>
+            {deviceName}
+          </DeviceName>
+          <DeviceInfoFormat>
+            <b>색상</b> {colorName}
+          </DeviceInfoFormat>
+          <DeviceInfoFormat>
+            <b>저장공간</b> {storage}
+          </DeviceInfoFormat>
           <PriceWrapper>
             <div>
               <p>월예상납부금액 </p>
               <p>{PriceFormatter(price)}원</p>
             </div>
           </PriceWrapper>
-          <TypeWrapper><span>{installmentPeriod === 1 ? '일시불' : `${installmentPeriod}개월 할부`} + {planName} + {discountType === 0 ? '공시지원금' : '선택약정'} 적용 기준</span></TypeWrapper>
+          <TypeWrapper>
+            <span>
+              {installmentPeriod === 1 ? '일시불' : `${installmentPeriod}개월 할부`} + {planName} +{' '}
+              {discountType === 0 ? '공시지원금' : '선택약정'} 적용 기준
+            </span>
+          </TypeWrapper>
           <AddressInfoWrapper>주문자 주소</AddressInfoWrapper>
-          <AddressWrapper><div>{address}</div></AddressWrapper>
-          <Stack marginTop={2} direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={2}>
+          <AddressWrapper>
+            <div>{address}</div>
+          </AddressWrapper>
+          <Stack
+            marginTop={2}
+            direction="row"
+            divider={<Divider orientation="vertical" flexItem />}
+            spacing={2}>
             <RoundBtn
               onClick={handleGoUpdateAddressPage}
-              border={`1px solid ${theme.palette.prime}`}
-            >주소 수정</RoundBtn>
+              border={`1px solid ${theme.palette.prime}`}>
+              주소 수정
+            </RoundBtn>
             <RoundBtn
               onClick={popDeleteAlert}
               backgroundColor="#FFFFFF"
               border={`1px solid ${theme.palette.prime}`}
               color={theme.palette.prime}>
-              주문 취소</RoundBtn>
+              주문 취소
+            </RoundBtn>
           </Stack>
         </flexWrapper>
-
       </OrderItemInfoWrapper>
-
-    </OrderSearchResultBlock >
-  )
+    </OrderSearchResultBlock>
+  );
 }
 
 export default DeviceOrderHistoryPage;
