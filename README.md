@@ -27,6 +27,6 @@ http://uplus3-dev.s3-website.ap-northeast-2.amazonaws.com
   - Search Bar : [성아영](https://github.com/Sungayoung)
   - Result : [이일환](https://github.com/pppp0722)
 - Order
-  - Order Form : [성아영](https://github.com/Sungayoung)
-  - Order History : [윤병찬](https://github.com/Chaaany)
-  - Order Update : [윤병찬](https://github.com/Chaaany)
+  - Form : [성아영](https://github.com/Sungayoung)
+  - History : [윤병찬](https://github.com/Chaaany)
+  - Update : [윤병찬](https://github.com/Chaaany)
