@@ -31,7 +31,7 @@ const InputWrapper = styled('div')(({ theme }) => ({
 
 
 const NameNumberInputWrapper = styled('div')({
-  margintop: 100,
+  marginTop: 100,
   display: 'flex',
   justifyContent: 'space-between',
 });
