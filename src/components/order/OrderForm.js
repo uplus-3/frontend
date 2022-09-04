@@ -360,7 +360,9 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
                   <div>선택약정 (24개월)</div>
                   <div className="discount-sub-description">통신요금 25% 할인</div>
                 </div>
-                <div className="discount-price">-{PriceFormatter(devicePriceInfo.sdiscount)}원</div>
+                <div className="discount-price">
+                  -{PriceFormatter(devicePriceInfo.sdiscount * 24)}원
+                </div>
               </DiscountContent>
             </SquareBtn>
           </ButtonWrapper>

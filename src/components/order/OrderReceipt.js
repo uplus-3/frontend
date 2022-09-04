@@ -82,6 +82,7 @@ const CustomDivider = styled(Divider)({
 function OrderReceipt({
   deviceInfo,
   orderForm,
+  setOrderForm,
   checkUserInfo,
   setDevicePriceInfo,
   getUserInfo,
@@ -169,6 +170,12 @@ function OrderReceipt({
       planId: orderForm.planId,
     });
     setDevicePriceInfo({ ...res.data });
+    setOrderForm((prev) => ({
+      ...prev,
+      price:
+        devicePriceInfo.dplanPrice +
+        (orderForm.installmentPeriod === 1 ? 0 : devicePriceInfo.ddevicePrice),
+    }));
   };
 
   useEffect(() => {
