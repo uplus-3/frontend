@@ -75,7 +75,11 @@ function DeviceListPage({ networkType }) {
     );
     // 출시 예정 단말기 리스트 불러오기
     dispatch(devicesActions.getLaunchingDevices(networkType));
-  }, [dispatch, networkType]);
+    // header option 초기화
+    setExcludeSoldout(false);
+    setShowPrice(false);
+    setSearch('');
+  }, [dispatch, networkType, setExcludeSoldout, setShowPrice, setSearch]);
 
   useEffect(() => {
     // 요금제 & 할인유형이 바뀐 경우
