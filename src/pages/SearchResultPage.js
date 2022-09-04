@@ -58,13 +58,14 @@ function SearchResultPage(props) {
   const searchParam = searchParams.get('searchResult');
   const networkType = searchParams.get('network-type');
   const [results, setResults] = useState([]);
+
   useEffect(() => {
     getResults(searchParam);
-  }, [searchParam]);
+  }, [searchParam, networkType]);
 
   const getResults = async (searchParam) => {
     try {
-      const res = await getSearchResult({ query: searchParam });
+      const res = await getSearchResult({ query: searchParam, networkType: networkType});
       setResults(res.data.searchList);
     } catch (e) {
       console.log('error');
@@ -75,14 +76,10 @@ function SearchResultPage(props) {
 
   return (
     <div>
-      {results.length > 0 ? (
-        <Title>
-          <Query>
-            "<Highlight>{searchParam}</Highlight>"
-          </Query>{' '}
-          검색결과
-        </Title>
-      ) : null}
+      {results.length > 0 && 
+      <Title>
+        <Query>"<Highlight>{searchParam}</Highlight>"</Query>{' '}검색결과
+      </Title>}
       <Box sx={{ padding: '20px 0' }}>
         <StyledTabs value="mobile">
           <Tab value="mobile" label={networkType === null ? '전체' : networkType + 'G'} />
@@ -101,7 +98,8 @@ function SearchResultPage(props) {
           </EmptyResultBottom>
         </EmptyResultWrapper>
       )}
-      {results.length > 0 ? <DeviceSearchList results={results} /> : null}
+      {results.length > 0 &&
+      <DeviceSearchList results={results} />}
     </div>
   );
 }
