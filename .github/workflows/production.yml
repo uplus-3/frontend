@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  ifmerged:
+  deploy:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
@@ -44,11 +44,12 @@ jobs:
     - run: yarn install
     - run: CI=false yarn build
     # Configure the GitHub Actions environment with a role using GitHub's OIDC provider and your desired region
+      # Configure the GitHub Actions environment with a role using GitHub's OIDC provider and your desired region
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.PRODUCTION_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.PRODUCTION_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
 
     # Login to Amazon ECR Private, then build and push a Docker image
@@ -66,14 +67,16 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$REGISTRY/$REPOSITORY:$IMAGE_TAG"
-    
-    - name: Install Kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: 'v1.22.12-eks-6d3986b' # default is latest stable
-      id: install
-    
-    - name: 
+#
+    - name: Update kube config
+      run: aws eks update-kubeconfig --name uplus3 --region ap-northeast-2
+
+    - name: Deploy Image to Amazon EKS
+      run: |
+        kubectl apply -f k8s/aws-auth.yml
+        kubectl apply -f k8s/web-deployment.yml
+        kubectl apply -f k8s/issuer.yml
+        kubectl apply -f k8s/ingress.yml
 
 
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node

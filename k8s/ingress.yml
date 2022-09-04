@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: nginx
+spec:
+  controller: k8s.io/ingress-nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: uplus3-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts: 
+    - api.uplus3.lguplus-intern.com
+    secretName: api-cert
+  - hosts:
+    - uplus3.lguplus-intern.com
+    secretName: web-cert
+  rules:
+  - host: "api.uplus3.lguplus-intern.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 80
+  - host: "uplus3.lguplus-intern.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: web-service
+            port:
+              number: 80
