@@ -36,7 +36,7 @@ const ItemTagWrapper = styled(Box)({
   },
 });
 
-const ItemImageWrapper = styled(Box)({
+const ItemImageWrapper = styled(Box)(({ soldout }) => ({
   width: '100%',
   height: 280,
   borderRadius: '0.875rem',
@@ -44,7 +44,8 @@ const ItemImageWrapper = styled(Box)({
   backgroundRepeat: 'no-repeat',
   transform: 'scale(0.8)',
   cursor: 'pointer',
-});
+  opacity: soldout && 0.5,
+}));
 
 const ItemColorWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -54,19 +55,31 @@ const ItemColorWrapper = styled(Box)(({ theme }) => ({
   '& .colors': {
     display: 'flex',
     gap: 10,
+  },
+}));
 
-    '& li': {
-      width: 12,
-      height: 12,
-      borderRadius: '100%',
-      boxShadow: `0 2px 0px 0px ${theme.palette.gray3}`,
-      cursor: 'pointer',
-      transition: 'transform 0.25s',
-    },
-    '& li:hover': {
-      transform: 'scale(1.3)',
-      transition: 'transform 0.25s',
-    },
+const ColorChip = styled('li')(({ theme, colorCode }) => ({
+  borderRadius: '50%',
+  background: colorCode,
+  width: 12,
+  height: 12,
+  boxShadow: `0 2px 0px 0px ${theme.palette.gray3}`,
+  cursor: 'pointer',
+  transition: 'transform 0.25s',
+  position: 'relative',
+
+  '&:hover': {
+    transform: 'scale(1.3)',
+    transition: 'transform 0.25s',
+  },
+
+  div: {
+    position: 'absolute',
+    top: 5,
+    width: 12,
+    height: 3,
+    backgroundColor: '#ffffff',
+    transform: 'rotate(45deg)',
   },
 }));
 
@@ -185,15 +198,18 @@ function DeviceListItem({ data, showPrice, searchParams }) {
       <ItemImageWrapper
         onClick={handleGoDetailPage}
         style={{ backgroundImage: `url(${data?.colors[cIdx]?.imageUrl})` }}
+        soldout={data?.colors[cIdx]?.stock <= 0}
       />
       <ItemColorWrapper>
         <ul className="colors">
           {data?.colors.map((color, index) => (
-            <li
-              key={color.name}
+            <ColorChip
+              key={`color-chip-${color.name}`}
               title={color.name}
-              style={{ background: color.rgb }}
-              onClick={() => handleClickColor(index)}></li>
+              colorCode={color.rgb}
+              onClick={() => handleClickColor(index)}>
+              {color?.stock <= 0 && <div></div>}
+            </ColorChip>
           ))}
         </ul>
       </ItemColorWrapper>
