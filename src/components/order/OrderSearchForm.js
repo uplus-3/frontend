@@ -28,8 +28,10 @@ const InputWrapper = styled('div')(({ theme }) => ({
   },
 }));
 
+
+
 const NameNumberInputWrapper = styled('div')({
-  margintop:100,
+  marginTop: 100,
   display: 'flex',
   justifyContent: 'space-between',
 });
@@ -49,7 +51,7 @@ const CustomInput = styled(TextField)(({ theme, width }) => ({
 }));
 
 const OrderTitle = styled('div')(({ theme }) => ({
-  marginBottom : 150,
+  marginBottom: 150,
   fontSize: '1.875rem',
   fontWeight: 'bold',
 }));
@@ -97,6 +99,12 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
     };
   };
 
+  const handleOnKeyPress = e => {
+    if (e.key === 'Enter') {
+      orderSearch(); // Enter 입력이 되면 클릭 이벤트 실행
+    }
+  };
+
   const orderSearch = async () => {
     try {
       //성공했을경우
@@ -104,11 +112,6 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
         const res = await getOrderInfoByNameAndNumber({ name, number });
         const orderId = res.data.id;
         const orderInfo = res.data;
-
-        console.log(res);
-        console.log(res.data.id);
-        console.log(orderId);
-        console.log(orderInfo);
 
         Calert.fire({
           title: '주문 조회가 완료되었습니다',
@@ -118,8 +121,8 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
             //결과페이지로 이동
             navigate(
               `/order/${orderId}`, {
-                state: orderInfo
-              }
+              state: orderInfo
+            }
             );
           }
         });
@@ -160,6 +163,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
               required
               width={255}
               value={name}
+              onKeyPress={handleOnKeyPress}
               onChange={onNameChange}
               variant="standard"
               helperText={nameMessage}
@@ -172,6 +176,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
               placehoder="주문번호를 입력해주세요"
               width={255}
               value={number}
+              onKeyPress={handleOnKeyPress}
               onChange={onNumberChange}
               variant="standard"
               helperText={numberMessage}

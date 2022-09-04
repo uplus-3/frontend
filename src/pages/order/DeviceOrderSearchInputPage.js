@@ -9,7 +9,6 @@ const DeviceOrderSearchInputPageBlock = styled('div')({
 
 
 function DeviceOrderSearchInputPage() {
-  const location = useLocation();
   const navigate = useNavigate();
   const formRef = useRef();
   const [orderSearchForm, setOrderSearchForm] = useState({
