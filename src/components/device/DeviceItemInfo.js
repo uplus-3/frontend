@@ -124,6 +124,7 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
       state: { deviceInfo: deviceInfo, selectedColor: selectedColor, devicePriceInfo },
     });
   };
+
   return (
     <DeviceItemInfoBlock>
       <div>

@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 function useCart() {
   const navigate = useNavigate();
   const [cookie, setCookie] = useCookies(['cartId', 'cartCount']);
-  const cAlert = useAlert();
+  const Calert = useAlert();
 
   const addCart = async ({
     colorId,
@@ -26,7 +26,6 @@ function useCart() {
         planId,
         registrationType,
       });
-      console.log(res);
       let date = new Date();
       date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
       setCookie('cartId', res.data.carts[0].cartId, {
@@ -40,23 +39,20 @@ function useCart() {
         secure: true,
       });
 
-      cAlert
-        .fire({
-          icon: 'success',
-          title: '장바구니에 물건을 담았습니다.',
-          text: '장바구니로 이동하시겠습니까?',
-          confirmButtonText: '이동하기',
-          showCancelButton: true,
-          cancelButtonText: '쇼핑 계속하기',
-        })
-        .then((res) => {
-          if (res.isConfirmed) {
-            navigate('/cart');
-          }
-        });
+      Calert.fire({
+        icon: 'success',
+        title: '장바구니에 물건을 담았습니다.',
+        text: '장바구니로 이동하시겠습니까?',
+        confirmButtonText: '이동하기',
+        showCancelButton: true,
+        cancelButtonText: '쇼핑 계속하기',
+      }).then((res) => {
+        if (res.isConfirmed) {
+          navigate('/cart');
+        }
+      });
     } catch (e) {
-      console.log(e.response);
-      cAlert.fire({
+      Calert.fire({
         title: '장바구니에 담을 수 없습니다.',
       });
     }

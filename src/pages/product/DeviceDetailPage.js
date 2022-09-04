@@ -2,21 +2,31 @@ import React, { useEffect, useState } from 'react';
 
 import { styled } from '@mui/material';
 import { getDeviceDetail, getDevicePrice } from '../../lib/api/device';
-import axios from 'axios';
 import DeviceItemImage from '../../components/device/DeviceItemImage';
 import DeviceItemInfo from '../../components/device/DeviceItemInfo';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { getPlanInfo } from '../../modules/actions/planSlice';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { loadingActions } from '../../modules/actions/loadingSlice';
+import { errorActions } from '../../modules/actions/errorSlice';
+import Loading from '../../components/common/Loading';
+import Error from '../../components/common/Error';
 
 const DeviceDetailPageWrapper = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
 });
+const ErrorWrapper = styled('div')({
+  marginTop: 30,
+});
 
 function DeviceDetailPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const isLoading = useSelector(({ Loading }) => Loading?.deviceDetail);
+  const isError = useSelector(({ Error }) => Error?.deviceDetail);
 
   const [deviceDetailInfo, setDeviceDetailInfo] = useState(null);
   const [devicePriceInfo, setDevicePriceInfo] = useState(null);
@@ -25,7 +35,7 @@ function DeviceDetailPage() {
   const planInfo = useSelector(({ plan }) => {
     return getPlanInfo(
       plan,
-      searchParams.get('plan') === '-1'
+      searchParams.get('plan') === '-1' || !!!searchParams.get('plan')
         ? deviceDetailInfo?.recommendedPlanId || 1
         : parseInt(searchParams.get('plan')),
     );
@@ -33,18 +43,27 @@ function DeviceDetailPage() {
 
   // 서버와 통신해 디바이스 정보를 가져옴
   const getDeviceDetailInfo = async () => {
+    const { startLoading, finishLoading } = loadingActions;
+    const { initError, setError } = errorActions;
+    dispatch(startLoading('deviceDetail'));
+    dispatch(initError('deviceDetail'));
     try {
       const res = await getDeviceDetail(searchParams.get('id'));
-
       setDeviceDetailInfo({ ...res.data });
       setSelectedColor(res.data?.colors[0]);
     } catch (e) {
-      console.log(e.response);
+      dispatch(setError('deviceDetail'));
+    } finally {
+      dispatch(finishLoading('deviceDetail'));
     }
   };
 
   // 디바이스 가격정보를 가져옴
   const getDevicePriceInfo = async () => {
+    const { startLoading, finishLoading } = loadingActions;
+    const { initError, setError } = errorActions;
+    dispatch(startLoading('deviceDetail'));
+    dispatch(initError('deviceDetail'));
     try {
       const req = {
         deviceId: searchParams.get('id'),
@@ -55,7 +74,9 @@ function DeviceDetailPage() {
       const res = await getDevicePrice(req);
       setDevicePriceInfo(res.data);
     } catch (e) {
-      console.log(e.response);
+      dispatch(setError('deviceDetail'));
+    } finally {
+      dispatch(finishLoading('deviceDetail'));
     }
   };
 
@@ -66,16 +87,32 @@ function DeviceDetailPage() {
 
   return (
     <div>
-      {deviceDetailInfo && (
-        <DeviceDetailPageWrapper>
-          <DeviceItemImage colors={deviceDetailInfo.colors} selectedColor={selectedColor} />
-          <DeviceItemInfo
-            devicePriceInfo={devicePriceInfo}
-            deviceInfo={{ ...deviceDetailInfo, plan: planInfo }}
-            selectedColor={selectedColor}
-            setSelectedColor={setSelectedColor}
-          />
-        </DeviceDetailPageWrapper>
+      {isError ? (
+        <ErrorWrapper>
+          <Error message="상품을 불러올 수 없습니다." />
+        </ErrorWrapper>
+      ) : (
+        <>
+          {isLoading ? (
+            <div className="loading">
+              <Loading />
+            </div>
+          ) : (
+            <>
+              {deviceDetailInfo && (
+                <DeviceDetailPageWrapper>
+                  <DeviceItemImage colors={deviceDetailInfo.colors} selectedColor={selectedColor} />
+                  <DeviceItemInfo
+                    devicePriceInfo={devicePriceInfo}
+                    deviceInfo={{ ...deviceDetailInfo, plan: planInfo }}
+                    selectedColor={selectedColor}
+                    setSelectedColor={setSelectedColor}
+                  />
+                </DeviceDetailPageWrapper>
+              )}
+            </>
+          )}
+        </>
       )}
     </div>
   );

@@ -1,15 +1,18 @@
 import React, { useMemo, useEffect } from 'react';
 import { styled } from '@mui/system';
 import { Paper, Divider, IconButton, Tooltip, useTheme } from '@mui/material';
+
+import { errorActions } from '../../modules/actions/errorSlice';
+import { useDispatch } from 'react-redux';
+
 import RoundBtn from '../common/RoundBtn';
 import { useNavigate } from 'react-router-dom';
 import useAlert from '../../lib/hooks/useAlert';
 import { PriceFormatter } from '../../lib/utils';
 import { postOrder } from '../../lib/api/order';
 import useCart from '../../lib/hooks/useCart';
-
+import { getDevicePrice } from '../../lib/api/device';
 import KakaoIcon from '../../assets/images/icon-kakao.png';
-import { getDeviceDetail, getDevicePrice } from '../../lib/api/device';
 
 const OrderReceiptBlock = styled('div')({});
 const OrderReceiptWrapper = styled(Paper)({
@@ -88,6 +91,7 @@ function OrderReceipt({
   getUserInfo,
   devicePriceInfo,
 }) {
+  const dispatch = useDispatch();
   const { addCart } = useCart();
   const Calert = useAlert();
   const navigate = useNavigate();
@@ -130,6 +134,7 @@ function OrderReceipt({
         const res = await postOrder({ ...orderForm, ...getUserInfo() });
         const number = await res.data.number;
         Calert.fire({
+          icon: 'success',
           title: '주문이 완료되었습니다',
           html: (
             <ShareDiv>
@@ -142,13 +147,16 @@ function OrderReceipt({
             </ShareDiv>
           ),
         }).then((res) => {
-          navigate(-1);
+          if (res.isConfirmed) {
+            navigate(-1);
+          } else if (res.isDismissed) {
+            navigate(-1);
+          }
         });
       }
     } catch (e) {
-      console.log(e.response);
+      // 실패했을 경우
       if (e.response.status === 403) {
-        // 실패했을 경우
         Calert.fire({
           title: '해당 상품은 이미 품절되었습니다',
           text: `이전페이지로 돌아가겠습니까?`,
@@ -158,24 +166,35 @@ function OrderReceipt({
             navigate(-1);
           }
         });
+      } else {
+        Calert.fire({
+          icon: 'error',
+          title: '주문에 실패했습니다.',
+        });
       }
     }
   };
 
   const getDeviceInfo = async () => {
-    const res = await getDevicePrice({
-      deviceId: deviceInfo.id,
-      installmentPeriod: orderForm.installmentPeriod,
-      discountType: orderForm.discountType,
-      planId: orderForm.planId,
-    });
-    setDevicePriceInfo({ ...res.data });
-    setOrderForm((prev) => ({
-      ...prev,
-      price:
-        devicePriceInfo.dplanPrice +
-        (orderForm.installmentPeriod === 1 ? 0 : devicePriceInfo.ddevicePrice),
-    }));
+    const { initError, setError } = errorActions;
+    dispatch(initError('order'));
+    try {
+      const res = await getDevicePrice({
+        deviceId: deviceInfo.id,
+        installmentPeriod: orderForm.installmentPeriod,
+        discountType: orderForm.discountType,
+        planId: orderForm.planId,
+      });
+      setDevicePriceInfo({ ...res.data });
+      setOrderForm((prev) => ({
+        ...prev,
+        price:
+          devicePriceInfo.dplanPrice +
+          (orderForm.installmentPeriod === 1 ? 0 : devicePriceInfo.ddevicePrice),
+      }));
+    } catch {
+      dispatch(setError('order'));
+    }
   };
 
   useEffect(() => {

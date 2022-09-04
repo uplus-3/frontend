@@ -2,6 +2,7 @@ import React from 'react';
 
 import { styled } from '@mui/material';
 import RoundBtn from '../components/common/RoundBtn';
+import { useNavigate } from 'react-router-dom';
 
 const MainDiv = styled('div')({
   zIndex: 0,
@@ -35,15 +36,21 @@ const SubTitle = styled('div')({
 });
 
 function MainPage() {
+  const navigate = useNavigate();
   return (
     <MainDiv>
       <ContentDiv>
-        <Title>Galaxy Z Filp4 | Z Fold4</Title>
+        <Title>Galaxy Z Filp4</Title>
         <div>
           <SubTitle> 유플러스 단독 메종키츠네 리미티드 에디션부터</SubTitle>
           <SubTitle>갤럭시 워치5와 버즈2까지</SubTitle>
         </div>
-        <RoundBtn>구매하러 가기</RoundBtn>
+        <RoundBtn
+          onClick={() => {
+            navigate('/5g-phone/SM-F721N512?id=3&plan=-1&discount=-1');
+          }}>
+          구매하러 가기
+        </RoundBtn>
       </ContentDiv>
     </MainDiv>
   );
