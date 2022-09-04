@@ -30,21 +30,6 @@ const ItemNameNumberWrapper = styled('div')({
   gap: 10,
 });
 
-// colorName: "스타라이트"
-// createdAt: "2022.08.31"
-// deviceName: "iPhone 13 mini 256G"
-// discountType: 0
-// id: 1
-// imageUrl: "https://image.lguplus.com/common/images/hphn/product/A2628-256/imge_cut/ushop_A2628-256_21_A.jpg"
-// installmentPeriod: 1
-// name: "윤유플"
-// number: 2208313678
-// planName: "5G 시그니처"
-// price: 100236
-// registrationType: 0
-// storage: "256GB"
-
-
 
 const DeviceName = styled('div')(({ isLink }) => ({
   cursor: isLink && 'pointer',
