@@ -193,7 +193,7 @@ function Navbar() {
             </Badge>
           </CartBtnWrapper>
           <BuyBtnWrapper onClick={handleOrderClick}>
-            <RoundBtn>구매조회</RoundBtn>
+            <RoundBtn>주문조회</RoundBtn>
           </BuyBtnWrapper>
         </CustomToolbar>
       </CustomAppbar>

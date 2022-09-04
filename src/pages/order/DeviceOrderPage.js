@@ -3,14 +3,25 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material';
 import OrderForm from '../../components/order/OrderForm';
 import OrderReceipt from '../../components/order/OrderReceipt';
+import useAlert from '../../lib/hooks/useAlert';
+
+import { useSelector, useDispatch } from 'react-redux';
+
+import Error from '../../components/common/Error';
 
 const DeviceOrderPageWrapper = styled('div')({
   display: 'flex',
 });
 
+const ErrorWrapper = styled('div')({
+  marginTop: 30,
+});
+
 function DeviceOrderPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const Calert = useAlert();
   const formRef = useRef();
   const [deviceInfo, setDeviceInfo] = useState(null);
   const [devicePriceInfo, setDevicePriceInfo] = useState(null);
@@ -19,10 +30,13 @@ function DeviceOrderPage() {
     discountType: 0,
     installmentPeriod: 24,
     planId: 1,
-    price: 100236,
+    price: 0,
     registrationType: 0,
     shipmentType: 1,
   });
+
+  const isLoading = useSelector(({ loading }) => loading?.order);
+  const isError = useSelector(({ error }) => error?.order);
 
   const checkUserInfo = () => {
     return formRef.current.checkUserInfo();
@@ -34,11 +48,17 @@ function DeviceOrderPage() {
 
   useEffect(() => {
     const { state } = location;
-    if (!!!state) navigate(-1);
-    console.log(state);
+    if (!!!state) {
+      Calert.fire({
+        title: '잘못된 접근입니다',
+        text: '3초 후 이전 페이지로 이동합니다.',
+        timer: 3000,
+      }).then((res) => {
+        navigate(-1);
+      });
+    }
     setDeviceInfo({ ...state.deviceInfo, selectedColor: { ...state.selectedColor } });
     setDevicePriceInfo(state.devicePriceInfo);
-    //TODO 기본값으로 plan Id 넣어주기
     setOrderForm((prev) => {
       return {
         ...prev,
@@ -51,25 +71,34 @@ function DeviceOrderPage() {
 
   return (
     <DeviceOrderPageWrapper>
-      {deviceInfo && (
+      {isError ? (
+        <ErrorWrapper>
+          <Error message="주문 정보를 불러올 수 없습니다." />
+        </ErrorWrapper>
+      ) : (
         <>
-          <OrderForm
-            orderForm={orderForm}
-            deviceInfo={deviceInfo}
-            setOrderForm={setOrderForm}
-            devicePriceInfo={devicePriceInfo}
-            planId={deviceInfo?.plan?.id}
-            ref={formRef}
-          />
-          <OrderReceipt
-            setDeviceInfo={setDeviceInfo}
-            deviceInfo={deviceInfo}
-            orderForm={orderForm}
-            setDevicePriceInfo={setDevicePriceInfo}
-            devicePriceInfo={devicePriceInfo}
-            checkUserInfo={checkUserInfo}
-            getUserInfo={getUserInfo}
-          />
+          {deviceInfo && (
+            <>
+              <OrderForm
+                orderForm={orderForm}
+                deviceInfo={deviceInfo}
+                setOrderForm={setOrderForm}
+                devicePriceInfo={devicePriceInfo}
+                planId={deviceInfo?.plan?.id}
+                ref={formRef}
+              />
+              <OrderReceipt
+                setOrderForm={setOrderForm}
+                setDeviceInfo={setDeviceInfo}
+                deviceInfo={deviceInfo}
+                orderForm={orderForm}
+                setDevicePriceInfo={setDevicePriceInfo}
+                devicePriceInfo={devicePriceInfo}
+                checkUserInfo={checkUserInfo}
+                getUserInfo={getUserInfo}
+              />
+            </>
+          )}
         </>
       )}
     </DeviceOrderPageWrapper>
