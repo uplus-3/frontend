@@ -82,9 +82,12 @@ function DeviceCompareModal({ open, setOpen }) {
     }
   };
 
-  const handleClickRemove = useCallback((id) => {
-    dispatch(devicesActions.removeComparison(id));
-  }, []);
+  const handleClickRemove = useCallback(
+    (id) => {
+      dispatch(devicesActions.removeComparison(id));
+    },
+    [dispatch],
+  );
 
   return (
     <DeviceCompareModalBlock open={open} onClose={handleClose} z>
