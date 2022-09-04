@@ -139,13 +139,10 @@ export const filteredDevices = (
     devicesWithPrice.sort((a, b) => b.price - a.price);
   }
 
-  // TODO - regex로 수정
   if (search) {
+    const regx = new RegExp(search.replaceAll(' ', ''), 'gi');
     devicesWithPrice = devicesWithPrice.filter((device) =>
-      device.name
-        .replaceAll(' ', '')
-        .toLowerCase()
-        .includes(search.replaceAll(' ', '').toLowerCase()),
+      device.name.replaceAll(' ', '').match(regx),
     );
   }
   return devicesWithPrice;
