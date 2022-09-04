@@ -128,7 +128,7 @@ function DeviceListHeader({
 
   const handleChangeSortDirection = useCallback(() => {
     setSortbyDir((prev) => !prev);
-  }, []);
+  }, [setSortbyDir]);
 
   return (
     <DeviceListHeaderBlock>

@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import DeviceListHeader from './DeviceListHeader';
 import DeviceListItem from './DeviceListItem';
 
 import { styled } from '@mui/system';
 import { Box } from '@mui/material';
-import { ErrorOutline } from '@mui/icons-material';
 import Loading from '../common/Loading';
 import Error from '../common/Error';
 
@@ -29,8 +28,11 @@ const ErrorWarpper = styled('div')({
   marginTop: 30,
 });
 
+const LaunchingDeviceListWrapper = styled(Box)({});
+
 function DeviceList({
   devices,
+  launchingDevices,
   loading,
   error,
   count,
@@ -40,6 +42,7 @@ function DeviceList({
   setExcludeSoldout,
   showPrice,
   setShowPrice,
+  sortby,
   sortbyDir,
   setSortbyDir,
   search,
