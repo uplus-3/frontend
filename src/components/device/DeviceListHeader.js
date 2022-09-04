@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SORT_TYPE } from './DeviceListFileterContents';
 
 import { styled } from '@mui/system';
@@ -22,6 +22,7 @@ import {
   CheckCircle,
   CheckCircleOutline,
 } from '@mui/icons-material';
+import { useSearchParams } from 'react-router-dom';
 
 const DeviceListHeaderBlock = styled('div')({
   width: '100%',
@@ -93,12 +94,15 @@ function DeviceListHeader({
   onChangeSearch,
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const sortby = searchParams.get('sortby');
   const [selectedIndex, setSelectedIndex] = useState(
-    (searchParams.get('sortby') &&
-      SORT_TYPE.findIndex((type) => type.value === searchParams.get('sortby'))) ||
-      0,
+    (sortby && SORT_TYPE.findIndex((type) => type.value === sortby)) || 0,
   );
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    setSelectedIndex((sortby && SORT_TYPE.findIndex((type) => type.value === sortby)) || 0);
+  }, [sortby]);
 
   const handleClickListItem = (event) => {
     setAnchorEl(event.currentTarget);
