@@ -59,7 +59,10 @@ function DeviceCompareItem({ device, isLink, onClickRemove, isModal }) {
 
   const handleGoDetail = () => {
     if (isLink) {
-      navigate(`./${device?.serialNumber}`);
+      navigate({
+        pathname: `./${device.serialNumber}`,
+        search: `?id=${device.id}`,
+      });
     }
   };
   return (
