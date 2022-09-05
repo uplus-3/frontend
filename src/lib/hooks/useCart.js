@@ -31,12 +31,10 @@ function useCart() {
       setCookie('cartId', res.data.carts[0].cartId, {
         path: '/',
         expires: date,
-        secure: true,
       });
       setCookie('cartCount', res.data.carts.length, {
         path: '/',
         expires: date,
-        secure: true,
       });
 
       Calert.fire({

@@ -124,7 +124,6 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
       state: { deviceInfo: deviceInfo, selectedColor: selectedColor, devicePriceInfo },
     });
   };
-
   return (
     <DeviceItemInfoBlock>
       <div>
@@ -192,10 +191,10 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
         <RoundBtn
           onClick={() =>
             addCart({
-              colorId: selectedColor?.colorId || 1,
+              colorId: selectedColor?.id || 1,
               discountType: deviceInfo.discountType,
               installmentPeriod: searchParams.get('installment-period') || 24,
-              planId: deviceInfo?.plan.id || 1,
+              planId: deviceInfo?.plan?.id || 1,
               registrationType: 0,
             })
           }
