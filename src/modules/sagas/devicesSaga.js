@@ -30,7 +30,6 @@ export function* getDevicesSaga(action) {
       }),
     );
   } catch (e) {
-    console.log(e);
     yield put(setError('devices'));
   } finally {
     yield put(finishLoading('devices'));
@@ -105,5 +104,4 @@ export function* devicesSaga() {
   yield takeLatest(getDevicePrice, getDevicePricesSaga);
   yield takeLatest(getDeviceSimple, getDeviceSimpleSaga);
   yield takeLatest(getLaunchingDevices, getLaunchingDeviceListSaga);
-  // yield takeLatest(setFilterValue, getDevicesSaga);
 }

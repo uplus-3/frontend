@@ -12,7 +12,6 @@ export const getDeviceDetail = (deviceId) => {
 };
 
 // 단일 디바이스 가격정보 받아오기
-//TODO planId/ plan 통일하기
 export const getDevicePrice = ({ deviceId, discountType, installmentPeriod, planId }) => {
   return client.get(`/devices/${deviceId}/plans/${planId || -1}`, {
     params: {

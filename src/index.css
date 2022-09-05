@@ -33,3 +33,10 @@ code {
   src: url(./assets/fonts/LGSmHaB.ttf);
   font-weight: 700;
 }
+
+.swal2-popup {
+  font-family: LGSmart;
+}
+.swal2-styled {
+  font-family: LGSmart;
+}

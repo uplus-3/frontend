@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { styled } from '@mui/system';
-import { Box } from '@mui/material';
 import DeviceSearchListItem from './DeviceSearchListItem';
 
 /**
@@ -15,7 +14,6 @@ const DeviceSearchListBlock = styled('div')({
 });
 
 function DeviceSearchList({ results }) {
-  console.log(results);
   return (
     <DeviceSearchListBlock>
       {results.map((result) => (

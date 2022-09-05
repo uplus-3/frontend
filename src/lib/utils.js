@@ -31,5 +31,4 @@ export const PhoneFormatter = (num) => {
     formattedNum += num.substr(7);
     return formattedNum;
   }
-  return num;
 };

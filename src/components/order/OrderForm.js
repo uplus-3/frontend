@@ -125,9 +125,8 @@ const installmentPeriodList = [
 ];
 
 function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
-  const phonenumberValidator = (num) => num.indexOf('-') === -1;
   const theme = useTheme();
-  const [name, onNameChange, setName] = useInput('');
+  const [name, onNameChange] = useInput('');
   const [phonenumber, setPhonenumber] = useState('');
   const [detailAddress, onChangeDetailAddress] = useInput('');
   const [address, setAddress] = useState('');
@@ -145,9 +144,6 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
     checkUserInfo,
     getUserInfo,
   }));
-  const getPrice = () => {
-    // 백엔드로 api 요청
-  };
 
   const planList =
     useSelector(({ plan }) => {
@@ -186,16 +182,12 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
   };
 
   useEffect(() => {
-    getPrice();
-  }, []);
-
-  useEffect(() => {
     if (!name || nameValidator.test(name)) {
       setNameMessage('');
     } else {
       setNameMessage('한글이름 기준으로 2자리 이상 20자리 이하로 입력해주세요.');
     }
-  }, [name]);
+  }, [name, nameValidator]);
 
   useEffect(() => {
     if (!phonenumber || phoneValidator.test(phonenumber)) {
@@ -203,7 +195,7 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
     } else {
       setPhoneMessage('유효하지 않은 휴대폰번호입니다.');
     }
-  }, [phonenumber]);
+  }, [phonenumber, phoneValidator]);
 
   return (
     <OrderFormBlock>
@@ -316,7 +308,7 @@ function OrderForm({ orderForm, setOrderForm, devicePriceInfo, planId }, ref) {
         <DeviceInfoWrapper>
           <span>요금제</span>
           <ButtonWrapper direction="column">
-            {planList.map((plan, idx) => (
+            {planList.map((plan) => (
               <SquareBtn
                 border={plan.id === orderForm.planId && `1px solid ${theme.palette.prime}`}
                 color={plan.id === orderForm.planId && theme.palette.prime}

@@ -26,7 +26,6 @@ const DeviceCompareItemSelectorBlock = styled('div')(({ theme }) => ({
 function DeviceCompareItemSelector() {
   const dispatch = useDispatch();
   const [company, setCompany] = useState();
-  const [device, setDevice] = useState();
   const dSimpleList = useSelector((state) => filteredSimple(state, company));
 
   useEffect(() => {
@@ -79,10 +78,7 @@ function DeviceCompareItemSelector() {
           </MenuItem>
         ))}
       </DeviceCompareItemSelect>
-      <DeviceCompareItemSelect
-        value={device}
-        onChange={handleDSelectValue}
-        renderValue={dRenderValue}>
+      <DeviceCompareItemSelect onChange={handleDSelectValue} renderValue={dRenderValue}>
         {company &&
           dSimpleList &&
           dSimpleList.map((menu) => <MenuItem value={menu.id}>{menu.name}</MenuItem>)}

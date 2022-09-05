@@ -51,7 +51,6 @@ function CartListPage() {
       try {
         const res = await getCartList(cookie.cartId);
         setCartList(res.data.carts);
-        console.log(res);
       } catch (e) {
         setCartCount(0);
       }
