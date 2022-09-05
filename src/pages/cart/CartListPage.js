@@ -1,7 +1,10 @@
-import styled from '@emotion/styled';
-import { Box, Tab, Tabs } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
+import { Helmet } from 'react-helmet-async';
+
+import styled from '@emotion/styled';
+import { Box, Tab, Tabs } from '@mui/material';
+
 import { getCartList } from '../../lib/api/cart';
 import CartList from '../../components/cart/CartList';
 import CartListEmpty from '../../components/cart/CartListEmpty';
@@ -57,6 +60,9 @@ function CartListPage() {
 
   return (
     <div>
+      <Helmet>
+        <title> 장바구니 | 엘지유플 최강 3조</title>
+      </Helmet>
       <Title>장바구니</Title>
       {cartCount ? (
         <>

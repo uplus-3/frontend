@@ -26,7 +26,7 @@ const DeviceListWrapper = styled(Box)({
   },
 });
 
-const ErrorWarpper = styled('div')({
+const ErrorWrapper = styled('div')({
   marginTop: 30,
 });
 
@@ -67,9 +67,9 @@ function DeviceList({
       />
 
       {error ? (
-        <ErrorWarpper>
+        <ErrorWrapper>
           <Error message="상품을 불러올 수 없습니다." />
-        </ErrorWarpper>
+        </ErrorWrapper>
       ) : (
         <DeviceListWrapper>
           {(loading || !devices) && (

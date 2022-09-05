@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 import { styled } from '@mui/material';
 import RoundBtn from '../components/common/RoundBtn';
@@ -39,6 +40,9 @@ function MainPage() {
   const navigate = useNavigate();
   return (
     <MainDiv>
+      <Helmet>
+        <title>엘지유플 최강 3조 | LG U+</title>
+      </Helmet>
       <ContentDiv>
         <Title>Galaxy Z Filp4</Title>
         <div>
