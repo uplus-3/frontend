@@ -193,7 +193,7 @@ const HightlightSearchTerm = (text, query) => {
     </>
   );
 };
-const DEFAULT_SEARCH_TERM = '갤럭시 Z Fold4';
+const DEFAULT_SEARCH_TERM = '갤럭시 Z Fold 4';
 
 function SearchBar() {
   const navigate = useNavigate();
@@ -307,7 +307,7 @@ function SearchBar() {
         <div>
           <SearchInput
             onFocus={(event) => setAnchorEl(event.currentTarget)}
-            placeholder="갤럭시 Z Fold4"
+            placeholder="갤럭시 Z Fold 4"
             value={searchResult}
             onChange={handleChangeSearchResult}
             onKeyDown={handleSearch}
