@@ -8,13 +8,11 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Divider,
-  Tooltip,
   Chip,
   ClickAwayListener,
 } from '@mui/material';
-import { Search, Clear, Work } from '@mui/icons-material';
+import { Search, Clear } from '@mui/icons-material';
 import { useNavigate, createSearchParams } from 'react-router-dom';
-import useInput from '../../lib/hooks/useInput';
 import { getSearchRelatedKeyword } from '../../lib/api/search';
 
 /**

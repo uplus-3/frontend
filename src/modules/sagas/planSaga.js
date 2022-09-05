@@ -1,4 +1,4 @@
-import { call, put, delay, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import { planActions } from '../actions/planSlice';
 import { loadingActions } from '../actions/loadingSlice';
 import { getPlans } from '../../lib/api/plan';
@@ -22,7 +22,6 @@ export function* getPlanSaga(action) {
       }),
     );
   } catch (e) {
-    console.log(e);
     yield put(
       getPlanFailure({
         payload: e,

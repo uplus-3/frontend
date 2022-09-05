@@ -69,6 +69,7 @@ const ShareDiv = styled('div')({
   alignItems: 'center',
   gap: 10,
 });
+
 const AlignCenter = styled('div')(({ direction }) => ({
   display: 'flex',
   justifyContent: 'center',

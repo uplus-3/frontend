@@ -44,7 +44,6 @@ const DeviceListFilterBlock = styled('div')(({ theme }) => ({
   },
 }));
 
-// TODO - sticky 적용시 하단에 공백 생성됨 : maxHeight때문
 const StyledListFilter = styled(List)(({ theme }) => ({
   background: theme.palette.gray1,
   position: 'sticky',
@@ -121,7 +120,7 @@ function isCheckedArr(std, value, defaultValue) {
   return false;
 }
 
-function DeviceListFilter({ searchParams, plan: plan_datas, loading, error, onChangeFilter }) {
+function DeviceListFilter({ searchParams, plan: plan_datas, onChangeFilter }) {
   const [open, setOpen] = useState([true, true, true, false, false]);
   const { plan_type, discount_type, company_type, storage_type, price_range } = FILTER_DATA;
 

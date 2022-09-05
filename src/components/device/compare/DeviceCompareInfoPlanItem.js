@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { styled } from '@mui/system';
 import DeviceCompareItemSelect from './DeviceCompareItemSelect';
 import { MenuItem } from '@mui/material';

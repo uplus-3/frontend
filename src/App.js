@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import './App.css';
 import Router from './router';
 
 import { ThemeProvider, CssBaseline } from '@mui/material';

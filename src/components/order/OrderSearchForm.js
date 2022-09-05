@@ -62,20 +62,15 @@ const OrderFormWrapper = styled('div')({
   alignItems: 'center',
 });
 
-function OrderSearchForm({ orderForm, setOrderForm }, ref) {
+function OrderSearchForm() {
   const Calert = useAlert();
-  const [name, onNameChange, setName] = useInput('');
-  const [number, onNumberChange, setNumber] = useInput('');
+  const [name, onNameChange] = useInput('');
+  const [number, onNumberChange] = useInput('');
   const navigate = useNavigate();
   const [numberMessage, setNumberMessage] = useState('');
   const [nameMessage, setNameMessage] = useState('');
 
   const nameValidator = /^[가-힣]{2,20}$/;
-
-  useImperativeHandle(ref, () => ({
-    checkUserInfo,
-    getUserInfo,
-  }));
 
   const checkUserInfo = () => {
     if (!!!name) {
@@ -86,13 +81,6 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
       return false;
     }
     return !!!nameMessage && !!!numberMessage;
-  };
-
-  const getUserInfo = () => {
-    return {
-      name,
-      number,
-    };
   };
 
   const handleOnKeyPress = (e) => {
@@ -112,6 +100,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
         Calert.fire({
           title: '주문 조회가 완료되었습니다',
           icon: 'success',
+          confirmButtonText: '확인',
         }).then((res) => {
           if (res.isConfirmed) {
             //결과페이지로 이동
@@ -139,7 +128,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
   }, [name]);
 
   useEffect(() => {
-    if (!number || number.length == 10) {
+    if (!number || number.length === 10) {
       setNumberMessage('');
     } else {
       setNumberMessage('유효하지 않은 주문번호입니다.');

@@ -70,14 +70,6 @@ const OrderItemImageWrapper = styled('div')(({ isLink }) => ({
     height: '100%',
   },
 }));
-const flexWrapper = styled('div')({
-  top: 0,
-  display: 'flex',
-  marginTop: 50,
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: 1,
-});
 
 const PriceWrapper = styled('b')(({ theme }) => ({
   display: 'flex',
@@ -97,14 +89,6 @@ const NameWrapper = styled('span')(({ theme }) => ({
   fontWeight: 'bold',
   fontSize: '1.5rem',
   color: '#E6007E',
-}));
-
-const OrderBottomInfoItem = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
 }));
 
 const DeviceInfoFormat = styled('div')(({ theme }) => ({
@@ -186,7 +170,7 @@ function DeviceOrderHistoryPage(props) {
       showCancelButton: true,
     }).then(async (res) => {
       if (res.isConfirmed) {
-        const response = await deleteOrder(id);
+        await deleteOrder(id);
         navigate('/');
       }
     });
@@ -206,7 +190,7 @@ function DeviceOrderHistoryPage(props) {
       </ItemNameNumberWrapper>
       <OrderItemInfoWrapper>
         <OrderItemImageWrapper isLink onClick={handleGoDetailPage}>
-          <img src={imageUrl} />
+          <img src={imageUrl} alt="주문 상품 이미지" />
         </OrderItemImageWrapper>
         <flexWrapper>
           <OrderDateformat>{createdAt}</OrderDateformat>

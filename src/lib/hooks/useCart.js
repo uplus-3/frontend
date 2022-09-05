@@ -1,5 +1,3 @@
-import React from 'react';
-import { styled } from '@mui/system';
 import { useCookies } from 'react-cookie';
 import { createCartItem, deleteCartItem } from '../api/cart';
 import useAlert from './useAlert';
