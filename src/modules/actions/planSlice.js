@@ -29,7 +29,6 @@ export const getRecommendedPlan = (state, planId) => {
   let networkType = '5g';
   if (state['4g']?.some((plan) => plan.id === planId)) {
     networkType = '4g';
-    planId -= state['5g']?.length;
   }
 
   let st = planId - 1;
