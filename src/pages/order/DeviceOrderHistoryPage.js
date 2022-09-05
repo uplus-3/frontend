@@ -12,6 +12,9 @@ import { PriceFormatter } from '../../lib/utils';
 import useAlert from '../../lib/hooks/useAlert';
 import { deleteOrder } from '../../lib/api/order';
 
+/**
+ * 담당자 : 윤병찬
+ */
 const OrderSearchResultBlock = styled('div')({
   top: 0,
   display: 'flex',

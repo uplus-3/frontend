@@ -2,6 +2,9 @@ import React from 'react';
 import { styled } from '@mui/system';
 import { CircularProgress } from '@mui/material';
 
+/**
+ * 담당자 : 김수현
+ */
 const StyledProgress = styled(CircularProgress)(({ theme, color }) => ({
   color: color || theme.palette.prime,
 }));

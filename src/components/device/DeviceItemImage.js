@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import PropTypes from 'prop-types';
 
+/**
+ * 담당자 : 성아영
+ */
 const DeviceItemImageBlock = styled('div')({
   position: 'sticky',
   top: 0,

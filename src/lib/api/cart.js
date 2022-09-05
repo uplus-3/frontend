@@ -1,5 +1,8 @@
 import client from './client';
 
+/**
+ * 담당자 : 성아영
+ */
 export const getCartList = (cartId) => {
   return client.get(`/carts/${cartId}`);
 };

@@ -1,3 +1,6 @@
+/**
+ * 담당자 : 성아영
+ */
 export const NavbarContent = {
   '모바일 기기': [
     {

@@ -14,6 +14,9 @@ import DeviceCompareInfoPrice from './DeviceCompareInfoPrice';
 import DeviceCompareInfoPlan from './DeviceCompareInfoPlan';
 import DeviceCompareInfoSpec from './DeviceCompareInfoSpec';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceCompareInfoBlock = styled('div')({});
 
 const StyledAccordion = styled(Accordion)({});

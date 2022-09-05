@@ -7,7 +7,9 @@ import DeviceCompareItemSelect from './DeviceCompareItemSelect';
 
 import { styled } from '@mui/system';
 import { MenuItem } from '@mui/material';
-
+/**
+ * 담당자 : 김수현
+ */
 const COMPANY = FILTER_DATA.company_type.data.slice(1);
 
 const DeviceCompareItemSelectorBlock = styled('div')(({ theme }) => ({

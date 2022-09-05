@@ -1,3 +1,6 @@
+/**
+ * 담당자 : 김수현
+ */
 export const SORT_TYPE = [
   {
     name: '출시순',

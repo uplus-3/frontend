@@ -10,6 +10,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Error from '../../components/common/Error';
 
+/**
+ * 담당자 : 성아영
+ */
 const DeviceOrderPageWrapper = styled('div')({
   display: 'flex',
 });

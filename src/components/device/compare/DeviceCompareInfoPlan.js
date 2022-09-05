@@ -7,6 +7,9 @@ import { useSelector } from 'react-redux';
 import { getDevicePrice } from '../../../lib/api/device';
 import { COMPARE_LIST } from './DeviceCompareInfoContent';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceCompareInfoPlanBlock = styled('div')({
   display: 'flex',
   flexDirection: 'column',

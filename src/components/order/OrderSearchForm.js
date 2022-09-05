@@ -1,14 +1,15 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { styled } from '@mui/system';
-import {
-  TextField,
-} from '@mui/material';
+import { TextField } from '@mui/material';
 import useInput from '../../lib/hooks/useInput';
 import RoundBtn from '../common/RoundBtn';
 import useAlert from '../../lib/hooks/useAlert';
 import { useNavigate } from 'react-router-dom';
 import { getOrderInfoByNameAndNumber } from '../../lib/api/order';
 
+/**
+ * 담당자 : 윤병찬
+ */
 const OrderFormBlock = styled('div')({
   marginTop: 150,
   marginLeft: 200,
@@ -27,8 +28,6 @@ const InputWrapper = styled('div')(({ theme }) => ({
     width: 100,
   },
 }));
-
-
 
 const NameNumberInputWrapper = styled('div')({
   marginTop: 100,
@@ -56,15 +55,12 @@ const OrderTitle = styled('div')(({ theme }) => ({
   fontWeight: 'bold',
 }));
 
-
 const OrderFormWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'column',
 
   alignItems: 'center',
 });
-
-
 
 function OrderSearchForm({ orderForm, setOrderForm }, ref) {
   const Calert = useAlert();
@@ -99,7 +95,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
     };
   };
 
-  const handleOnKeyPress = e => {
+  const handleOnKeyPress = (e) => {
     if (e.key === 'Enter') {
       orderSearch(); // Enter 입력이 되면 클릭 이벤트 실행
     }
@@ -115,15 +111,13 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
 
         Calert.fire({
           title: '주문 조회가 완료되었습니다',
-          icon: 'success'
+          icon: 'success',
         }).then((res) => {
           if (res.isConfirmed) {
             //결과페이지로 이동
-            navigate(
-              `/order/${orderId}`, {
-              state: orderInfo
-            }
-            );
+            navigate(`/order/${orderId}`, {
+              state: orderInfo,
+            });
           }
         });
       }
@@ -184,9 +178,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
               helperText={numberMessage}
             />
           </InputWrapper>
-          <RoundBtn onClick={orderSearch}>
-            조회하기
-          </RoundBtn>
+          <RoundBtn onClick={orderSearch}>조회하기</RoundBtn>
         </NameNumberInputWrapper>
       </OrderFormWrapper>
     </OrderFormBlock>

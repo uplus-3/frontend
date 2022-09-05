@@ -10,6 +10,9 @@ import LaunchingDeviceDetailModal from '../modal/LaunchingDeviceDetailModal';
 import Loading from '../common/Loading';
 import Error from '../common/Error';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceListBlock = styled('div')({
   width: '100%',
 });

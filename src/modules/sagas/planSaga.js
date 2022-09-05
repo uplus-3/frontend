@@ -3,6 +3,9 @@ import { planActions } from '../actions/planSlice';
 import { loadingActions } from '../actions/loadingSlice';
 import { getPlans } from '../../lib/api/plan';
 
+/**
+ * 담당자 : 김수현
+ */
 // Plan데이터 호출
 export function* getPlanSaga(action) {
   const { startLoading, finishLoading } = loadingActions;

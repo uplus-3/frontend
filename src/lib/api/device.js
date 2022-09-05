@@ -1,5 +1,8 @@
 import client from './client';
 
+/**
+ * 담당자 : 김수현, 성아영
+ */
 // 단일 디바이스 정보 받아오기
 export const getDeviceDetail = (deviceId) => {
   return client({

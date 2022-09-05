@@ -5,6 +5,9 @@ import { ErrorOutline } from '@mui/icons-material';
 import RoundBtn from '../common/RoundBtn';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * 담당자 : 성아영
+ */
 const CartListEmptyBlock = styled('div')({
   display: 'flex',
   flexDirection: 'column',

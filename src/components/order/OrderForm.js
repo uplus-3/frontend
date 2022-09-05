@@ -9,6 +9,9 @@ import DaumPostCodeModal from '../modal/DaumPostCodeModal';
 import { useSelector } from 'react-redux';
 import { getRecommendedPlan } from '../../modules/actions/planSlice';
 
+/**
+ * 담당자 : 성아영
+ */
 const OrderFormBlock = styled('div')({
   marginTop: 20,
   width: 1000,

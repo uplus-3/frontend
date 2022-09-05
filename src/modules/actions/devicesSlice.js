@@ -2,6 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { FILTER_DATA } from '../../components/device/DeviceListFileterContents';
 
+/**
+ * 담당자 : 김수현
+ */
 const ALL = 'all';
 const LAUNCH = 'launch';
 const PURCHASE = 'purchase';

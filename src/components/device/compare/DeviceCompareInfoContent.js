@@ -1,3 +1,6 @@
+/**
+ * 담당자 : 김수현
+ */
 export const COMPARE_LIST = {
   installmentPeriod: [
     {
