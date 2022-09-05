@@ -148,9 +148,14 @@ export const filteredDevices = (
   return devicesWithPrice;
 };
 
-export const filteredSimple = (state, company) =>
-  state.devices.simple?.filter((device) => {
+export const filteredSimple = (state, company) => {
+  let devices = state.devices.simple?.filter((device) => {
     if (company === ETC) return ![SAMSUNG, APPLE].includes(device.company);
     return device.company === company;
   });
+  // 중복 제거
+  return devices
+    ? devices.filter((device) => !state.devices.comparison.some((c) => c.id === device.id))
+    : null;
+};
 export default reducer;
