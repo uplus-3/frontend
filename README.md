@@ -3,8 +3,8 @@
 
 [김수현](https://github.com/HiBird00) [김형준](https://github.com/hjkim0822) [성아영](https://github.com/Sungayoung) [윤병찬](https://github.com/Chaaany) [이일환](https://github.com/pppp0722)
 
-<a href="https://github.com/uplus-3/backend/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=uplus-3/backend" />
+<a href="https://github.com/uplus-3/frontend/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=uplus-3/frontend" />
 </a>
 
 ## 배포 사이트
