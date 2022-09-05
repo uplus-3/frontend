@@ -193,7 +193,7 @@ const HightlightSearchTerm = (text, query) => {
     </>
   );
 };
-const DEFAULT_SEARCH_TERM = '갤럭시 Z Fold4';
+const DEFAULT_SEARCH_TERM = '갤럭시 Z Fold 4';
 
 function SearchBar() {
   const navigate = useNavigate();
