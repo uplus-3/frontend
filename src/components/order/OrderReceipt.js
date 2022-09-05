@@ -13,7 +13,11 @@ import { postOrder } from '../../lib/api/order';
 import useCart from '../../lib/hooks/useCart';
 import { getDevicePrice } from '../../lib/api/device';
 import KakaoIcon from '../../assets/images/icon-kakao.png';
+import { getOrderInfoByNameAndNumber } from '../../lib/api/order';
 
+/**
+ * 담당자 : 성아영
+ */
 const OrderReceiptBlock = styled('div')({});
 const OrderReceiptWrapper = styled(Paper)({
   position: 'sticky',
@@ -65,6 +69,7 @@ const ShareDiv = styled('div')({
   alignItems: 'center',
   gap: 10,
 });
+
 const AlignCenter = styled('div')(({ direction }) => ({
   display: 'flex',
   justifyContent: 'center',
@@ -136,6 +141,9 @@ function OrderReceipt({
         Calert.fire({
           icon: 'success',
           title: '주문이 완료되었습니다',
+          confirmButtonText: '주문결과 페이지 이동',
+          showCancelButton: true,
+          cancelButtonText: '메인으로 이동',
           html: (
             <ShareDiv>
               <div>{`주문번호: ${number}`}</div>
@@ -146,11 +154,19 @@ function OrderReceipt({
               </Tooltip>
             </ShareDiv>
           ),
-        }).then((res) => {
+        }).then(async (res) => {
           if (res.isConfirmed) {
-            navigate(-1);
-          } else if (res.isDismissed) {
-            navigate(-1);
+            const response = await getOrderInfoByNameAndNumber({
+              name: getUserInfo().name,
+              number,
+            });
+            const orderId = response.data.id;
+            const orderInfo = response.data;
+            navigate(`/order/${orderId}`, {
+              state: orderInfo,
+            });
+          } else {
+            navigate('/');
           }
         });
       }

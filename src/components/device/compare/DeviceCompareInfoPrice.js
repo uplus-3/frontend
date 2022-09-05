@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/system';
 import DeviceCompareInfoPriceItem from './DeviceCompareInfoPriceItem';
-import { getDevicePrice } from '../../../lib/api/device';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceCompareInfoPriceBlock = styled('div')({
   display: 'flex',
   flexDirection: 'column',

@@ -1,9 +1,11 @@
 import React from 'react';
 
 import { styled } from '@mui/system';
-import { Box } from '@mui/material';
 import DeviceSearchListItem from './DeviceSearchListItem';
 
+/**
+ * 담당자 : 이일환
+ */
 const DeviceSearchListBlock = styled('div')({
   width: '100%',
   display: 'flex',
@@ -12,7 +14,6 @@ const DeviceSearchListBlock = styled('div')({
 });
 
 function DeviceSearchList({ results }) {
-  console.log(results);
   return (
     <DeviceSearchListBlock>
       {results.map((result) => (

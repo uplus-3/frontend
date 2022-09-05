@@ -10,6 +10,9 @@ import { styled } from '@mui/system';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
 import DeviceCompareModal from '../../modal/DeviceCompareModal';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceCompareTabBlock = styled('div')(({ theme }) => ({
   position: 'fixed',
   bottom: 0,

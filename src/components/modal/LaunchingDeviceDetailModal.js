@@ -3,6 +3,9 @@ import { styled } from '@mui/system';
 import { Dialog } from '@mui/material';
 import { PriceFormatter } from '../../lib/utils';
 
+/**
+ * 담당자 : 김수현
+ */
 const LaunchingDeviceDetailModalBlock = styled(Dialog)({
   '.MuiDialog-paper': {
     width: 500,

@@ -1,10 +1,8 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Box, Divider } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/system';
 import { TextField, InputAdornment, useTheme } from '@mui/material';
-import { IconButton, Tooltip } from '@mui/material';
 import useInput from '../../lib/hooks/useInput';
 import SquareBtn from '../../components/common/SquareBtn';
 import DaumPostCodeModal from '../../components/modal/DaumPostCodeModal';
@@ -12,12 +10,11 @@ import DaumPostCodeModal from '../../components/modal/DaumPostCodeModal';
 import RoundBtn from '../../components/common/RoundBtn';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAlert from '../../lib/hooks/useAlert';
-import { PriceFormatter } from '../../lib/utils';
 import { updateOrderInfo } from '../../lib/api/order';
-import useCart from '../../lib/hooks/useCart';
-import KakaoIcon from '../../assets/images/icon-kakao.png';
-import { getDeviceDetail, getDevicePrice } from '../../lib/api/device';
 
+/**
+ * 담당자 : 윤병찬
+ */
 const DeviceOrderAddressUpdatePageBlock = styled('div')({
   marginTop: 150,
   marginLeft: 200,
@@ -38,11 +35,6 @@ const InputWrapper = styled('div')(({ theme }) => ({
   },
 }));
 
-const NamePhoneInputWrapper = styled('div')({
-  display: 'flex',
-  justifyContent: 'space-between',
-});
-
 const CustomInput = styled(TextField)(({ theme, width }) => ({
   width: width,
   margin: 0,
@@ -57,18 +49,6 @@ const CustomInput = styled(TextField)(({ theme, width }) => ({
   },
 }));
 
-const DeviceInfoWrapper = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'start',
-  marginLeft: 20,
-  marginBottom: 30,
-  span: {
-    fontSize: '0.8rem',
-    color: '#00000090',
-    width: 100,
-  },
-}));
-
 const OrderTitle = styled('div')(({ theme }) => ({
   marginBottom: 150,
   fontSize: '1.875rem',
@@ -80,47 +60,6 @@ const OrderFormWrapper = styled('div')({
   flexDirection: 'column',
 
   alignItems: 'center',
-});
-
-const ButtonWrapper = styled('div')(({ theme, direction }) => ({
-  display: 'flex',
-  flexDirection: direction,
-  gap: !!direction ? 10 : 20,
-}));
-
-const PlanContent = styled('div')({
-  padding: 10,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'start',
-  marginRight: 'auto',
-  textAlign: 'start',
-  '.plan-price': {
-    fontSize: '1.2rem',
-    fontWeight: 600,
-    color: '#000000',
-  },
-});
-
-const DiscountContent = styled('div')({
-  padding: 10,
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  '.discount-price': {
-    fontSize: '1.2rem',
-    marginLeft: 'auto',
-    fontWeight: 600,
-  },
-  '.discount-description': {
-    marginRight: 'auto',
-    textAlign: 'start',
-    fontSize: '0.9rem',
-    '.discount-sub-description': {
-      fontSize: '0.8rem',
-      color: '#000000B0',
-    },
-  },
 });
 
 function OrderAddressUpdatePage(ref) {
@@ -162,7 +101,7 @@ function OrderAddressUpdatePage(ref) {
   const updateAddress = async () => {
     try {
       if (checkUserInfo()) {
-        const res = await updateOrderInfo(orderId, getAddress());
+        await updateOrderInfo(orderId, getAddress());
         Calert.fire({
           title: '주소 수정이 완료되었습니다',
           icon: 'success',

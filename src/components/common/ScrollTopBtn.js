@@ -2,6 +2,9 @@ import React from 'react';
 import { styled } from '@mui/system';
 import { Fab } from '@mui/material';
 
+/**
+ * 담당자 : 김수현
+ */
 const ScrollTopBtnBlock = styled('div')({
   position: 'fixed',
   bottom: 40,

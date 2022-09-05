@@ -2,6 +2,9 @@ import React from 'react';
 import { styled } from '@mui/system';
 import { PriceFormatter } from '../../../lib/utils';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceCompareInfoPriceItemBlock = styled('div')({
   background: '#fff',
   padding: 20,

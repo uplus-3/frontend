@@ -1,14 +1,15 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { styled } from '@mui/system';
-import {
-  TextField,
-} from '@mui/material';
+import { TextField } from '@mui/material';
 import useInput from '../../lib/hooks/useInput';
 import RoundBtn from '../common/RoundBtn';
 import useAlert from '../../lib/hooks/useAlert';
 import { useNavigate } from 'react-router-dom';
 import { getOrderInfoByNameAndNumber } from '../../lib/api/order';
 
+/**
+ * 담당자 : 윤병찬
+ */
 const OrderFormBlock = styled('div')({
   marginTop: 150,
   marginLeft: 200,
@@ -27,8 +28,6 @@ const InputWrapper = styled('div')(({ theme }) => ({
     width: 100,
   },
 }));
-
-
 
 const NameNumberInputWrapper = styled('div')({
   marginTop: 100,
@@ -56,7 +55,6 @@ const OrderTitle = styled('div')(({ theme }) => ({
   fontWeight: 'bold',
 }));
 
-
 const OrderFormWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'column',
@@ -64,22 +62,15 @@ const OrderFormWrapper = styled('div')({
   alignItems: 'center',
 });
 
-
-
-function OrderSearchForm({ orderForm, setOrderForm }, ref) {
+function OrderSearchForm() {
   const Calert = useAlert();
-  const [name, onNameChange, setName] = useInput('');
-  const [number, onNumberChange, setNumber] = useInput('');
+  const [name, onNameChange] = useInput('');
+  const [number, onNumberChange] = useInput('');
   const navigate = useNavigate();
   const [numberMessage, setNumberMessage] = useState('');
   const [nameMessage, setNameMessage] = useState('');
 
   const nameValidator = /^[가-힣]{2,20}$/;
-
-  useImperativeHandle(ref, () => ({
-    checkUserInfo,
-    getUserInfo,
-  }));
 
   const checkUserInfo = () => {
     if (!!!name) {
@@ -92,14 +83,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
     return !!!nameMessage && !!!numberMessage;
   };
 
-  const getUserInfo = () => {
-    return {
-      name,
-      number,
-    };
-  };
-
-  const handleOnKeyPress = e => {
+  const handleOnKeyPress = (e) => {
     if (e.key === 'Enter') {
       orderSearch(); // Enter 입력이 되면 클릭 이벤트 실행
     }
@@ -115,15 +99,14 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
 
         Calert.fire({
           title: '주문 조회가 완료되었습니다',
-          icon: 'success'
+          icon: 'success',
+          confirmButtonText: '확인',
         }).then((res) => {
           if (res.isConfirmed) {
             //결과페이지로 이동
-            navigate(
-              `/order/${orderId}`, {
-              state: orderInfo
-            }
-            );
+            navigate(`/order/${orderId}`, {
+              state: orderInfo,
+            });
           }
         });
       }
@@ -145,7 +128,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
   }, [name]);
 
   useEffect(() => {
-    if (!number || number.length == 10) {
+    if (!number || number.length === 10) {
       setNumberMessage('');
     } else {
       setNumberMessage('유효하지 않은 주문번호입니다.');
@@ -184,9 +167,7 @@ function OrderSearchForm({ orderForm, setOrderForm }, ref) {
               helperText={numberMessage}
             />
           </InputWrapper>
-          <RoundBtn onClick={orderSearch}>
-            조회하기
-          </RoundBtn>
+          <RoundBtn onClick={orderSearch}>조회하기</RoundBtn>
         </NameNumberInputWrapper>
       </OrderFormWrapper>
     </OrderFormBlock>

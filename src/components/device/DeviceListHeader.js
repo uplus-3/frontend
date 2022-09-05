@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SORT_TYPE } from './DeviceListFileterContents';
 
 import { styled } from '@mui/system';
@@ -22,8 +22,10 @@ import {
   CheckCircle,
   CheckCircleOutline,
 } from '@mui/icons-material';
-import { useSearchParams } from 'react-router-dom';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceListHeaderBlock = styled('div')({
   width: '100%',
   display: 'flex',

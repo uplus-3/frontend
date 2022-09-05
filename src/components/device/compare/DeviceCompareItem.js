@@ -6,6 +6,9 @@ import { Close } from '@mui/icons-material';
 
 import { PriceFormatter } from '../../../lib/utils';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceCompareItemBlock = styled('div')(({ theme, data }) => ({
   position: 'relative',
   display: 'flex',

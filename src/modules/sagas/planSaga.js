@@ -1,8 +1,11 @@
-import { call, put, delay, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import { planActions } from '../actions/planSlice';
 import { loadingActions } from '../actions/loadingSlice';
 import { getPlans } from '../../lib/api/plan';
 
+/**
+ * 담당자 : 김수현
+ */
 // Plan데이터 호출
 export function* getPlanSaga(action) {
   const { startLoading, finishLoading } = loadingActions;
@@ -19,7 +22,6 @@ export function* getPlanSaga(action) {
       }),
     );
   } catch (e) {
-    console.log(e);
     yield put(
       getPlanFailure({
         payload: e,

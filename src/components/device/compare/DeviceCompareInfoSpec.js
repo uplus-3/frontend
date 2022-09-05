@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from '@mui/system';
 import { getDeviceDetail } from '../../../lib/api/device';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceCompareInfoSpecBlock = styled('div')({
   display: 'flex',
   flexDirection: 'column',

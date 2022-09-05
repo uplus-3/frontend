@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { styled } from '@mui/system';
 
 import { Dialog } from '@mui/material';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 
+/**
+ * 담당자 : 성아영
+ */
 const DaumPostCodeModalBlock = styled(Dialog)({});
 function DaumPostCodeModal({ open, setOpen, setAddress }) {
   const handleComplete = ({ zonecode, address }) => {

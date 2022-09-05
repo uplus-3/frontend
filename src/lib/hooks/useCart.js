@@ -1,10 +1,11 @@
-import React from 'react';
-import { styled } from '@mui/system';
 import { useCookies } from 'react-cookie';
 import { createCartItem, deleteCartItem } from '../api/cart';
 import useAlert from './useAlert';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * 담당자 : 성아영
+ */
 function useCart() {
   const navigate = useNavigate();
   const [cookie, setCookie] = useCookies(['cartId', 'cartCount']);

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/system';
 import { Button } from '@mui/material';
 
+/**
+ * 담당자 : 성아영
+ */
 const SquareBtnBlock = styled('div')({});
 const CustomButton = styled(Button)(({ theme }) => ({
   fontFamily: 'LGSmart',

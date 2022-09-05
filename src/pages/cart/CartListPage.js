@@ -9,6 +9,9 @@ import { getCartList } from '../../lib/api/cart';
 import CartList from '../../components/cart/CartList';
 import CartListEmpty from '../../components/cart/CartListEmpty';
 
+/**
+ * 담당자 : 성아영
+ */
 const Title = styled('h1')({
   paddingTop: 30,
   paddingBottom: 10,
@@ -48,7 +51,6 @@ function CartListPage() {
       try {
         const res = await getCartList(cookie.cartId);
         setCartList(res.data.carts);
-        console.log(res);
       } catch (e) {
         setCartCount(0);
       }

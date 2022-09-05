@@ -11,6 +11,9 @@ import DeviceCompareInfo from '../device/compare/DeviceCompareInfo';
 import DeviceCompareItemSelector from '../device/compare/DeviceCompareItemSelector';
 import { devicesActions } from '../../modules/actions/devicesSlice';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceCompareModalBlock = styled(Dialog)({
   '& .MuiDialogContent-root': {
     padding: 0,

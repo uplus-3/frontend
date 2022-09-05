@@ -1,3 +1,6 @@
+/**
+ * 담당자 : 성아영
+ */
 export const PriceFormatter = (price) => {
   if (typeof price !== 'number') return;
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -28,5 +31,4 @@ export const PhoneFormatter = (num) => {
     formattedNum += num.substr(7);
     return formattedNum;
   }
-  return num;
 };

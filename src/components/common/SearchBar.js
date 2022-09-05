@@ -8,15 +8,16 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Divider,
-  Tooltip,
   Chip,
   ClickAwayListener,
 } from '@mui/material';
-import { Search, Clear, Work } from '@mui/icons-material';
+import { Search, Clear } from '@mui/icons-material';
 import { useNavigate, createSearchParams } from 'react-router-dom';
-import useInput from '../../lib/hooks/useInput';
 import { getSearchRelatedKeyword } from '../../lib/api/search';
 
+/**
+ * 담당자 : 성아영
+ */
 const SearchBarBlock = styled('div')({
   position: 'absolute',
   left: '50%',
@@ -193,7 +194,7 @@ const HightlightSearchTerm = (text, query) => {
     </>
   );
 };
-const DEFAULT_SEARCH_TERM = '갤럭시 Z Fold4';
+const DEFAULT_SEARCH_TERM = '갤럭시 Z Fold 4';
 
 function SearchBar() {
   const navigate = useNavigate();
@@ -307,7 +308,7 @@ function SearchBar() {
         <div>
           <SearchInput
             onFocus={(event) => setAnchorEl(event.currentTarget)}
-            placeholder="갤럭시 Z Fold4"
+            placeholder="갤럭시 Z Fold 4"
             value={searchResult}
             onChange={handleChangeSearchResult}
             onKeyDown={handleSearch}

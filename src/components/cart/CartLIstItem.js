@@ -7,6 +7,9 @@ import { PriceFormatter } from '../../lib/utils';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import useCart from '../../lib/hooks/useCart';
 
+/**
+ * 담당자 : 성아영
+ */
 const CartLIstItemBlock = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',

@@ -14,6 +14,9 @@ import { errorActions } from '../../modules/actions/errorSlice';
 import Loading from '../../components/common/Loading';
 import Error from '../../components/common/Error';
 
+/**
+ * 담당자 : 성아영
+ */
 const DeviceDetailPageWrapper = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',

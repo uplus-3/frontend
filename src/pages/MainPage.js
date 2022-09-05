@@ -5,6 +5,9 @@ import { styled } from '@mui/material';
 import RoundBtn from '../components/common/RoundBtn';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * 담당자 : 성아영
+ */
 const MainDiv = styled('div')({
   zIndex: 0,
   position: 'absolute',

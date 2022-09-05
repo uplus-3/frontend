@@ -1,5 +1,8 @@
 import { createTheme } from '@mui/material';
 
+/**
+ * 담당자 : 성아영
+ */
 const palette = {
   prime: '#E6007E',
   dark: '#2B2926',

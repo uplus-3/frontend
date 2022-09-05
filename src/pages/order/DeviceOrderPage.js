@@ -6,10 +6,13 @@ import OrderForm from '../../components/order/OrderForm';
 import OrderReceipt from '../../components/order/OrderReceipt';
 import useAlert from '../../lib/hooks/useAlert';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Error from '../../components/common/Error';
 
+/**
+ * 담당자 : 성아영
+ */
 const DeviceOrderPageWrapper = styled('div')({
   display: 'flex',
 });
@@ -21,7 +24,6 @@ const ErrorWrapper = styled('div')({
 function DeviceOrderPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const Calert = useAlert();
   const formRef = useRef();
   const [deviceInfo, setDeviceInfo] = useState(null);
@@ -36,7 +38,6 @@ function DeviceOrderPage() {
     shipmentType: 1,
   });
 
-  const isLoading = useSelector(({ loading }) => loading?.order);
   const isError = useSelector(({ error }) => error?.order);
 
   const checkUserInfo = () => {

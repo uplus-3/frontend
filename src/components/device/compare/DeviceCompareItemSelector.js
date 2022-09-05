@@ -7,7 +7,9 @@ import DeviceCompareItemSelect from './DeviceCompareItemSelect';
 
 import { styled } from '@mui/system';
 import { MenuItem } from '@mui/material';
-
+/**
+ * 담당자 : 김수현
+ */
 const COMPANY = FILTER_DATA.company_type.data.slice(1);
 
 const DeviceCompareItemSelectorBlock = styled('div')(({ theme }) => ({
@@ -24,7 +26,6 @@ const DeviceCompareItemSelectorBlock = styled('div')(({ theme }) => ({
 function DeviceCompareItemSelector() {
   const dispatch = useDispatch();
   const [company, setCompany] = useState();
-  const [device, setDevice] = useState();
   const dSimpleList = useSelector((state) => filteredSimple(state, company));
 
   useEffect(() => {
@@ -77,10 +78,7 @@ function DeviceCompareItemSelector() {
           </MenuItem>
         ))}
       </DeviceCompareItemSelect>
-      <DeviceCompareItemSelect
-        value={device}
-        onChange={handleDSelectValue}
-        renderValue={dRenderValue}>
+      <DeviceCompareItemSelect onChange={handleDSelectValue} renderValue={dRenderValue}>
         {company &&
           dSimpleList &&
           dSimpleList.map((menu) => <MenuItem value={menu.id}>{menu.name}</MenuItem>)}

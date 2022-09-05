@@ -6,6 +6,9 @@ import { errorActions } from '../actions/errorSlice';
 
 import { getDevicePriceList, getDeviceSimple, getLaunchingDeviceList } from '../../lib/api/device';
 
+/**
+ * 담당자 : 김수현
+ */
 // Devices 데이터를 가져오는 Saga (api 호출)
 export function* getDevicesSaga(action) {
   const { getDevicesSuccess } = devicesActions;
@@ -27,7 +30,6 @@ export function* getDevicesSaga(action) {
       }),
     );
   } catch (e) {
-    console.log(e);
     yield put(setError('devices'));
   } finally {
     yield put(finishLoading('devices'));
@@ -102,5 +104,4 @@ export function* devicesSaga() {
   yield takeLatest(getDevicePrice, getDevicePricesSaga);
   yield takeLatest(getDeviceSimple, getDeviceSimpleSaga);
   yield takeLatest(getLaunchingDevices, getLaunchingDeviceListSaga);
-  // yield takeLatest(setFilterValue, getDevicesSaga);
 }

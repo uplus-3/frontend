@@ -6,6 +6,9 @@ import { ErrorOutline } from '@mui/icons-material';
 import RoundBtn from '../components/common/RoundBtn';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * 담당자 : 성아영
+ */
 const NotFoundBlock = styled('div')({
   marginTop: '10%',
   display: 'flex',

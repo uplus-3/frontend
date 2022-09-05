@@ -8,6 +8,9 @@ import useCart from '../../lib/hooks/useCart';
 import PropTypes from 'prop-types';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+/**
+ * 담당자 : 성아영
+ */
 const DeviceItemInfoBlock = styled('div')({
   width: 600,
   marginTop: 150,
