@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: 888045237793.dkr.ecr.ap-northeast-2.amazonaws.com/uplus3nginx
+        image: 888045237793.dkr.ecr.ap-northeast-2.amazonaws.com/uplus3nginx:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
