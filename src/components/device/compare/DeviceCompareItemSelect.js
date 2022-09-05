@@ -2,6 +2,9 @@ import React from 'react';
 import { FormControl, Select } from '@mui/material';
 import styled from '@emotion/styled';
 
+/**
+ * 담당자 : 김수현
+ */
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   margin: 1,
   minWidth: 250,

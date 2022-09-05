@@ -24,6 +24,9 @@ import {
 } from '@mui/icons-material';
 import { useSearchParams } from 'react-router-dom';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceListHeaderBlock = styled('div')({
   width: '100%',
   display: 'flex',

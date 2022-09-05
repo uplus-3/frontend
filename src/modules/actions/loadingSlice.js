@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+/**
+ * 담당자 : 김수현
+ */
 const initialState = {};
 
 const loadingSlice = createSlice({

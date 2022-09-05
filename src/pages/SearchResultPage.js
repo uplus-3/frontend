@@ -11,6 +11,9 @@ import { loadingActions } from '../modules/actions/loadingSlice';
 import { errorActions } from '../modules/actions/errorSlice';
 import { Helmet } from 'react-helmet-async';
 
+/**
+ * 담당자 : 이일환
+ */
 const SearchResultPageWrapper = styled('div')({});
 
 const StatusWrapper = styled('div')({

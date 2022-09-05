@@ -6,6 +6,9 @@ import { errorActions } from '../actions/errorSlice';
 
 import { getDevicePriceList, getDeviceSimple, getLaunchingDeviceList } from '../../lib/api/device';
 
+/**
+ * 담당자 : 김수현
+ */
 // Devices 데이터를 가져오는 Saga (api 호출)
 export function* getDevicesSaga(action) {
   const { getDevicesSuccess } = devicesActions;

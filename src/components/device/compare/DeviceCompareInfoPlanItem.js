@@ -3,6 +3,9 @@ import { styled } from '@mui/system';
 import DeviceCompareItemSelect from './DeviceCompareItemSelect';
 import { MenuItem } from '@mui/material';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceCompareInfoPlanItemBlock = styled('div')({
   display: 'flex',
   flexDirection: 'column',

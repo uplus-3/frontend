@@ -14,6 +14,9 @@ import { devicesActions } from '../../modules/actions/devicesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import useCart from '../../lib/hooks/useCart';
 
+/**
+ * 담당자 : 김수현
+ */
 const DeviceListItemBlock = styled('div')(({ theme }) => ({
   position: 'relative',
   width: 280,

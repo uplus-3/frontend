@@ -2,6 +2,9 @@ import React from 'react';
 import { ErrorOutline } from '@mui/icons-material';
 import { styled } from '@mui/system';
 
+/**
+ * 담당자 : 김수현
+ */
 const ErrorBlock = styled('div')({
   textAlign: 'center',
 });

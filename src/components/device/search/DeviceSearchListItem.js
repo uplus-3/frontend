@@ -4,6 +4,9 @@ import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import { PriceFormatter } from '../../../lib/utils';
 
+/**
+ * 담당자 : 이일환
+ */
 const DeviceSearchListItemBlock = styled('div')(({ theme }) => ({
   display: 'flex',
   minWidth: 'calc((100% - 20px)/2)',

@@ -15,6 +15,9 @@ import DeviceCompareTab from '../../components/device/compare/DeviceCompareTab';
 import ScrollTopBtn from '../../components/common/ScrollTopBtn';
 import useInput from '../../lib/hooks/useInput';
 
+/**
+ * 담당자 : 김수현
+ */
 const ALL = 'all';
 
 const Title = styled('h2')({

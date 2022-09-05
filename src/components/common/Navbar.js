@@ -19,6 +19,9 @@ import SearchBar from './SearchBar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
+/**
+ * 담당자 : 성아영
+ */
 const CustomAppbar = styled(AppBar)(({ theme }) => ({
   height: 60,
   width: '100%',

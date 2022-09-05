@@ -14,6 +14,9 @@ import useCart from '../../lib/hooks/useCart';
 import { getDevicePrice } from '../../lib/api/device';
 import KakaoIcon from '../../assets/images/icon-kakao.png';
 
+/**
+ * 담당자 : 성아영
+ */
 const OrderReceiptBlock = styled('div')({});
 const OrderReceiptWrapper = styled(Paper)({
   position: 'sticky',

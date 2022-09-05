@@ -1,5 +1,8 @@
 import client from './client';
 
+/**
+ * 담당자 : 성아영
+ */
 export const getSearchRelatedKeyword = ({ query, networkType }) => {
   return client({
     url: '/search/keyword',

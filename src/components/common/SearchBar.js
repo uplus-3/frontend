@@ -17,6 +17,9 @@ import { useNavigate, createSearchParams } from 'react-router-dom';
 import useInput from '../../lib/hooks/useInput';
 import { getSearchRelatedKeyword } from '../../lib/api/search';
 
+/**
+ * 담당자 : 성아영
+ */
 const SearchBarBlock = styled('div')({
   position: 'absolute',
   left: '50%',

@@ -5,6 +5,9 @@ import { Box, Divider } from '@mui/material';
 
 import { PriceFormatter } from '../../../lib/utils';
 
+/**
+ * 담당자 : 김수현
+ */
 const LaunchingDeviceListItemBlock = styled('div')(({ theme }) => ({
   position: 'relative',
   width: 280,

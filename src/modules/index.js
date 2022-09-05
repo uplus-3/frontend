@@ -7,6 +7,9 @@ import errorSlice from './actions/errorSlice';
 import { devicesSaga } from './sagas/devicesSaga';
 import { planSaga } from './sagas/planSaga';
 
+/**
+ * 담당자 : 김수현
+ */
 // Root Reducer
 // Reducer Combine
 const rootReducer = combineReducers({
