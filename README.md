@@ -30,3 +30,119 @@ http://uplus3-dev.s3-website.ap-northeast-2.amazonaws.com
   - Form : [성아영](https://github.com/Sungayoung)
   - History : [윤병찬](https://github.com/Chaaany)
   - Update : [윤병찬](https://github.com/Chaaany)
+
+
+## 파일 디렉토리 구성
+```
+📦src
+ ┣ 📂assets
+ ┃ ┣ 📂fonts
+ ┃ ┃ ┣ 📜LGSmHaB.ttf
+ ┃ ┃ ┣ 📜LGSmHaL.ttf
+ ┃ ┃ ┣ 📜LGSmHaR.ttf
+ ┃ ┃ ┗ 📜LGSmHaSB.ttf
+ ┃ ┗ 📂images
+ ┃ ┃ ┣ 📜icon-kakao.png
+ ┃ ┃ ┣ 📜logo_uplus.png
+ ┃ ┃ ┣ 📜SM-F721N-blue-0.jpg
+ ┃ ┃ ┣ 📜SM-F721N-gold-0.jpg
+ ┃ ┃ ┣ 📜SM-F721N-graphite-0.jpg
+ ┃ ┃ ┗ 📜SM-F721N-purple-0.jpg
+ ┣ 📂components
+ ┃ ┣ 📂cart
+ ┃ ┃ ┣ 📜CartList.js
+ ┃ ┃ ┣ 📜CartListEmpty.js
+ ┃ ┃ ┗ 📜CartLIstItem.js
+ ┃ ┣ 📂common
+ ┃ ┃ ┣ 📜Error.js
+ ┃ ┃ ┣ 📜Loading.js
+ ┃ ┃ ┣ 📜Navbar.js
+ ┃ ┃ ┣ 📜NavbarContent.js
+ ┃ ┃ ┣ 📜RoundBtn.js
+ ┃ ┃ ┣ 📜ScrollTopBtn.js
+ ┃ ┃ ┣ 📜SearchBar.js
+ ┃ ┃ ┗ 📜SquareBtn.js
+ ┃ ┣ 📂device
+ ┃ ┃ ┣ 📂compare
+ ┃ ┃ ┃ ┣ 📜DeviceCompareInfo.js
+ ┃ ┃ ┃ ┣ 📜DeviceCompareInfoContent.js
+ ┃ ┃ ┃ ┣ 📜DeviceCompareInfoPlan.js
+ ┃ ┃ ┃ ┣ 📜DeviceCompareInfoPlanItem.js
+ ┃ ┃ ┃ ┣ 📜DeviceCompareInfoPrice.js
+ ┃ ┃ ┃ ┣ 📜DeviceCompareInfoPriceItem.js
+ ┃ ┃ ┃ ┣ 📜DeviceCompareInfoSpec.js
+ ┃ ┃ ┃ ┣ 📜DeviceCompareItem.js
+ ┃ ┃ ┃ ┣ 📜DeviceCompareItemSelect.js
+ ┃ ┃ ┃ ┣ 📜DeviceCompareItemSelector.js
+ ┃ ┃ ┃ ┗ 📜DeviceCompareTab.js
+ ┃ ┃ ┣ 📂launching
+ ┃ ┃ ┃ ┗ 📜LaunchingDeviceListItem.js
+ ┃ ┃ ┣ 📂search
+ ┃ ┃ ┃ ┣ 📜DeviceSearchList.js
+ ┃ ┃ ┃ ┗ 📜DeviceSearchListItem.js
+ ┃ ┃ ┣ 📜DeviceItemImage.js
+ ┃ ┃ ┣ 📜DeviceItemInfo.js
+ ┃ ┃ ┣ 📜DeviceList.js
+ ┃ ┃ ┣ 📜DeviceListFileterContents.js
+ ┃ ┃ ┣ 📜DeviceListFilter.js
+ ┃ ┃ ┣ 📜DeviceListHeader.js
+ ┃ ┃ ┗ 📜DeviceListItem.js
+ ┃ ┣ 📂modal
+ ┃ ┃ ┣ 📜DaumPostCodeModal.js
+ ┃ ┃ ┣ 📜DeviceCompareModal.js
+ ┃ ┃ ┣ 📜LaunchingDeviceDetailModal.js
+ ┃ ┃ ┗ 📜PriceCompareModal.js
+ ┃ ┗ 📂order
+ ┃ ┃ ┣ 📜OrderForm.js
+ ┃ ┃ ┣ 📜OrderReceipt.js
+ ┃ ┃ ┗ 📜OrderSearchForm.js
+ ┣ 📂layout
+ ┃ ┗ 📜MainLayout.js
+ ┣ 📂lib
+ ┃ ┣ 📂api
+ ┃ ┃ ┣ 📜cart.js
+ ┃ ┃ ┣ 📜client.js
+ ┃ ┃ ┣ 📜device.js
+ ┃ ┃ ┣ 📜order.js
+ ┃ ┃ ┣ 📜plan.js
+ ┃ ┃ ┣ 📜search.js
+ ┃ ┃ ┗ 📜test.js
+ ┃ ┣ 📂hooks
+ ┃ ┃ ┣ 📜useAlert.js
+ ┃ ┃ ┣ 📜useCart.js
+ ┃ ┃ ┗ 📜useInput.js
+ ┃ ┗ 📜utils.js
+ ┣ 📂modules
+ ┃ ┣ 📂actions
+ ┃ ┃ ┣ 📜devicesSlice.js
+ ┃ ┃ ┣ 📜errorSlice.js
+ ┃ ┃ ┣ 📜loadingSlice.js
+ ┃ ┃ ┗ 📜planSlice.js
+ ┃ ┣ 📂sagas
+ ┃ ┃ ┣ 📜devicesSaga.js
+ ┃ ┃ ┗ 📜planSaga.js
+ ┃ ┣ 📜index.js
+ ┃ ┗ 📜store.js
+ ┣ 📂pages
+ ┃ ┣ 📂cart
+ ┃ ┃ ┗ 📜CartListPage.js
+ ┃ ┣ 📂order
+ ┃ ┃ ┣ 📜DeviceOrderAddressUpdatePage.js
+ ┃ ┃ ┣ 📜DeviceOrderHistoryPage.js
+ ┃ ┃ ┣ 📜DeviceOrderPage.js
+ ┃ ┃ ┗ 📜DeviceOrderSearchInputPage.js
+ ┃ ┣ 📂product
+ ┃ ┃ ┣ 📜DeviceDetailPage.js
+ ┃ ┃ ┗ 📜DeviceListPage.js
+ ┃ ┣ 📜MainPage.js
+ ┃ ┣ 📜NotFoundPage.js
+ ┃ ┗ 📜SearchResultPage.js
+ ┣ 📂theme
+ ┃ ┗ 📜theme.js
+ ┣ 📜App.css
+ ┣ 📜App.js
+ ┣ 📜index.css
+ ┣ 📜index.js
+ ┣ 📜reset.css
+ ┗ 📜router.js
+ ```
