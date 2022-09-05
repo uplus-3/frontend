@@ -31,12 +31,10 @@ function useCart() {
       setCookie('cartId', res.data.carts[0].cartId, {
         path: '/',
         expires: date,
-        secure: true,
       });
       setCookie('cartCount', res.data.carts.length, {
         path: '/',
         expires: date,
-        secure: true,
       });
 
       Calert.fire({
@@ -65,7 +63,7 @@ function useCart() {
         let curCartCount = parseInt(cookie.cartCount || 1);
         let date = new Date();
         date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
-        setCookie('cartCount', curCartCount - 1, { path: '/', expires: date, secure: true });
+        setCookie('cartCount', curCartCount - 1, { path: '/', expires: date });
         resolve(true);
       } catch (e) {
         reject(false);
