@@ -44,17 +44,18 @@ function CartListPage() {
   };
 
   const getCartItemList = async () => {
-    if (cookie.cartCount && cookie.cartId) {
+    if (cookie?.cartCount && cookie?.cartId) {
       try {
         const res = await getCartList(cookie.cartId);
         setCartList(res.data.carts);
+        console.log(res);
       } catch (e) {
         setCartCount(0);
       }
     }
   };
   useEffect(() => {
-    setCartCount(cookie.cartCount || 0);
+    setCartCount(parseInt(cookie?.cartCount || 0));
     getCartItemList();
   }, [cookie.cartCount]);
 
