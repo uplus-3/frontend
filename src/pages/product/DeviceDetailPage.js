@@ -71,7 +71,7 @@ function DeviceDetailPage() {
     try {
       const req = {
         deviceId: searchParams.get('id'),
-        discountType: searchParams.get('discountType') || -1,
+        discountType: searchParams.get('discount') || -1,
         installmentPeriod: searchParams.get('installmentPeriod') || 24,
         planId: searchParams.get('plan') || -1,
       };
