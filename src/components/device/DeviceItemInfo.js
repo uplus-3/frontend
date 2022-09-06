@@ -169,7 +169,7 @@ function DeviceItemInfo({ deviceInfo, selectedColor, setSelectedColor, devicePri
       <DeviceSelectResult>
         <CompareBtn onClick={() => setCompareModalOpen(true)}>비교하기</CompareBtn>
         <DeviceSelectResultTitle>
-          월 {PriceFormatter(devicePriceInfo?.mdevicePrice + devicePriceInfo?.mplanPrice)}원
+          월 {PriceFormatter(devicePriceInfo?.ddevicePrice + devicePriceInfo?.dplanPrice)}원
         </DeviceSelectResultTitle>
         {deviceInfo?.plan?.name},
         {deviceInfo?.discountType === 0 ? ' 공시지원금' : ' 선택약정 (24개월)'} 기준
